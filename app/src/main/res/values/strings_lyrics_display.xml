@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lyrics_highlight_style_title">Word highlight</string>
+    <string name="lyrics_highlight_style_subtitle">How word-synced lyrics light up as they are sung</string>
+    <string name="lyrics_highlight_style_wipe">Gradient sweep</string>
+    <string name="lyrics_highlight_style_wipe_desc">A soft edge glides across each word as it is sung</string>
+    <string name="lyrics_highlight_style_fade">Fade</string>
+    <string name="lyrics_highlight_style_fade_desc">Each syllable fades in while it is sung</string>
+    <string name="lyrics_highlight_style_classic">Instant</string>
+    <string name="lyrics_highlight_style_classic_desc">Each syllable lights up the moment it starts</string>
+    <string name="lyrics_duet_layout_title">Duet layout</string>
+    <string name="lyrics_duet_layout_subtitle">Put each singer on their own side when the lyrics mark voices (v1:, v2:)</string>
+    <string name="lyrics_background_vocals_title">Background vocals</string>
+    <string name="lyrics_background_vocals_subtitle">Show backing vocals in smaller text under the main line</string>
+
+    <!-- AI Lyrics Translation & Pronunciation -->
+    <string name="setcat_lyrics_ai_section">AI Translation &amp; Pronunciation</string>
+    <string name="lyrics_ai_auto_translate_title">Auto-translate lyrics</string>
+    <string name="lyrics_ai_auto_translate_subtitle">Automatically translate lyrics and show pronunciation when opening a song</string>
+    <string name="lyrics_ai_target_language_title">Translation language</string>
+    <string name="lyrics_ai_target_language_subtitle">Language used when translating lyrics</string>
+    <string name="lyrics_ai_lang_auto">Device language</string>
+    <string name="lyrics_ai_lang_es">Spanish</string>
+    <string name="lyrics_ai_lang_en">English</string>
+    <string name="lyrics_ai_lang_pt">Portuguese</string>
+    <string name="lyrics_ai_lang_fr">French</string>
+    <string name="lyrics_ai_lang_de">German</string>
+    <string name="lyrics_ai_lang_it">Italian</string>
+    <string name="lyrics_ai_lang_ja">Japanese</string>
+    <string name="lyrics_ai_lang_ko">Korean</string>
+    <string name="lyrics_ai_lang_zh">Chinese</string>
+    <string name="lyrics_ai_gemini_key_title">Gemini API key (optional)</string>
+    <string name="lyrics_ai_gemini_key_configured">Configured (%1$s) · Using Gemini AI</string>
+    <string name="lyrics_ai_gemini_key_not_configured">Not configured · Using free automatic translator</string>
+    <string name="lyrics_ai_gemini_key_dialog_title">Gemini API Key</string>
+    <string name="lyrics_ai_gemini_key_dialog_body">Enter a free API key from Google AI Studio (aistudio.google.com) for higher quality AI lyrics translation and phonetic pronunciation. Without a key, FabiPlayer uses the free automatic translator.</string>
+    <string name="lyrics_ai_gemini_key_hint">Paste AIza… API key</string>
+    <string name="lyrics_ai_gemini_key_save">Save</string>
+    <string name="lyrics_ai_gemini_key_clear">Clear</string>
+    <string name="lyrics_action_translate_ai">Translate with AI</string>
+    <string name="lyrics_action_translating_ai">Translating…</string>
+    <string name="lyrics_action_retranslate_ai">Re-translate with AI</string>
+    <string name="lyrics_ai_translate_success_gemini">Lyrics translated with Gemini AI</string>
+    <string name="lyrics_ai_translate_success_free">Lyrics translated</string>
+    <string name="lyrics_ai_translate_fallback">Gemini failed (%1$s); used free translator</string>
+    <string name="lyrics_ai_translate_failed">Could not translate lyrics right now</string>
+    <string name="lyrics_more_auto_translate">Auto-translate lyrics</string>
+</resources>
