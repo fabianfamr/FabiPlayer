@@ -26,9 +26,14 @@
     <string name="lyrics_ai_lang_fr">French</string>
     <string name="lyrics_ai_lang_de">German</string>
     <string name="lyrics_ai_lang_it">Italian</string>
+    <string name="lyrics_ai_lang_ru">Russian</string>
     <string name="lyrics_ai_lang_ja">Japanese</string>
     <string name="lyrics_ai_lang_ko">Korean</string>
     <string name="lyrics_ai_lang_zh">Chinese</string>
+    <string name="lyrics_ai_show_romanization_title">Show phonetic pronunciation</string>
+    <string name="lyrics_ai_show_romanization_subtitle">Display target-language phonetics below non-native lyrics</string>
+    <string name="lyrics_ai_show_translation_title">Show line-by-line translation</string>
+    <string name="lyrics_ai_show_translation_subtitle">Display the translated line directly underneath each original lyric line</string>
     <string name="lyrics_ai_gemini_key_title">Gemini API key (optional)</string>
     <string name="lyrics_ai_gemini_key_configured">Configured (%1$s) · Using Gemini AI</string>
     <string name="lyrics_ai_gemini_key_not_configured">Not configured · Using free automatic translator</string>

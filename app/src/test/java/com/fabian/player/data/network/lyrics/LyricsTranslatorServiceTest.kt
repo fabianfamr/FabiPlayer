@@ -2,6 +2,7 @@ package com.fabian.player.data.network.lyrics
 
 import com.fabian.player.data.model.Lyrics
 import com.fabian.player.data.model.SyncedLine
+import com.fabian.player.utils.MultiLangRomanizer
 import com.google.common.truth.Truth.assertThat
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
@@ -125,5 +126,33 @@ class LyricsTranslatorServiceTest {
         val text = LyricsTranslatorService.parseGoogleTranslateArrayResponse(sample)
 
         assertThat(text).isEqualTo("Hola\nMundo")
+    }
+
+    @Test
+    fun `adaptRomanizationForTargetLanguage adjusts phonetics for spanish readers`() {
+        val adapted = MultiLangRomanizer.adaptRomanizationForTargetLanguage("Khorosho yest ya lyublyu", "es")
+
+        assertThat(adapted).isEqualTo("Jorosho iest ia liubliu")
+        assertThat(MultiLangRomanizer.adaptRomanizationForTargetLanguage("Privet", "en")).isEqualTo("Privet")
+    }
+
+    @Test
+    fun `applyTranslationsToLyrics preserves stacked bilingual lines without requiring romanization`() {
+        val plain = Lyrics(plain = listOf("Hola, esta es la parte de arriba."))
+        val updated = LyricsTranslatorService.applyTranslationsToLyrics(
+            lyrics = plain,
+            translated = mapOf(
+                0 to TranslatedLyricLine(
+                    index = 0,
+                    romanization = null,
+                    translation = "Bonjour, voici la partie supérieure."
+                )
+            ),
+            entireLyricsHasKana = false,
+            targetLanguageCode = "fr"
+        )
+
+        assertThat(updated.plainRomanizations).containsExactly(null)
+        assertThat(updated.plainTranslations).containsExactly("Bonjour, voici la partie supérieure.")
     }
 }

@@ -336,7 +336,31 @@ object SettingsRegistry {
                 category = SettingsCategory.PLAYBACK,
                 subscreenRoute = Screen.LyricsSettings.createRoute(),
                 type = SettingType.NAVIGABLE_CARD,
-                keywordsStatic = listOf("language", "translate", "spanish", "english", "idioma", "traducción")
+                keywordsStatic = listOf("language", "translate", "spanish", "english", "russian", "idioma", "traducción")
+            ),
+            SettingSpec(
+                id = "lyrics_show_romanization",
+                itemKey = "item_lyrics_show_romanization",
+                titleRes = R.string.lyrics_ai_show_romanization_title,
+                subtitleRes = R.string.lyrics_ai_show_romanization_subtitle,
+                category = SettingsCategory.PLAYBACK,
+                subscreenRoute = Screen.LyricsSettings.createRoute(),
+                type = SettingType.SWITCH,
+                keywordsStatic = listOf("phonetics", "pronunciation", "romanization", "fonetica", "pronunciacion"),
+                getValue = { it.showLyricsRomanization },
+                onToggle = { viewModel, checked -> viewModel.setShowLyricsRomanization(checked) }
+            ),
+            SettingSpec(
+                id = "lyrics_show_translation",
+                itemKey = "item_lyrics_show_translation",
+                titleRes = R.string.lyrics_ai_show_translation_title,
+                subtitleRes = R.string.lyrics_ai_show_translation_subtitle,
+                category = SettingsCategory.PLAYBACK,
+                subscreenRoute = Screen.LyricsSettings.createRoute(),
+                type = SettingType.SWITCH,
+                keywordsStatic = listOf("translation", "bilingual", "traduccion", "bilingue"),
+                getValue = { it.showLyricsTranslation },
+                onToggle = { viewModel, checked -> viewModel.setShowLyricsTranslation(checked) }
             ),
             SettingSpec(
                 id = "lyrics_gemini_key",

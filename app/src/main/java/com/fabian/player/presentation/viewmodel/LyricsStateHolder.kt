@@ -377,6 +377,7 @@ class LyricsStateHolder @Inject constructor(
             val updatedSong = currentSong.withPersistedLyrics(result.rawLyrics, refreshedAlbumArtUri)
 
             _songUpdates.emit(updatedSong to result.lyrics)
+            maybeAutoTranslate(updatedSong, result.lyrics)
         }
     }
 
@@ -393,10 +394,21 @@ class LyricsStateHolder @Inject constructor(
             if (currentSong != null && currentSong.id.toLongOrNull() == songId) {
                 val refreshedAlbumArtUri = persistLyricsToFileMetadataIfPossible(currentSong, sanitizedContent)
                 val updatedSong = currentSong.withPersistedLyrics(sanitizedContent, refreshedAlbumArtUri)
-                _songUpdates.emit(updatedSong to parsedLyrics.takeIf(::hasValidLyrics))
+                val validLyrics = parsedLyrics.takeIf(::hasValidLyrics)
+                _songUpdates.emit(updatedSong to validLyrics)
+                if (validLyrics != null) {
+                    maybeAutoTranslate(updatedSong, validLyrics)
+                }
             }
 
             _messageEvents.emit("Lyrics imported successfully!")
+        }
+    }
+
+    private suspend fun maybeAutoTranslate(song: Song, lyrics: Lyrics) {
+        val aiPrefs = lyricsAiPreferencesRepository ?: return
+        if (hasValidLyrics(lyrics) && aiPrefs.getAutoTranslateLyrics()) {
+            launchTranslation(song = song, lyrics = lyrics, showFeedback = false)
         }
     }
 

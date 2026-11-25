@@ -26,9 +26,14 @@
     <string name="lyrics_ai_lang_fr">Francés</string>
     <string name="lyrics_ai_lang_de">Alemán</string>
     <string name="lyrics_ai_lang_it">Italiano</string>
+    <string name="lyrics_ai_lang_ru">Ruso</string>
     <string name="lyrics_ai_lang_ja">Japonés</string>
     <string name="lyrics_ai_lang_ko">Coreano</string>
     <string name="lyrics_ai_lang_zh">Chino</string>
+    <string name="lyrics_ai_show_romanization_title">Mostrar pronunciación fonética</string>
+    <string name="lyrics_ai_show_romanization_subtitle">Muestra debajo cómo suena la letra adaptada a tu idioma</string>
+    <string name="lyrics_ai_show_translation_title">Mostrar traducción línea por línea</string>
+    <string name="lyrics_ai_show_translation_subtitle">Muestra la traducción justo debajo de cada línea original</string>
     <string name="lyrics_ai_gemini_key_title">Clave API de Gemini (opcional)</string>
     <string name="lyrics_ai_gemini_key_configured">Configurada (%1$s) · Usando Gemini IA</string>
     <string name="lyrics_ai_gemini_key_not_configured">Sin configurar · Usando traductor gratuito</string>

@@ -108,7 +108,8 @@ class LyricsTranslatorService @Inject constructor(
                 val updatedLyrics = applyTranslationsToLyrics(
                     lyrics = lyrics,
                     translated = translatedLines,
-                    entireLyricsHasKana = entireLyricsHasKana
+                    entireLyricsHasKana = entireLyricsHasKana,
+                    targetLanguageCode = normalizedLang
                 )
                 writeCachedLyrics(cacheFile, updatedLyrics)
                 return@withContext Result.success(
@@ -132,7 +133,8 @@ class LyricsTranslatorService @Inject constructor(
                     val updatedLyrics = applyTranslationsToLyrics(
                         lyrics = lyrics,
                         translated = fallbackLines,
-                        entireLyricsHasKana = entireLyricsHasKana
+                        entireLyricsHasKana = entireLyricsHasKana,
+                        targetLanguageCode = normalizedLang
                     )
                     val freeCache = cacheFileFor(
                         songId = songId,
@@ -159,7 +161,8 @@ class LyricsTranslatorService @Inject constructor(
             val updatedLyrics = applyTranslationsToLyrics(
                 lyrics = lyrics,
                 translated = fallbackLines,
-                entireLyricsHasKana = entireLyricsHasKana
+                entireLyricsHasKana = entireLyricsHasKana,
+                targetLanguageCode = normalizedLang
             )
             writeCachedLyrics(cacheFile, updatedLyrics)
             LyricsTranslationOutcome(
@@ -231,7 +234,9 @@ class LyricsTranslatorService @Inject constructor(
             if (splitTranslated.size == chunk.size) {
                 chunk.forEachIndexed { pos, (index, originalText) ->
                     val romanization = if (MultiLangRomanizer.isScriptThatNeedsRomanization(originalText)) {
-                        MultiLangRomanizer.romanizeLine(originalText, entireLyricsHasKana)
+                        MultiLangRomanizer.romanizeLine(originalText, entireLyricsHasKana)?.let {
+                            MultiLangRomanizer.adaptRomanizationForTargetLanguage(it, targetLanguageCode)
+                        }
                     } else null
                     results[index] = TranslatedLyricLine(
                         index = index,
@@ -247,7 +252,9 @@ class LyricsTranslatorService @Inject constructor(
                         targetLanguageCode
                     ).trim()
                     val romanization = if (MultiLangRomanizer.isScriptThatNeedsRomanization(originalText)) {
-                        MultiLangRomanizer.romanizeLine(originalText, entireLyricsHasKana)
+                        MultiLangRomanizer.romanizeLine(originalText, entireLyricsHasKana)?.let {
+                            MultiLangRomanizer.adaptRomanizationForTargetLanguage(it, targetLanguageCode)
+                        }
                     } else null
                     results[index] = TranslatedLyricLine(
                         index = index,
@@ -438,7 +445,8 @@ class LyricsTranslatorService @Inject constructor(
         internal fun applyTranslationsToLyrics(
             lyrics: Lyrics,
             translated: Map<Int, TranslatedLyricLine>,
-            entireLyricsHasKana: Boolean
+            entireLyricsHasKana: Boolean,
+            targetLanguageCode: String = "en"
         ): Lyrics {
             val synced = lyrics.synced
             if (!synced.isNullOrEmpty()) {
@@ -449,7 +457,9 @@ class LyricsTranslatorService @Inject constructor(
                         line.romanization.isNullOrBlank() &&
                         MultiLangRomanizer.isScriptThatNeedsRomanization(line.line)
                     ) {
-                        MultiLangRomanizer.romanizeLine(line.line, entireLyricsHasKana)
+                        MultiLangRomanizer.romanizeLine(line.line, entireLyricsHasKana)?.let {
+                            MultiLangRomanizer.adaptRomanizationForTargetLanguage(it, targetLanguageCode)
+                        }
                     } else null
 
                     line.copy(
@@ -473,7 +483,9 @@ class LyricsTranslatorService @Inject constructor(
                     } else {
                         translated[index]?.romanization
                             ?: if (MultiLangRomanizer.isScriptThatNeedsRomanization(primary)) {
-                                MultiLangRomanizer.romanizeLine(primary, entireLyricsHasKana)
+                                MultiLangRomanizer.romanizeLine(primary, entireLyricsHasKana)?.let {
+                                    MultiLangRomanizer.adaptRomanizationForTargetLanguage(it, targetLanguageCode)
+                                }
                             } else null
                     }
                 }
@@ -492,7 +504,7 @@ class LyricsTranslatorService @Inject constructor(
 
         private fun fingerprintLyrics(lyrics: Lyrics, useGemini: Boolean): String {
             val raw = buildString {
-                append(if (useGemini) "g2:" else "f2:")
+                append(if (useGemini) "g3:" else "f3:")
                 lyrics.synced?.forEach { append(it.time).append(':').append(it.line).append('\n') }
                 lyrics.plain?.forEach { append(it).append('\n') }
             }

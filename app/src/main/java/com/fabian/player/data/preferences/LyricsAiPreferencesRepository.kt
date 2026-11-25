@@ -50,6 +50,14 @@ class LyricsAiPreferencesRepository @Inject constructor(
         sanitizeLanguageCode(prefs[Keys.TARGET_LANGUAGE])
     }
 
+    val showLyricsTranslationFlow: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[Keys.SHOW_TRANSLATION] ?: true
+    }
+
+    val showLyricsRomanizationFlow: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[Keys.SHOW_ROMANIZATION] ?: true
+    }
+
     suspend fun getAutoTranslateLyrics(): Boolean = autoTranslateLyricsFlow.first()
 
     suspend fun setAutoTranslateLyrics(enabled: Boolean) {
@@ -63,6 +71,18 @@ class LyricsAiPreferencesRepository @Inject constructor(
     suspend fun setTargetLanguage(languageCode: String) {
         dataStore.edit { prefs ->
             prefs[Keys.TARGET_LANGUAGE] = sanitizeLanguageCode(languageCode)
+        }
+    }
+
+    suspend fun setShowLyricsTranslation(enabled: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[Keys.SHOW_TRANSLATION] = enabled
+        }
+    }
+
+    suspend fun setShowLyricsRomanization(enabled: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[Keys.SHOW_ROMANIZATION] = enabled
         }
     }
 
@@ -128,7 +148,7 @@ class LyricsAiPreferencesRepository @Inject constructor(
         const val LANG_AUTO = "auto"
 
         val SUPPORTED_LANGUAGE_CODES = listOf(
-            LANG_AUTO, "es", "en", "pt", "fr", "de", "it", "ja", "ko", "zh"
+            LANG_AUTO, "es", "en", "pt", "fr", "de", "it", "ru", "ja", "ko", "zh"
         )
 
         fun sanitizeLanguageCode(code: String?): String =

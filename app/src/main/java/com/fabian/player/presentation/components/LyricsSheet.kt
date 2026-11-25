@@ -739,9 +739,13 @@ fun LyricsSheet(
         containerColor = containerColor,
         contentColor = contentColor,
     ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
+        ) {
             Column(
                 modifier = Modifier
+                    .widthIn(max = 760.dp)
                     .fillMaxSize()
                     .padding(top = paddingValues.calculateTopPadding())
                 .clickable(
@@ -1688,8 +1692,8 @@ fun LyricLineRow(
         )
     }
 
-    val romanizationColor = lineColor.copy(alpha = lineColor.alpha * 0.85f)
-    val translationColor = lineColor.copy(alpha = lineColor.alpha * 0.55f)
+    val romanizationColor = lineColor.copy(alpha = lineColor.alpha * 0.72f)
+    val translationColor = lineColor.copy(alpha = lineColor.alpha * 0.82f)
 
     val horizontalAlignment = when (lyricsAlignment) {
         "center" -> Alignment.CenterHorizontally
@@ -1869,7 +1873,8 @@ fun PlainLyricsLine(
             fontWeight = FontWeight.Normal
         )
     }
-    val translationColor = LocalContentColor.current.copy(alpha = 0.45f)
+    val romanizationColor = LocalContentColor.current.copy(alpha = 0.62f)
+    val translationColor = LocalContentColor.current.copy(alpha = 0.76f)
 
     val hapticFeedback = LocalHapticFeedback.current
     val currentOnLongClick by rememberUpdatedState(onLongClick)
@@ -1900,7 +1905,7 @@ fun PlainLyricsLine(
             Text(
                 text = primaryText,
                 style = style,
-                color = LocalContentColor.current.copy(alpha = 0.7f),
+                color = LocalContentColor.current.copy(alpha = 0.86f),
                 textAlign = textAlign,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -1909,7 +1914,7 @@ fun PlainLyricsLine(
                 Text(
                     text = romanizationText,
                     style = translationStyle,
-                    color = translationColor,
+                    color = romanizationColor,
                     textAlign = textAlign,
                     modifier = Modifier
                         .fillMaxWidth()

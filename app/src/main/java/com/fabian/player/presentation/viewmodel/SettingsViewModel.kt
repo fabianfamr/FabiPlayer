@@ -126,6 +126,8 @@ data class SettingsUiState(
     val hasGeminiApiKey: Boolean = false,
     val autoTranslateLyricsEnabled: Boolean = false,
     val lyricsTranslationTargetLanguage: String = LyricsAiPreferencesRepository.LANG_AUTO,
+    val showLyricsRomanization: Boolean = true,
+    val showLyricsTranslation: Boolean = true,
     val backupInfoDismissed: Boolean = false,
     val isDataTransferInProgress: Boolean = false,
     val restorePlan: RestorePlan? = null,
@@ -143,6 +145,14 @@ data class SettingsUiState(
     val minTracksPerArtist: Int = 1,
     val replayGainEnabled: Boolean = false,
     val replayGainUseAlbumGain: Boolean = false
+)
+
+private data class LyricsAiUiSlice(
+    val geminiApiKey: String,
+    val autoTranslate: Boolean,
+    val targetLang: String,
+    val showRomanization: Boolean,
+    val showTranslation: Boolean
 )
 
 data class FailedSongInfo(
@@ -476,16 +486,26 @@ class SettingsViewModel @Inject constructor(
             combine(
                 lyricsAiPreferencesRepository.geminiApiKeyFlow,
                 lyricsAiPreferencesRepository.autoTranslateLyricsFlow,
-                lyricsAiPreferencesRepository.targetLanguageFlow
-            ) { apiKey, autoTranslate, targetLang ->
-                Triple(apiKey, autoTranslate, targetLang)
-            }.collect { (apiKey, autoTranslate, targetLang) ->
+                lyricsAiPreferencesRepository.targetLanguageFlow,
+                lyricsAiPreferencesRepository.showLyricsRomanizationFlow,
+                lyricsAiPreferencesRepository.showLyricsTranslationFlow
+            ) { apiKey, autoTranslate, targetLang, showRomanization, showTranslation ->
+                LyricsAiUiSlice(
+                    geminiApiKey = apiKey,
+                    autoTranslate = autoTranslate,
+                    targetLang = targetLang,
+                    showRomanization = showRomanization,
+                    showTranslation = showTranslation
+                )
+            }.collect { slice ->
                 _uiState.update {
                     it.copy(
-                        geminiApiKey = apiKey,
-                        hasGeminiApiKey = apiKey.isNotBlank(),
-                        autoTranslateLyricsEnabled = autoTranslate,
-                        lyricsTranslationTargetLanguage = targetLang
+                        geminiApiKey = slice.geminiApiKey,
+                        hasGeminiApiKey = slice.geminiApiKey.isNotBlank(),
+                        autoTranslateLyricsEnabled = slice.autoTranslate,
+                        lyricsTranslationTargetLanguage = slice.targetLang,
+                        showLyricsRomanization = slice.showRomanization,
+                        showLyricsTranslation = slice.showTranslation
                     )
                 }
             }
@@ -701,6 +721,18 @@ class SettingsViewModel @Inject constructor(
     fun setLyricsTranslationTargetLanguage(languageCode: String) {
         viewModelScope.launch {
             lyricsAiPreferencesRepository.setTargetLanguage(languageCode)
+        }
+    }
+
+    fun setShowLyricsRomanization(enabled: Boolean) {
+        viewModelScope.launch {
+            lyricsAiPreferencesRepository.setShowLyricsRomanization(enabled)
+        }
+    }
+
+    fun setShowLyricsTranslation(enabled: Boolean) {
+        viewModelScope.launch {
+            lyricsAiPreferencesRepository.setShowLyricsTranslation(enabled)
         }
     }
 

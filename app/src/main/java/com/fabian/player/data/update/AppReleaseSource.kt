@@ -107,7 +107,10 @@ class AppReleaseSource @Inject constructor(
             val apks = (0 until assets.length())
                 .mapNotNull { assets.optJSONObject(it) }
                 .filter {
-                    it.optString("name").endsWith(".apk") && it.optString("browser_download_url").isNotBlank()
+                    val name = it.optString("name")
+                    name.endsWith(".apk") &&
+                        !name.endsWith("-debug.apk") &&
+                        it.optString("browser_download_url").isNotBlank()
                 }
             return supportedAbis.firstNotNullOfOrNull { abi ->
                 apks.firstOrNull { it.optString("name").endsWith("-$abi.apk") }

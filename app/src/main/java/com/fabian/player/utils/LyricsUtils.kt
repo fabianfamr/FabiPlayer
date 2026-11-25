@@ -631,6 +631,25 @@ object MultiLangRomanizer {
         }
         return romajiBuilder.toString()
     }
+
+    /**
+     * Adapts English-style romanized phonetics for non-Latin scripts (e.g. Cyrillic, Japanese,
+     * Korean) to sound natural for readers of [targetLanguageCode] (such as Spanish).
+     */
+    fun adaptRomanizationForTargetLanguage(romanized: String, targetLanguageCode: String): String {
+        val lang = targetLanguageCode.lowercase(Locale.ROOT).substringBefore('-')
+        if (lang != "es") return romanized
+
+        return romanized
+            .replace(Regex("(?i)\\bkh")) { if (it.value[0].isUpperCase()) "J" else "j" }
+            .replace(Regex("(?i)kh")) { if (it.value[0].isUpperCase()) "J" else "j" }
+            .replace(Regex("(?i)zh")) { if (it.value[0].isUpperCase()) "Y" else "y" }
+            .replace(Regex("(?i)ts")) { if (it.value[0].isUpperCase()) "Ts" else "ts" }
+            .replace(Regex("(?i)ye")) { if (it.value[0].isUpperCase()) "Ie" else "ie" }
+            .replace(Regex("(?i)yu")) { if (it.value[0].isUpperCase()) "Iu" else "iu" }
+            .replace(Regex("(?i)ya")) { if (it.value[0].isUpperCase()) "Ia" else "ia" }
+            .replace(Regex("(?i)yo")) { if (it.value[0].isUpperCase()) "Io" else "io" }
+    }
 }
 
 private fun String.capitalizeFirstLetter(): String {

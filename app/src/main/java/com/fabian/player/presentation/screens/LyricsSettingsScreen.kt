@@ -29,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ClearAll
 import androidx.compose.material.icons.outlined.LinearScale
 import androidx.compose.material.icons.outlined.Warning
+import androidx.compose.material.icons.rounded.Abc
 import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.BlurOn
 import androidx.compose.material.icons.rounded.FormatSize
@@ -36,6 +37,7 @@ import androidx.compose.material.icons.rounded.Gradient
 import androidx.compose.material.icons.rounded.Groups
 import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.Mic
+import androidx.compose.material.icons.rounded.Subtitles
 import androidx.compose.material.icons.rounded.Translate
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
@@ -169,7 +171,11 @@ fun LyricsSettingsScreen(
         if (highlightPending && !highlightKey.isNullOrBlank()) {
             delay(200)
             val targetIndex = when (highlightKey) {
-                "item_lyrics_auto_translate", "item_lyrics_translation_lang", "item_lyrics_gemini_key" -> 1
+                "item_lyrics_auto_translate",
+                "item_lyrics_show_romanization",
+                "item_lyrics_show_translation",
+                "item_lyrics_translation_lang",
+                "item_lyrics_gemini_key" -> 1
                 "item_lyrics_source_priority", "item_lyrics_reset_imported" -> 2
                 else -> 0
             }
@@ -319,6 +325,7 @@ fun LyricsSettingsScreen(
                         "fr" to stringResource(R.string.lyrics_ai_lang_fr),
                         "de" to stringResource(R.string.lyrics_ai_lang_de),
                         "it" to stringResource(R.string.lyrics_ai_lang_it),
+                        "ru" to stringResource(R.string.lyrics_ai_lang_ru),
                         "ja" to stringResource(R.string.lyrics_ai_lang_ja),
                         "ko" to stringResource(R.string.lyrics_ai_lang_ko),
                         "zh" to stringResource(R.string.lyrics_ai_lang_zh)
@@ -333,6 +340,28 @@ fun LyricsSettingsScreen(
                             Icon(Icons.Rounded.Translate, null, tint = MaterialTheme.colorScheme.secondary)
                         },
                         modifier = Modifier.settingHighlight("item_lyrics_translation_lang", highlightKey)
+                    )
+
+                    SwitchSettingItem(
+                        title = stringResource(R.string.lyrics_ai_show_romanization_title),
+                        subtitle = stringResource(R.string.lyrics_ai_show_romanization_subtitle),
+                        checked = uiState.showLyricsRomanization,
+                        onCheckedChange = settingsViewModel::setShowLyricsRomanization,
+                        leadingIcon = {
+                            Icon(Icons.Rounded.Abc, null, tint = MaterialTheme.colorScheme.secondary)
+                        },
+                        modifier = Modifier.settingHighlight("item_lyrics_show_romanization", highlightKey)
+                    )
+
+                    SwitchSettingItem(
+                        title = stringResource(R.string.lyrics_ai_show_translation_title),
+                        subtitle = stringResource(R.string.lyrics_ai_show_translation_subtitle),
+                        checked = uiState.showLyricsTranslation,
+                        onCheckedChange = settingsViewModel::setShowLyricsTranslation,
+                        leadingIcon = {
+                            Icon(Icons.Rounded.Subtitles, null, tint = MaterialTheme.colorScheme.secondary)
+                        },
+                        modifier = Modifier.settingHighlight("item_lyrics_show_translation", highlightKey)
                     )
 
                     SettingsItem(

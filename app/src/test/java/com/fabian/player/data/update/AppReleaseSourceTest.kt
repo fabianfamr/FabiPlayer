@@ -65,6 +65,39 @@ class AppReleaseSourceTest {
     }
 
     @Test
+    fun `universal release apk is selected and debug apk is ignored`() {
+        val releases = JSONArray(
+            """
+            [
+              {
+                "tag_name": "v0.5.0",
+                "prerelease": false,
+                "draft": false,
+                "html_url": "https://github.com/fabianfamr/FabiPlayer/releases/tag/v0.5.0",
+                "assets": [
+                  {
+                    "name": "FabiPlayer-v0.5.0-debug.apk",
+                    "size": 12345,
+                    "browser_download_url": "https://github.com/fabianfamr/FabiPlayer/releases/download/v0.5.0/FabiPlayer-v0.5.0-debug.apk"
+                  },
+                  {
+                    "name": "FabiPlayer-v0.5.0-release.apk",
+                    "size": 23456,
+                    "browser_download_url": "https://github.com/fabianfamr/FabiPlayer/releases/download/v0.5.0/FabiPlayer-v0.5.0-release.apk"
+                  }
+                ]
+              }
+            ]
+            """.trimIndent()
+        )
+
+        val latest = AppReleaseSource.parseLatestStable(releases, listOf("arm64-v8a", "x86_64"))!!
+
+        assertThat(latest.versionName).isEqualTo("0.5.0")
+        assertThat(latest.apkUrl).endsWith("FabiPlayer-v0.5.0-release.apk")
+    }
+
+    @Test
     fun `alpha versions order by base version before build number`() {
         val olderBaseHigherBuild = alphaRelease("0.3.0-alpha.99")
         val newerBase = alphaRelease("0.4.0-alpha.1")

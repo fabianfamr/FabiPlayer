@@ -2,16 +2,18 @@
 
 All notable changes to FabiPlayer will be documented in this file.
 
-## [Unreleased]
+## [0.5.0] - 2026-11-25
 
 ### Added
 - **FabiPlayer rebrand & GitHub-only distribution:** Renamed the app to **FabiPlayer** (`com.fabian.player`), removed F-Droid distribution/metadata, and switched both Stable and Alpha update channels to GitHub Releases (`github.com/fabianfamr/FabiPlayer`).
-- **AI lyrics translation & target-language phonetics:** Added on-demand and optional automatic lyrics translation for both synced and plain lyrics using Gemini (`gemini-3.8-flash`) when an API key is configured in *Settings → Lyrics* (stored with `EncryptedSharedPreferences`), with an automatic free translator + local romanizer fallback when no key is set. Phonetics are tailored to the target language (e.g., Russian/Japanese/English pronunciation adapted for Spanish readers right above the translated line) and cached locally per song.
+- **AI lyrics translation + target-language phonetics together:** Added on-demand and optional automatic line-by-line lyrics translation using Gemini (`gemini-3.8-flash`) or the free translator fallback, showing the original lyric line on top, target-language phonetics (for Russian, Japanese, Korean, etc., adapted to how the user's language pronounces them) in the middle, and the translated line directly underneath (including Latin-to-Latin pairs such as Spanish ↔ French/English). Added Russian (`ru`) target language support, visibility switches in *Settings → Lyrics*, and improved readability/contrast on stacked lines.
 - **Smooth app-wide album art theme transitions:** Enabled *"Use now playing colors across the app"* by default and added animated color-scheme transitions across the full interface, plus a configurable transition duration slider (`1.0s` to `4.0s`) in *Settings → Appearance*.
+- **Tablet & large-screen compatibility:** Added `<supports-screens>` and optional hardware `<uses-feature>` declarations in `AndroidManifest.xml`, enabled universal APK / `x86_64` ABI support, and constrained full-screen lyrics width (`760.dp`) on wide tablet screens alongside existing adaptive navigation rail, multi-column album grids, and two-pane player layouts.
+- **GitHub Actions Build & Release workflow:** Added `.github/workflows/build-and-release.yml` (JDK 21, automatic `keystore.properties` CI signing, version resolution from `gradle.properties`, universal `FabiPlayer-v<version>-release.apk` and `FabiPlayer-v<version>-debug.apk` release assets).
 
 ### Fixed
 - **No unnecessary library rescans on reopen:** Persisted the `MediaStore` generation snapshot across app launches so reopening the app no longer triggers a library rescan unless audio files actually changed on the device.
-- **Update asset ABI matching:** Fixed GitHub release asset selection so ABI-specific APKs for another architecture are not offered as fallbacks when a device ABI isn't present.
+- **Update asset ABI matching:** Fixed GitHub release asset selection so ABI-specific APKs for another architecture and `-debug.apk` artifacts are not selected by the in-app updater when picking universal or matching-ABI release APKs.
 - Navidrome/Subsonic (including Gonic) and Jellyfin covers no longer hold up other artwork while a slow server answers. A cover download kept one of the threads that decode every image in the app until the server replied, even after its list item had scrolled away, so a burst of slow covers left the rest of the library on placeholders. Downloads now run off those threads and stop as soon as their cover leaves the screen, and a cover shown in several places at once is downloaded once instead of once per place ([#118](https://github.com/fabianfamr/FabiPlayer/issues/118)).
 
 ## [0.4.0] - 2026-10-17

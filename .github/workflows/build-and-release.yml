@@ -1,0 +1,162 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-release:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Get Version
+        id: get_version
+        run: |
+          if [ -f "VERSION" ]; then
+            VNAME=$(sed -n '1p' VERSION | tr -d '\r\n[:space:]')
+            VCODE=$(sed -n '2p' VERSION | tr -d '\r\n[:space:]')
+          elif [ -f "gradle.properties" ] && grep -q '^APP_VERSION_NAME=' gradle.properties; then
+            VNAME=$(grep '^APP_VERSION_NAME=' gradle.properties | head -1 | cut -d= -f2 | tr -d '\r\n[:space:]')
+            VCODE=$(grep '^APP_VERSION_CODE=' gradle.properties | head -1 | cut -d= -f2 | tr -d '\r\n[:space:]')
+          else
+            VNAME=$(grep -E '^\s*versionName' app/build.gradle.kts | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
+            VCODE=$(grep -E '^\s*versionCode' app/build.gradle.kts | head -1 | sed -E 's/[^0-9]*([0-9]+).*/\1/')
+          fi
+          echo "VERSION_NAME=$VNAME" >> $GITHUB_OUTPUT
+          echo "VERSION_CODE=$VCODE" >> $GITHUB_OUTPUT
+          echo "VERSION=$VNAME" >> $GITHUB_OUTPUT
+
+      - name: Prepare Debug Keystore
+        run: |
+          if [ -f "debug.keystore.base64" ]; then
+            echo "Decoding debug.keystore.base64 to debug.keystore..."
+            tr -d '\n\r' < debug.keystore.base64 | base64 -d > debug.keystore
+          fi
+          if [ ! -f "debug.keystore" ] && [ ! -f "release.keystore" ]; then
+            echo "No debug keystore found, generating a temporary debug.keystore..."
+            keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+          fi
+
+      - name: Build Debug APK
+        run: >
+          ./gradlew :app:assembleDebug
+          -Ppixelplayer.enableAbiSplits=false
+          -PAPP_VERSION_NAME=${{ steps.get_version.outputs.VERSION_NAME }}
+          -PAPP_VERSION_CODE=${{ steps.get_version.outputs.VERSION_CODE }}
+
+      - name: Configure Release Signing
+        env:
+          CI_KEYSTORE_BASE64: ${{ secrets.CI_KEYSTORE_BASE64 }}
+          CI_KEYSTORE_B64: ${{ secrets.CI_KEYSTORE_B64 }}
+          CI_STORE_PASSWORD: ${{ secrets.CI_STORE_PASSWORD }}
+          CI_KEYSTORE_PASSWORD: ${{ secrets.CI_KEYSTORE_PASSWORD }}
+          CI_KEY_ALIAS: ${{ secrets.CI_KEY_ALIAS }}
+          CI_KEY_PASSWORD: ${{ secrets.CI_KEY_PASSWORD }}
+        run: |
+          mkdir -p app
+          KEYSTORE_B64="${CI_KEYSTORE_BASE64:-$CI_KEYSTORE_B64}"
+          STORE_PASS="${CI_STORE_PASSWORD:-${CI_KEYSTORE_PASSWORD:-android}}"
+          ALIAS_NAME="${CI_KEY_ALIAS:-androiddebugkey}"
+          KEY_PASS="${CI_KEY_PASSWORD:-$STORE_PASS}"
+
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "Restaurando keystore desde secreto de CI..."
+            printf '%s' "$KEYSTORE_B64" | tr -d '\n\r' | base64 -d > app/keystore.jks
+          elif [ -f "release.keystore" ]; then
+            cp release.keystore app/keystore.jks
+          elif [ -f "debug.keystore.base64" ]; then
+            tr -d '\n\r' < debug.keystore.base64 | base64 -d > app/keystore.jks
+          elif [ -f "debug.keystore" ]; then
+            cp debug.keystore app/keystore.jks
+          else
+            echo "No release keystore found, generating a temporary keystore..."
+            keytool -genkey -v -keystore app/keystore.jks -storepass "$STORE_PASS" -alias "$ALIAS_NAME" -keypass "$KEY_PASS" -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=FabiPlayer CI,O=FabiPlayer,C=US"
+          fi
+
+          {
+            echo "storeFile=app/keystore.jks"
+            echo "storePassword=$STORE_PASS"
+            echo "keyAlias=$ALIAS_NAME"
+            echo "keyPassword=$KEY_PASS"
+          } > keystore.properties
+
+      - name: Build Release APK
+        run: >
+          ./gradlew :app:assembleRelease
+          -Ppixelplayer.enableAbiSplits=false
+          -PAPP_VERSION_NAME=${{ steps.get_version.outputs.VERSION_NAME }}
+          -PAPP_VERSION_CODE=${{ steps.get_version.outputs.VERSION_CODE }}
+
+      - name: Prepare Named Release Assets
+        run: |
+          mkdir -p release_assets
+          VNAME="${{ steps.get_version.outputs.VERSION_NAME }}"
+
+          if [ -f "app/build/outputs/apk/release/app-universal-release.apk" ]; then
+            cp app/build/outputs/apk/release/app-universal-release.apk "release_assets/FabiPlayer-v${VNAME}-release.apk"
+          elif [ -f "app/build/outputs/apk/release/app-release.apk" ]; then
+            cp app/build/outputs/apk/release/app-release.apk "release_assets/FabiPlayer-v${VNAME}-release.apk"
+          fi
+
+          if [ -f "app/build/outputs/apk/debug/app-universal-debug.apk" ]; then
+            cp app/build/outputs/apk/debug/app-universal-debug.apk "release_assets/FabiPlayer-v${VNAME}-debug.apk"
+          elif [ -f "app/build/outputs/apk/debug/app-debug.apk" ]; then
+            cp app/build/outputs/apk/debug/app-debug.apk "release_assets/FabiPlayer-v${VNAME}-debug.apk"
+          fi
+
+          ls -lh release_assets
+
+      - name: Upload Debug APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fabiplayer-debug
+          path: release_assets/*debug.apk
+
+      - name: Upload Release APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fabiplayer-release
+          path: release_assets/*release.apk
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('v{0}', steps.get_version.outputs.VERSION_NAME) }}
+          name: "v${{ steps.get_version.outputs.VERSION_NAME }} - FabiPlayer"
+          body: |
+            Release generada automáticamente.
+            Versión: ${{ steps.get_version.outputs.VERSION_NAME }}
+            Código de Versión: ${{ steps.get_version.outputs.VERSION_CODE }}
+            Commit: ${{ github.sha }}
+          draft: false
+          prerelease: false
+          overwrite: true
+          fail_on_unmatched_files: false
+          files: |
+            release_assets/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
