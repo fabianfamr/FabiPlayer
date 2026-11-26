@@ -36,6 +36,7 @@ class LyricsAiPreferencesRepository @Inject constructor(
         val TARGET_LANGUAGE = stringPreferencesKey("lyrics_translation_target_lang_v1")
         val SHOW_TRANSLATION = booleanPreferencesKey("show_lyrics_translation")
         val SHOW_ROMANIZATION = booleanPreferencesKey("show_lyrics_romanization")
+        val GEMINI_MODEL = stringPreferencesKey("lyrics_gemini_model_v1")
     }
 
     private val encryptedPrefs: SharedPreferences by lazy { createApiKeyPrefs() }
@@ -56,6 +57,10 @@ class LyricsAiPreferencesRepository @Inject constructor(
 
     val showLyricsRomanizationFlow: Flow<Boolean> = dataStore.data.map { prefs ->
         prefs[Keys.SHOW_ROMANIZATION] ?: true
+    }
+
+    val geminiModelFlow: Flow<String> = dataStore.data.map { prefs ->
+        sanitizeGeminiModel(prefs[Keys.GEMINI_MODEL])
     }
 
     suspend fun getAutoTranslateLyrics(): Boolean = autoTranslateLyricsFlow.first()
@@ -103,6 +108,14 @@ class LyricsAiPreferencesRepository @Inject constructor(
         _geminiApiKeyFlow.value = trimmed
     }
 
+    suspend fun getGeminiModel(): String = geminiModelFlow.first()
+
+    suspend fun setGeminiModel(model: String) {
+        dataStore.edit { prefs ->
+            prefs[Keys.GEMINI_MODEL] = sanitizeGeminiModel(model)
+        }
+    }
+
     fun resolveTargetLanguageCode(storedCode: String = _targetCodeSnapshot()): String {
         val sanitized = sanitizeLanguageCode(storedCode)
         if (sanitized != LANG_AUTO) return sanitized
@@ -146,13 +159,28 @@ class LyricsAiPreferencesRepository @Inject constructor(
         private const val PREFS_NAME = "lyrics_ai_secrets"
         private const val KEY_GEMINI_API_KEY = "gemini_api_key"
         const val LANG_AUTO = "auto"
+        const val DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
 
         val SUPPORTED_LANGUAGE_CODES = listOf(
             LANG_AUTO, "es", "en", "pt", "fr", "de", "it", "ru", "ja", "ko", "zh"
         )
 
+        val SUPPORTED_GEMINI_MODELS = listOf(
+            "gemini-2.5-flash",
+            "gemini-2.5-flash-lite",
+            "gemini-2.5-pro",
+            "gemini-3-flash-preview"
+        )
+
+        private val VALID_GEMINI_MODEL_REGEX = Regex("^[A-Za-z0-9._-]{1,80}$")
+
         fun sanitizeLanguageCode(code: String?): String =
             if (code != null && code in SUPPORTED_LANGUAGE_CODES) code else LANG_AUTO
+
+        fun sanitizeGeminiModel(model: String?): String {
+            val trimmed = model?.trim().orEmpty()
+            return if (VALID_GEMINI_MODEL_REGEX.matches(trimmed)) trimmed else DEFAULT_GEMINI_MODEL
+        }
 
         fun maskApiKey(apiKey: String): String {
             val trimmed = apiKey.trim()

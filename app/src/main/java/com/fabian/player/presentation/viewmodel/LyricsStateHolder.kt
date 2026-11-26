@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.viewmodel
+package com.fabian.player.presentation.viewmodel
 
 import android.content.Context
 import com.fabian.player.R
@@ -188,6 +188,7 @@ class LyricsStateHolder @Inject constructor(
                 val storedLang = aiPrefs.getTargetLanguage()
                 val resolvedLang = aiPrefs.resolveTargetLanguageCode(storedLang)
                 val apiKey = aiPrefs.getGeminiApiKey()
+                val geminiModel = aiPrefs.getGeminiModel()
 
                 translator.translateLyrics(
                     songId = targetSongId,
@@ -195,7 +196,8 @@ class LyricsStateHolder @Inject constructor(
                     artist = song.displayArtist,
                     lyrics = lyrics,
                     targetLanguageCode = resolvedLang,
-                    geminiApiKey = apiKey
+                    geminiApiKey = apiKey,
+                    geminiModel = geminiModel
                 ).onSuccess { outcome ->
                     aiPrefs.ensureTranslationAndPronunciationVisible()
                     loadCallback?.onLyricsLoaded(targetSongId, outcome.lyrics)

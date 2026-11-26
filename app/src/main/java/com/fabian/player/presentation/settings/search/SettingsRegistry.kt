@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.settings.search
+package com.fabian.player.presentation.settings.search
 
 import com.fabian.player.R
 import com.fabian.player.presentation.model.SettingsCategory
@@ -371,6 +371,16 @@ object SettingsRegistry {
                 subscreenRoute = Screen.LyricsSettings.createRoute(),
                 type = SettingType.NAVIGABLE_CARD,
                 keywordsStatic = listOf("gemini", "api key", "ai", "clave", "google ai studio")
+            ),
+            SettingSpec(
+                id = "lyrics_gemini_model",
+                itemKey = "item_lyrics_gemini_model",
+                titleRes = R.string.lyrics_ai_gemini_model_title,
+                subtitleRes = R.string.lyrics_ai_gemini_model_dialog_title,
+                category = SettingsCategory.PLAYBACK,
+                subscreenRoute = Screen.LyricsSettings.createRoute(),
+                type = SettingType.NAVIGABLE_CARD,
+                keywordsStatic = listOf("gemini", "model", "modelo", "ai", "ia", "flash", "pro")
             ),
             SettingSpec(
                 id = "lyrics_source_priority",

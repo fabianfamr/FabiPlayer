@@ -41,7 +41,7 @@ internal data class TranslatedLyricLine(
 /**
  * Translates synced and plain song lyrics into the user's target language and generates
  * phonetic pronunciation (e.g. Romaji for Japanese, Revised Romanization for Korean) using the
- * Gemini API (`gemini-2.5-flash`) when an API key is configured, with automatic fallback to a
+ * Gemini API with the model and API key configured in AI settings, with automatic fallback to a
  * free translation endpoint plus local [MultiLangRomanizer].
  */
 @Singleton
@@ -66,7 +66,8 @@ class LyricsTranslatorService @Inject constructor(
         artist: String,
         lyrics: Lyrics,
         targetLanguageCode: String,
-        geminiApiKey: String
+        geminiApiKey: String,
+        geminiModel: String = DEFAULT_GEMINI_MODEL
     ): Result<LyricsTranslationOutcome> = withContext(Dispatchers.IO) {
         val linesToTranslate = extractTranslatableLines(lyrics)
         if (linesToTranslate.isEmpty()) {
@@ -77,10 +78,15 @@ class LyricsTranslatorService @Inject constructor(
 
         val normalizedLang = targetLanguageCode.trim().ifBlank { "es" }
         val trimmedKey = geminiApiKey.trim()
+        val resolvedModel = sanitizeModelId(geminiModel)
         val cacheFile = cacheFileFor(
             songId = songId,
             targetLang = normalizedLang,
-            fingerprint = fingerprintLyrics(lyrics, useGemini = trimmedKey.isNotEmpty())
+            fingerprint = fingerprintLyrics(
+                lyrics = lyrics,
+                useGemini = trimmedKey.isNotEmpty(),
+                geminiModel = resolvedModel
+            )
         )
         readCachedLyrics(cacheFile)?.let { cached ->
             return@withContext Result.success(
@@ -103,6 +109,7 @@ class LyricsTranslatorService @Inject constructor(
                     artist = artist,
                     lines = linesToTranslate,
                     targetLanguageCode = normalizedLang,
+                    model = resolvedModel,
                     apiKey = trimmedKey
                 )
                 val updatedLyrics = applyTranslationsToLyrics(
@@ -187,8 +194,10 @@ class LyricsTranslatorService @Inject constructor(
         artist: String,
         lines: List<Pair<Int, String>>,
         targetLanguageCode: String,
+        model: String,
         apiKey: String
     ): Map<Int, TranslatedLyricLine> {
+        val endpoint = geminiEndpointForModel(model)
         val results = mutableMapOf<Int, TranslatedLyricLine>()
         lines.chunked(GEMINI_CHUNK_SIZE).forEach { chunk ->
             val requestJson = buildGeminiRequestBody(
@@ -198,7 +207,7 @@ class LyricsTranslatorService @Inject constructor(
                 targetLanguageCode = targetLanguageCode
             )
             val request = Request.Builder()
-                .url(GEMINI_ENDPOINT)
+                .url(endpoint)
                 .header("x-goog-api-key", apiKey)
                 .header("Content-Type", "application/json")
                 .post(requestJson.toRequestBody(JSON_MEDIA_TYPE))
@@ -307,12 +316,21 @@ class LyricsTranslatorService @Inject constructor(
     companion object {
         private const val TAG = "LyricsTranslator"
         private const val CACHE_DIR_NAME = "lyrics_translations"
-        private const val GEMINI_MODEL = "gemini-2.5-flash"
-        private const val GEMINI_ENDPOINT =
-            "https://generativelanguage.googleapis.com/v1beta/models/$GEMINI_MODEL:generateContent"
+        const val DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
+        private val VALID_MODEL_REGEX = Regex("^[A-Za-z0-9._-]{1,80}$")
         private const val GEMINI_CHUNK_SIZE = 75
         private const val FREE_CHUNK_SIZE = 25
         private val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaType()
+
+        internal fun sanitizeModelId(model: String?): String {
+            val trimmed = model?.trim().orEmpty()
+            return if (VALID_MODEL_REGEX.matches(trimmed)) trimmed else DEFAULT_GEMINI_MODEL
+        }
+
+        internal fun geminiEndpointForModel(model: String?): String {
+            val safeModel = sanitizeModelId(model)
+            return "https://generativelanguage.googleapis.com/v1beta/models/$safeModel:generateContent"
+        }
 
         internal fun extractTranslatableLines(lyrics: Lyrics): List<Pair<Int, String>> {
             val synced = lyrics.synced
@@ -502,9 +520,17 @@ class LyricsTranslatorService @Inject constructor(
             JSONObject(body).optJSONObject("error")?.optString("message")?.takeIf { it.isNotBlank() }
         }.getOrNull()
 
-        private fun fingerprintLyrics(lyrics: Lyrics, useGemini: Boolean): String {
+        private fun fingerprintLyrics(
+            lyrics: Lyrics,
+            useGemini: Boolean,
+            geminiModel: String = DEFAULT_GEMINI_MODEL
+        ): String {
             val raw = buildString {
-                append(if (useGemini) "g3:" else "f3:")
+                if (useGemini) {
+                    append("g3:").append(sanitizeModelId(geminiModel)).append(':')
+                } else {
+                    append("f3:")
+                }
                 lyrics.synced?.forEach { append(it.time).append(':').append(it.line).append('\n') }
                 lyrics.plain?.forEach { append(it).append('\n') }
             }

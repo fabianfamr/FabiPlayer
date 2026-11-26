@@ -42,6 +42,13 @@
     <string name="lyrics_ai_gemini_key_hint">Paste AIza… API key</string>
     <string name="lyrics_ai_gemini_key_save">Save</string>
     <string name="lyrics_ai_gemini_key_clear">Clear</string>
+    <string name="lyrics_ai_gemini_model_title">Gemini AI model</string>
+    <string name="lyrics_ai_gemini_model_subtitle">Active: %1$s</string>
+    <string name="lyrics_ai_gemini_model_dialog_title">Gemini AI Model</string>
+    <string name="lyrics_ai_gemini_model_dialog_body">Choose a preset Gemini model or enter any valid model ID to use with your API key.</string>
+    <string name="lyrics_ai_gemini_model_custom_label">Model ID</string>
+    <string name="lyrics_ai_gemini_model_hint">e.g. gemini-2.5-flash</string>
+    <string name="lyrics_ai_gemini_model_reset">Default</string>
     <string name="lyrics_action_translate_ai">Translate with AI</string>
     <string name="lyrics_action_translating_ai">Translating…</string>
     <string name="lyrics_action_retranslate_ai">Re-translate with AI</string>

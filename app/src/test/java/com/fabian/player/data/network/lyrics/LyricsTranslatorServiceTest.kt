@@ -155,4 +155,19 @@ class LyricsTranslatorServiceTest {
         assertThat(updated.plainRomanizations).containsExactly(null)
         assertThat(updated.plainTranslations).containsExactly("Bonjour, voici la partie supérieure.")
     }
+
+    @Test
+    fun `geminiEndpointForModel uses configured model and falls back safely on invalid values`() {
+        assertThat(LyricsTranslatorService.geminiEndpointForModel("gemini-2.5-pro"))
+            .isEqualTo("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent")
+
+        assertThat(LyricsTranslatorService.geminiEndpointForModel("  gemini-2.5-flash-lite  "))
+            .isEqualTo("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent")
+
+        assertThat(LyricsTranslatorService.geminiEndpointForModel(""))
+            .isEqualTo("https://generativelanguage.googleapis.com/v1beta/models/${LyricsTranslatorService.DEFAULT_GEMINI_MODEL}:generateContent")
+
+        assertThat(LyricsTranslatorService.geminiEndpointForModel("gemini-2.5-flash/../../evil"))
+            .isEqualTo("https://generativelanguage.googleapis.com/v1beta/models/${LyricsTranslatorService.DEFAULT_GEMINI_MODEL}:generateContent")
+    }
 }

@@ -123,6 +123,7 @@ data class SettingsUiState(
     val showLyricsBackgroundVocals: Boolean = DEFAULT_SHOW_LYRICS_BACKGROUND_VOCALS,
     val geminiApiKey: String = "",
     val hasGeminiApiKey: Boolean = false,
+    val geminiModel: String = LyricsAiPreferencesRepository.DEFAULT_GEMINI_MODEL,
     val autoTranslateLyricsEnabled: Boolean = false,
     val lyricsTranslationTargetLanguage: String = LyricsAiPreferencesRepository.LANG_AUTO,
     val showLyricsRomanization: Boolean = true,
@@ -148,6 +149,7 @@ data class SettingsUiState(
 
 private data class LyricsAiUiSlice(
     val geminiApiKey: String,
+    val geminiModel: String,
     val autoTranslate: Boolean,
     val targetLang: String,
     val showRomanization: Boolean,
@@ -479,24 +481,31 @@ class SettingsViewModel @Inject constructor(
 
         viewModelScope.launch {
             combine(
-                lyricsAiPreferencesRepository.geminiApiKeyFlow,
-                lyricsAiPreferencesRepository.autoTranslateLyricsFlow,
-                lyricsAiPreferencesRepository.targetLanguageFlow,
-                lyricsAiPreferencesRepository.showLyricsRomanizationFlow,
-                lyricsAiPreferencesRepository.showLyricsTranslationFlow
-            ) { apiKey, autoTranslate, targetLang, showRomanization, showTranslation ->
-                LyricsAiUiSlice(
-                    geminiApiKey = apiKey,
-                    autoTranslate = autoTranslate,
-                    targetLang = targetLang,
-                    showRomanization = showRomanization,
-                    showTranslation = showTranslation
-                )
+                combine(
+                    lyricsAiPreferencesRepository.geminiApiKeyFlow,
+                    lyricsAiPreferencesRepository.autoTranslateLyricsFlow,
+                    lyricsAiPreferencesRepository.targetLanguageFlow,
+                    lyricsAiPreferencesRepository.showLyricsRomanizationFlow,
+                    lyricsAiPreferencesRepository.showLyricsTranslationFlow
+                ) { apiKey, autoTranslate, targetLang, showRomanization, showTranslation ->
+                    LyricsAiUiSlice(
+                        geminiApiKey = apiKey,
+                        geminiModel = LyricsAiPreferencesRepository.DEFAULT_GEMINI_MODEL,
+                        autoTranslate = autoTranslate,
+                        targetLang = targetLang,
+                        showRomanization = showRomanization,
+                        showTranslation = showTranslation
+                    )
+                },
+                lyricsAiPreferencesRepository.geminiModelFlow
+            ) { slice, model ->
+                slice.copy(geminiModel = model)
             }.collect { slice ->
                 _uiState.update {
                     it.copy(
                         geminiApiKey = slice.geminiApiKey,
                         hasGeminiApiKey = slice.geminiApiKey.isNotBlank(),
+                        geminiModel = slice.geminiModel,
                         autoTranslateLyricsEnabled = slice.autoTranslate,
                         lyricsTranslationTargetLanguage = slice.targetLang,
                         showLyricsRomanization = slice.showRomanization,
@@ -699,6 +708,12 @@ class SettingsViewModel @Inject constructor(
 
     fun setGeminiApiKey(apiKey: String) {
         lyricsAiPreferencesRepository.setGeminiApiKey(apiKey)
+    }
+
+    fun setGeminiModel(model: String) {
+        viewModelScope.launch {
+            lyricsAiPreferencesRepository.setGeminiModel(model)
+        }
     }
 
     fun setAutoTranslateLyricsEnabled(enabled: Boolean) {
