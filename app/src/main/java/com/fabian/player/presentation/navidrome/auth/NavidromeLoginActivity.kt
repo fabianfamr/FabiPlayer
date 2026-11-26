@@ -1,6 +1,5 @@
-﻿package com.fabian.player.presentation.navidrome.auth
+package com.fabian.player.presentation.navidrome.auth
 
-import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
@@ -192,16 +191,17 @@ fun NavidromeLoginScreen(
     val connect = {
         focusManager.clearFocus()
         val credentials = NavidromeCredentials(serverUrl, username, password)
+        val localNetworkPermission = "android.permission.ACCESS_LOCAL_NETWORK"
         val permissionMissing = Build.VERSION.SDK_INT >= 37 &&
             credentials.requiresLocalNetworkAccess &&
             ContextCompat.checkSelfPermission(
                 context,
-                Manifest.permission.ACCESS_LOCAL_NETWORK
+                localNetworkPermission
             ) != PackageManager.PERMISSION_GRANTED
 
         if (permissionMissing) {
             pendingLocalNetworkLogin = Triple(serverUrl, username, password)
-            localNetworkPermissionLauncher.launch(Manifest.permission.ACCESS_LOCAL_NETWORK)
+            localNetworkPermissionLauncher.launch(localNetworkPermission)
         } else {
             viewModel.login(serverUrl, username, password)
         }

@@ -41,7 +41,7 @@ internal data class TranslatedLyricLine(
 /**
  * Translates synced and plain song lyrics into the user's target language and generates
  * phonetic pronunciation (e.g. Romaji for Japanese, Revised Romanization for Korean) using the
- * Gemini API (`gemini-3.8-flash`) when an API key is configured, with automatic fallback to a
+ * Gemini API (`gemini-2.5-flash`) when an API key is configured, with automatic fallback to a
  * free translation endpoint plus local [MultiLangRomanizer].
  */
 @Singleton
@@ -307,7 +307,7 @@ class LyricsTranslatorService @Inject constructor(
     companion object {
         private const val TAG = "LyricsTranslator"
         private const val CACHE_DIR_NAME = "lyrics_translations"
-        private const val GEMINI_MODEL = "gemini-3.8-flash"
+        private const val GEMINI_MODEL = "gemini-2.5-flash"
         private const val GEMINI_ENDPOINT =
             "https://generativelanguage.googleapis.com/v1beta/models/$GEMINI_MODEL:generateContent"
         private const val GEMINI_CHUNK_SIZE = 75

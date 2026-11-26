@@ -1,4 +1,4 @@
-﻿package com.fabian.player.di
+package com.fabian.player.di
 
 import android.content.Context
 import androidx.annotation.OptIn
@@ -373,6 +373,8 @@ object AppModule {
             redactHeader("X-Emby-Token")
             redactHeader("X-Emby-Authorization")
             redactHeader("X-MediaBrowser-Token")
+            redactHeader("x-goog-api-key")
+            redactHeader("X-Goog-Api-Key")
         }
         
         val connectionPool = okhttp3.ConnectionPool(
@@ -389,6 +391,12 @@ object AppModule {
             .retryOnConnectionFailure(true)
             .addInterceptor { chain ->
                 val originalRequest = chain.request()
+                val requestUrl = originalRequest.url
+                if (!requestUrl.isHttps &&
+                    !com.fabian.player.data.stream.CloudStreamSecurity.isLocalServerHost(requestUrl.host)
+                ) {
+                    throw java.io.IOException("Cleartext HTTP is only permitted for local network servers")
+                }
                 val requestWithUserAgent = originalRequest.newBuilder()
                     .header("User-Agent", "FabiPlayer/1.0 (Android; Music Player)")
                     .build()

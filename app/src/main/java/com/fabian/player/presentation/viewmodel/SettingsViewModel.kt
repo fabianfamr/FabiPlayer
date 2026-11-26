@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.viewmodel
+package com.fabian.player.presentation.viewmodel
 
 import android.content.Context
 import android.net.Uri
@@ -101,7 +101,6 @@ data class SettingsUiState(
     val externalLyricsEnabled: Boolean = false,
     val externalArtistImagesEnabled: Boolean = false,
     val blockedDirectories: Set<String> = emptySet(),
-    val appRebrandDialogShown: Boolean = false,
     val fullPlayerLoadingTweaks: FullPlayerLoadingTweaks = FullPlayerLoadingTweaks(),
     val showPlayerFileInfo: Boolean = true,
     val showScrollbar: Boolean = true,
@@ -177,7 +176,6 @@ data class LyricsRefreshProgress(
 
 private sealed interface SettingsUiUpdate {
     data class Group1(
-        val appRebrandDialogShown: Boolean,
         val appThemeMode: String,
         val playerThemePreference: String,
         val albumArtPaletteStyle: AlbumArtPaletteStyle,
@@ -313,7 +311,6 @@ class SettingsViewModel @Inject constructor(
 
         viewModelScope.launch {
             combine<Any?, SettingsUiUpdate.Group1>(
-                userPreferencesRepository.appRebrandDialogShownFlow,
                 themePreferencesRepository.appThemeModeFlow,
                 themePreferencesRepository.playerThemePreferenceFlow,
                 themePreferencesRepository.albumArtPaletteStyleFlow,
@@ -329,25 +326,23 @@ class SettingsViewModel @Inject constructor(
                 themePreferencesRepository.globalNowPlayingThemeEnabledFlow
             ) { values ->
                 SettingsUiUpdate.Group1(
-                    appRebrandDialogShown = values[0] as Boolean,
-                    appThemeMode = values[1] as String,
-                    playerThemePreference = values[2] as String,
-                    albumArtPaletteStyle = values[3] as AlbumArtPaletteStyle,
-                    albumArtColorAccuracy = values[4] as Int,
-                    mockGenresEnabled = values[5] as Boolean,
-                    navBarCornerRadius = values[6] as Int,
-                    navBarStyle = values[7] as String,
-                    navBarCompactMode = values[8] as Boolean,
-                    libraryNavigationMode = values[9] as String,
-                    carouselStyle = values[10] as String,
-                    launchTab = values[11] as String,
-                    showPlayerFileInfo = values[12] as Boolean,
-                    globalNowPlayingThemeEnabled = values[13] as Boolean
+                    appThemeMode = values[0] as String,
+                    playerThemePreference = values[1] as String,
+                    albumArtPaletteStyle = values[2] as AlbumArtPaletteStyle,
+                    albumArtColorAccuracy = values[3] as Int,
+                    mockGenresEnabled = values[4] as Boolean,
+                    navBarCornerRadius = values[5] as Int,
+                    navBarStyle = values[6] as String,
+                    navBarCompactMode = values[7] as Boolean,
+                    libraryNavigationMode = values[8] as String,
+                    carouselStyle = values[9] as String,
+                    launchTab = values[10] as String,
+                    showPlayerFileInfo = values[11] as Boolean,
+                    globalNowPlayingThemeEnabled = values[12] as Boolean
                 )
             }.collect { update ->
                 _uiState.update { state ->
                     state.copy(
-                        appRebrandDialogShown = update.appRebrandDialogShown,
                         appThemeMode = update.appThemeMode,
                         playerThemePreference = update.playerThemePreference,
                         albumArtPaletteStyle = update.albumArtPaletteStyle,
@@ -617,12 +612,6 @@ class SettingsViewModel @Inject constructor(
             userPreferencesRepository.showScrollbarFlow.collect { enabled ->
                 _uiState.update { it.copy(showScrollbar = enabled) }
             }
-        }
-    }
-
-    fun setAppRebrandDialogShown(wasShown: Boolean) {
-        viewModelScope.launch {
-            userPreferencesRepository.setAppRebrandDialogShown(wasShown)
         }
     }
 

@@ -40,7 +40,7 @@ val enableComposeCompilerReports = providers.gradleProperty("pixelplayer.enableC
 @Suppress("DEPRECATION")
 android {
     namespace = "com.fabian.player"
-    compileSdk = 37
+    compileSdk = 36
 
     sourceSets {
         getByName("androidTest") {
@@ -80,9 +80,9 @@ android {
     defaultConfig {
         applicationId = "com.fabian.player"
         minSdk = 30
-        targetSdk = 37
-        versionCode = (project.findProperty("APP_VERSION_CODE") as? String)?.toInt() ?: 1
-        versionName = (project.findProperty("APP_VERSION_NAME") as? String) ?: "1.0.0"
+        targetSdk = 36
+        versionCode = (project.findProperty("APP_VERSION_CODE") as? String)?.toInt() ?: 6
+        versionName = (project.findProperty("APP_VERSION_NAME") as? String) ?: "0.6.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

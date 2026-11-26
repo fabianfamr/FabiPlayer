@@ -1,9 +1,8 @@
-﻿package com.fabian.player
+package com.fabian.player
 
 import com.fabian.player.presentation.navigation.navigateSafely
 
 import android.Manifest
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -104,15 +103,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.session.MediaController
-import androidx.media3.session.SessionToken
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.common.util.concurrent.ListenableFuture
-import com.google.common.util.concurrent.MoreExecutors
 import com.fabian.player.data.preferences.AppThemeMode
 import com.fabian.player.data.preferences.NavBarStyle
 import com.fabian.player.data.preferences.sanitizeNavBarCornerRadius
@@ -201,8 +196,6 @@ class MainActivity : ComponentActivity() {
 
     private val playerViewModel: PlayerViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
-    private var isUIVisiblyReady = false
-    private var mediaControllerFuture: ListenableFuture<MediaController>? = null
     @Inject
     lateinit var userPreferencesRepository: UserPreferencesRepository
     @Inject
@@ -738,7 +731,6 @@ class MainActivity : ComponentActivity() {
                 Screen.SettingsCategory.route,
                 Screen.DelimiterConfig.route,
                 Screen.PaletteStyle.route,
-                Screen.RecentlyPlayed.route,
                 Screen.DeviceCapabilities.route,
                 Screen.EasterEgg.route,
                 Screen.WordDelimiterConfig.route,
@@ -1284,26 +1276,11 @@ class MainActivity : ComponentActivity() {
         super.onStart()
         LogUtils.d(this, "onStart")
         playerViewModel.onMainActivityStart()
-
-        if (intent.getBooleanExtra("is_benchmark", false)) {
-        }
-
-        val sessionToken = SessionToken(this, ComponentName(this, MusicService::class.java))
-        mediaControllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
-        mediaControllerFuture?.addListener({
-        }, MoreExecutors.directExecutor())
     }
 
     override fun onStop() {
         super.onStop()
         LogUtils.d(this, "onStop")
-        mediaControllerFuture?.let {
-            MediaController.releaseFuture(it)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     // configChanges keeps this activity alive across fold/unfold, so re-check the phone lock here.

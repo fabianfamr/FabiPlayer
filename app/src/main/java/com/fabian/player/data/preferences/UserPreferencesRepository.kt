@@ -1,4 +1,4 @@
-﻿package com.fabian.player.data.preferences
+package com.fabian.player.data.preferences
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -120,7 +120,6 @@ constructor(
     )
 
     private object PreferencesKeys {
-        val APP_REBRAND_DIALOG_SHOWN = booleanPreferencesKey("app_rebrand_dialog_shown")
         val RECAP_HOME_CARD_DISMISSED_YEAR = intPreferencesKey("recap_home_card_dismissed_year")
         val ALLOWED_DIRECTORIES = stringSetPreferencesKey("allowed_directories")
         val BLOCKED_DIRECTORIES = stringSetPreferencesKey("blocked_directories")
@@ -323,17 +322,6 @@ constructor(
 
     suspend fun setLastNotifiedUpdateVersion(version: String) {
         dataStore.edit { preferences -> preferences[PreferencesKeys.UPDATE_LAST_NOTIFIED_VERSION] = version }
-    }
-
-    val appRebrandDialogShownFlow: Flow<Boolean> =
-            dataStore.data.map { preferences ->
-                preferences[PreferencesKeys.APP_REBRAND_DIALOG_SHOWN] ?: false
-            }
-
-    suspend fun setAppRebrandDialogShown(wasShown: Boolean) {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.APP_REBRAND_DIALOG_SHOWN] = wasShown
-        }
     }
 
     /** The year whose seasonal Home recap card the user dismissed, or 0 when none was. */
