@@ -1,4 +1,4 @@
-﻿@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
 
 package com.fabian.player.presentation.screens
 
@@ -1432,6 +1432,8 @@ fun SettingsCategoryScreen(
                             }
                         }
                         SettingsCategory.EQUALIZER -> {
+                        }
+                        SettingsCategory.AI -> {
                         }
                         SettingsCategory.DEVICE_CAPABILITIES -> {
                         }

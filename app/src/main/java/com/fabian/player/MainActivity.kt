@@ -726,6 +726,7 @@ class MainActivity : ComponentActivity() {
                 Screen.EditTransition.route,
                 Screen.Experimental.route,
                 Screen.LyricsSettings.route,
+                Screen.AiSettings.route,
                 Screen.ArtistSettings.route,
                 Screen.Equalizer.route,
                 Screen.SettingsCategory.route,

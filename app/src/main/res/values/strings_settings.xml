@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="setcat_m3u_sync_section">Playlist synchronization</string>
     <string name="setcat_m3u_sync_title">Automatic M3U sync</string>
@@ -31,6 +31,12 @@
     <string name="settings_category_developer_subtitle">Experimental features and debugging</string>
     <string name="settings_category_equalizer_title">Equalizer</string>
     <string name="settings_category_equalizer_subtitle">Adjust audio frequencies and presets</string>
+    <string name="settings_category_ai_title">AI</string>
+    <string name="settings_category_ai_subtitle">API key and Gemini model configuration</string>
+    <string name="ai_settings_gemini_section">Gemini configuration</string>
+    <string name="ai_settings_overview">Configure your Google AI Studio API key and select the Gemini model used for AI-powered features such as lyrics translation and phonetic pronunciation.</string>
+    <string name="cd_show_api_key">Show API key</string>
+    <string name="cd_hide_api_key">Hide API key</string>
     <string name="settings_category_device_capabilities_title">Device Capabilities</string>
     <string name="settings_category_device_capabilities_subtitle">Audio specs, codecs, and decoder info</string>
     <string name="settings_category_about_title">About</string>

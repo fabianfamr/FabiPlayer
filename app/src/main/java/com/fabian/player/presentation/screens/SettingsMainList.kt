@@ -1,10 +1,9 @@
-﻿package com.fabian.player.presentation.screens
+package com.fabian.player.presentation.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
-import androidx.compose.material.icons.rounded.CloudDownload
 import androidx.compose.material.icons.rounded.Lyrics
 import androidx.compose.material.icons.rounded.SystemUpdate
 import androidx.compose.material3.ColorScheme
@@ -49,6 +48,7 @@ internal val SettingsCategory.iconTone: SettingsIconTone
         SettingsCategory.BACKUP_RESTORE -> SettingsIconTone.TERTIARY
         SettingsCategory.DEVELOPER -> SettingsIconTone.SECONDARY
         SettingsCategory.EQUALIZER -> SettingsIconTone.TERTIARY
+        SettingsCategory.AI -> SettingsIconTone.PRIMARY
         SettingsCategory.DEVICE_CAPABILITIES -> SettingsIconTone.SECONDARY
         SettingsCategory.ABOUT -> SettingsIconTone.SECONDARY
     }
@@ -66,6 +66,7 @@ internal sealed interface MainSettingsEntry {
         override val route: String
             get() = when (category) {
                 SettingsCategory.EQUALIZER -> Screen.Equalizer.createRoute()
+                SettingsCategory.AI -> Screen.AiSettings.createRoute()
                 SettingsCategory.DEVICE_CAPABILITIES -> Screen.DeviceCapabilities.createRoute()
                 SettingsCategory.ABOUT -> Screen.About.route
                 else -> Screen.SettingsCategory.createRoute(category.id)
@@ -87,13 +88,6 @@ internal sealed interface MainSettingsEntry {
             icon = Icons.Rounded.Lyrics,
             iconTone = SettingsIconTone.SECONDARY,
             route = Screen.LyricsSettings.createRoute()
-        ),
-        DOWNLOADS(
-            titleRes = R.string.cloud_downloads_title,
-            subtitleRes = R.string.cloud_downloads_settings_subtitle,
-            icon = Icons.Rounded.CloudDownload,
-            iconTone = SettingsIconTone.PRIMARY,
-            route = Screen.CloudDownloads.route
         ),
         ACCOUNTS(
             titleRes = R.string.settings_accounts_row_title,
@@ -123,7 +117,6 @@ internal val mainSettingsEntries: List<MainSettingsEntry> = buildList {
             add(MainSettingsEntry.Category(category))
             if (category == SettingsCategory.PLAYBACK) add(MainSettingsEntry.Destination.LYRICS)
         }
-    add(MainSettingsEntry.Destination.DOWNLOADS)
     add(MainSettingsEntry.Category(SettingsCategory.DEVICE_CAPABILITIES))
     add(MainSettingsEntry.Destination.ACCOUNTS)
     add(MainSettingsEntry.Destination.UPDATES)

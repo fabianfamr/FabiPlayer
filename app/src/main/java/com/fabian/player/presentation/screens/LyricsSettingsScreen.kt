@@ -11,8 +11,6 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,25 +35,16 @@ import androidx.compose.material.icons.rounded.BlurOn
 import androidx.compose.material.icons.rounded.FormatSize
 import androidx.compose.material.icons.rounded.Gradient
 import androidx.compose.material.icons.rounded.Groups
-import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.Subtitles
 import androidx.compose.material.icons.rounded.Translate
-import androidx.compose.material.icons.rounded.Tune
-import androidx.compose.material.icons.rounded.Visibility
-import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -113,8 +102,6 @@ fun LyricsSettingsScreen(
         mutableFloatStateOf(uiState.animatedLyricsBlurStrength)
     }
     var showClearLyricsDialog by remember { mutableStateOf(false) }
-    var showGeminiKeyDialog by remember { mutableStateOf(false) }
-    var showGeminiModelDialog by remember { mutableStateOf(false) }
 
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
@@ -179,9 +166,7 @@ fun LyricsSettingsScreen(
                 "item_lyrics_auto_translate",
                 "item_lyrics_show_romanization",
                 "item_lyrics_show_translation",
-                "item_lyrics_translation_lang",
-                "item_lyrics_gemini_key",
-                "item_lyrics_gemini_model" -> 1
+                "item_lyrics_translation_lang" -> 1
                 "item_lyrics_source_priority", "item_lyrics_reset_imported" -> 2
                 else -> 0
             }
@@ -369,36 +354,6 @@ fun LyricsSettingsScreen(
                         },
                         modifier = Modifier.settingHighlight("item_lyrics_show_translation", highlightKey)
                     )
-
-                    SettingsItem(
-                        title = stringResource(R.string.lyrics_ai_gemini_key_title),
-                        subtitle = if (uiState.hasGeminiApiKey) {
-                            stringResource(
-                                R.string.lyrics_ai_gemini_key_configured,
-                                LyricsAiPreferencesRepository.maskApiKey(uiState.geminiApiKey)
-                            )
-                        } else {
-                            stringResource(R.string.lyrics_ai_gemini_key_not_configured)
-                        },
-                        leadingIcon = {
-                            Icon(Icons.Rounded.Key, null, tint = MaterialTheme.colorScheme.secondary)
-                        },
-                        modifier = Modifier.settingHighlight("item_lyrics_gemini_key", highlightKey),
-                        onClick = { showGeminiKeyDialog = true }
-                    )
-
-                    SettingsItem(
-                        title = stringResource(R.string.lyrics_ai_gemini_model_title),
-                        subtitle = stringResource(
-                            R.string.lyrics_ai_gemini_model_subtitle,
-                            uiState.geminiModel
-                        ),
-                        leadingIcon = {
-                            Icon(Icons.Rounded.Tune, null, tint = MaterialTheme.colorScheme.secondary)
-                        },
-                        modifier = Modifier.settingHighlight("item_lyrics_gemini_model", highlightKey),
-                        onClick = { showGeminiModelDialog = true }
-                    )
                 }
             }
 
@@ -468,147 +423,6 @@ fun LyricsSettingsScreen(
             dismissButton = {
                 TextButton(onClick = { showClearLyricsDialog = false }) {
                     Text(stringResource(R.string.cancel), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                }
-            }
-        )
-    }
-
-    if (showGeminiKeyDialog) {
-        var apiKeyInput by remember(uiState.geminiApiKey) { mutableStateOf(uiState.geminiApiKey) }
-        var showKeyText by remember { mutableStateOf(false) }
-
-        AlertDialog(
-            icon = { Icon(Icons.Rounded.AutoAwesome, null) },
-            title = { Text(stringResource(R.string.lyrics_ai_gemini_key_dialog_title)) },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(
-                        text = stringResource(R.string.lyrics_ai_gemini_key_dialog_body),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    OutlinedTextField(
-                        value = apiKeyInput,
-                        onValueChange = { apiKeyInput = it },
-                        singleLine = true,
-                        placeholder = { Text(stringResource(R.string.lyrics_ai_gemini_key_hint)) },
-                        visualTransformation = if (showKeyText) {
-                            VisualTransformation.None
-                        } else {
-                            PasswordVisualTransformation()
-                        },
-                        trailingIcon = {
-                            IconButton(onClick = { showKeyText = !showKeyText }) {
-                                Icon(
-                                    imageVector = if (showKeyText) Icons.Rounded.VisibilityOff else Icons.Rounded.Visibility,
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            },
-            onDismissRequest = { showGeminiKeyDialog = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        settingsViewModel.setGeminiApiKey(apiKeyInput)
-                        showGeminiKeyDialog = false
-                    }
-                ) {
-                    Text(stringResource(R.string.lyrics_ai_gemini_key_save), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                }
-            },
-            dismissButton = {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    if (uiState.hasGeminiApiKey) {
-                        TextButton(
-                            onClick = {
-                                settingsViewModel.setGeminiApiKey("")
-                                showGeminiKeyDialog = false
-                            }
-                        ) {
-                            Text(
-                                text = stringResource(R.string.lyrics_ai_gemini_key_clear),
-                                color = MaterialTheme.colorScheme.error,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                    }
-                    TextButton(onClick = { showGeminiKeyDialog = false }) {
-                        Text(stringResource(R.string.cancel), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    }
-                }
-            }
-        )
-    }
-
-    if (showGeminiModelDialog) {
-        var modelInput by remember(uiState.geminiModel) { mutableStateOf(uiState.geminiModel) }
-
-        AlertDialog(
-            icon = { Icon(Icons.Rounded.AutoAwesome, null) },
-            title = { Text(stringResource(R.string.lyrics_ai_gemini_model_dialog_title)) },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(
-                        text = stringResource(R.string.lyrics_ai_gemini_model_dialog_body),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    @OptIn(ExperimentalLayoutApi::class)
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        LyricsAiPreferencesRepository.SUPPORTED_GEMINI_MODELS.forEach { preset ->
-                            FilterChip(
-                                selected = modelInput.trim() == preset,
-                                onClick = { modelInput = preset },
-                                label = { Text(preset, maxLines = 1, overflow = TextOverflow.Ellipsis) }
-                            )
-                        }
-                    }
-                    OutlinedTextField(
-                        value = modelInput,
-                        onValueChange = { modelInput = it },
-                        singleLine = true,
-                        label = { Text(stringResource(R.string.lyrics_ai_gemini_model_custom_label)) },
-                        placeholder = { Text(stringResource(R.string.lyrics_ai_gemini_model_hint)) },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            },
-            onDismissRequest = { showGeminiModelDialog = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        settingsViewModel.setGeminiModel(modelInput)
-                        showGeminiModelDialog = false
-                    }
-                ) {
-                    Text(stringResource(R.string.lyrics_ai_gemini_key_save), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                }
-            },
-            dismissButton = {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    if (uiState.geminiModel != LyricsAiPreferencesRepository.DEFAULT_GEMINI_MODEL) {
-                        TextButton(
-                            onClick = {
-                                settingsViewModel.setGeminiModel(LyricsAiPreferencesRepository.DEFAULT_GEMINI_MODEL)
-                                showGeminiModelDialog = false
-                            }
-                        ) {
-                            Text(
-                                text = stringResource(R.string.lyrics_ai_gemini_model_reset),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                    }
-                    TextButton(onClick = { showGeminiModelDialog = false }) {
-                        Text(stringResource(R.string.cancel), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    }
                 }
             }
         )

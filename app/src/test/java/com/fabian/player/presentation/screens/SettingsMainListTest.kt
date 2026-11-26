@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.screens
+package com.fabian.player.presentation.screens
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
@@ -153,13 +153,13 @@ class SettingsMainListTest {
             MainSettingsEntry.Category(SettingsCategory.LIBRARY).route
         )
         assertEquals(Screen.Equalizer.createRoute(), MainSettingsEntry.Category(SettingsCategory.EQUALIZER).route)
+        assertEquals(Screen.AiSettings.createRoute(), MainSettingsEntry.Category(SettingsCategory.AI).route)
         assertEquals(
             Screen.DeviceCapabilities.createRoute(),
             MainSettingsEntry.Category(SettingsCategory.DEVICE_CAPABILITIES).route
         )
         assertEquals(Screen.About.route, MainSettingsEntry.Category(SettingsCategory.ABOUT).route)
         assertEquals(Screen.LyricsSettings.createRoute(), MainSettingsEntry.Destination.LYRICS.route)
-        assertEquals(Screen.CloudDownloads.route, MainSettingsEntry.Destination.DOWNLOADS.route)
         assertEquals(Screen.Accounts.createRoute(), MainSettingsEntry.Destination.ACCOUNTS.route)
         assertEquals(Screen.Updates.route, MainSettingsEntry.Destination.UPDATES.route)
     }

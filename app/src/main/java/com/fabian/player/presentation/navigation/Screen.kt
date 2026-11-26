@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.navigation
+package com.fabian.player.presentation.navigation
 
 import android.net.Uri
 import androidx.compose.runtime.Immutable
@@ -29,6 +29,10 @@ sealed class Screen(val route: String) {
     object LyricsSettings : Screen("lyrics_settings?highlightKey={highlightKey}") {
         fun createRoute(highlightKey: String? = null) =
             if (highlightKey != null) "lyrics_settings?highlightKey=$highlightKey" else "lyrics_settings"
+    }
+    object AiSettings : Screen("ai_settings?highlightKey={highlightKey}") {
+        fun createRoute(highlightKey: String? = null) =
+            if (highlightKey != null) "ai_settings?highlightKey=$highlightKey" else "ai_settings"
     }
     object NavBarCrRad : Screen("nav_bar_corner_radius?highlightKey={highlightKey}") {
         fun createRoute(highlightKey: String? = null) =
@@ -86,7 +90,6 @@ sealed class Screen(val route: String) {
     }
     object NavidromeDashboard : Screen("navidrome_dashboard")
     object JellyfinDashboard : Screen("jellyfin_dashboard")
-    object CloudDownloads : Screen("cloud_downloads")
     object Updates : Screen("updates")
 
     object AudioBookmarks : Screen("audio_bookmarks")

@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.settings.search
+package com.fabian.player.presentation.settings.search
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
@@ -167,5 +167,21 @@ class SettingsRegistryTest {
     @Test
     fun `default highlight shape matches the settings row corner radius`() {
         assertThat(DefaultSettingHighlightShape).isEqualTo(RoundedCornerShape(10.dp))
+    }
+
+    @Test
+    fun `gemini key and model live under AI settings and downloads is removed`() {
+        val geminiKey = spec("ai_gemini_key")
+        val geminiModel = spec("ai_gemini_model")
+
+        assertThat(geminiKey.category).isEqualTo(SettingsCategory.AI)
+        assertThat(geminiKey.subscreenRoute).isEqualTo(Screen.AiSettings.createRoute())
+        assertThat(geminiKey.createNavigationRoute()).isEqualTo("ai_settings?highlightKey=item_ai_gemini_key")
+
+        assertThat(geminiModel.category).isEqualTo(SettingsCategory.AI)
+        assertThat(geminiModel.subscreenRoute).isEqualTo(Screen.AiSettings.createRoute())
+        assertThat(geminiModel.createNavigationRoute()).isEqualTo("ai_settings?highlightKey=item_ai_gemini_model")
+
+        assertThat(settings.none { it.id == "cloud_downloads" }).isTrue()
     }
 }

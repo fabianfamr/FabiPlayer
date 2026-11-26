@@ -1,7 +1,8 @@
-﻿package com.fabian.player.presentation.model
+package com.fabian.player.presentation.model
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.DeveloperBoard
 import androidx.compose.material.icons.rounded.DeveloperMode
 import androidx.compose.material.icons.rounded.GraphicEq
@@ -42,6 +43,12 @@ enum class SettingsCategory(
         titleRes = R.string.settings_category_equalizer_title,
         subtitleRes = R.string.settings_category_equalizer_subtitle,
         icon = Icons.Rounded.GraphicEq
+    ),
+    AI(
+        id = "ai",
+        titleRes = R.string.settings_category_ai_title,
+        subtitleRes = R.string.settings_category_ai_subtitle,
+        icon = Icons.Rounded.AutoAwesome
     ),
     BEHAVIOR(
         id = "behavior",

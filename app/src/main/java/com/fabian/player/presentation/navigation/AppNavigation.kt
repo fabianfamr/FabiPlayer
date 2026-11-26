@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.navigation
+package com.fabian.player.presentation.navigation
 
 import DelimiterConfigScreen
 import com.fabian.player.presentation.screens.WordDelimiterConfigScreen
@@ -34,9 +34,9 @@ import androidx.navigation.navArgument
 import com.fabian.player.data.preferences.LaunchTab
 import com.fabian.player.data.preferences.UserPreferencesRepository
 import com.fabian.player.presentation.screens.AlbumDetailScreen
+import com.fabian.player.presentation.screens.AiSettingsScreen
 import com.fabian.player.presentation.screens.AudioBookmarkFolderScreen
 import com.fabian.player.presentation.screens.AudioBookmarksScreen
-import com.fabian.player.presentation.screens.CloudDownloadsScreen
 import com.fabian.player.presentation.screens.UpdatesScreen
 import com.fabian.player.presentation.model.SettingsCategory
 import com.fabian.player.presentation.screens.AccountsScreen
@@ -324,6 +324,24 @@ fun AppNavigation(
                         LyricsSettingsScreen(
                             navController = navController,
                             playerViewModel = playerViewModel,
+                            highlightKey = highlightKey
+                        )
+                    }
+                }
+            }
+            composable(
+                route = Screen.AiSettings.route,
+                arguments = listOf(navArgument("highlightKey") { type = NavType.StringType; nullable = true; defaultValue = null }),
+                enterTransition = { enterTransition() },
+                exitTransition = { exitTransition() },
+                popEnterTransition = { popEnterTransition() },
+                popExitTransition = { popExitTransition() },
+            ) { backStackEntry ->
+                val highlightKey = backStackEntry.arguments?.getString("highlightKey")
+                ScreenWrapper(navController = navController, playerViewModel = playerViewModel) {
+                    ProvideSettingsHighlight(highlightKey) {
+                        AiSettingsScreen(
+                            navController = navController,
                             highlightKey = highlightKey
                         )
                     }
@@ -682,17 +700,6 @@ fun AppNavigation(
                     com.fabian.player.presentation.jellyfin.dashboard.JellyfinDashboardScreen(
                         onBack = { navController.popBackStack() }
                     )
-                }
-            }
-            composable(
-                Screen.CloudDownloads.route,
-                enterTransition = { enterTransition() },
-                exitTransition = { exitTransition() },
-                popEnterTransition = { popEnterTransition() },
-                popExitTransition = { popExitTransition() },
-            ) {
-                ScreenWrapper(navController = navController, playerViewModel = playerViewModel) {
-                    CloudDownloadsScreen(onBack = { navController.popBackStack() })
                 }
             }
             composable(

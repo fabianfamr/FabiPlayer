@@ -362,23 +362,25 @@ object SettingsRegistry {
                 getValue = { it.showLyricsTranslation },
                 onToggle = { viewModel, checked -> viewModel.setShowLyricsTranslation(checked) }
             ),
+
+            // --- AI CATEGORY ---
             SettingSpec(
-                id = "lyrics_gemini_key",
-                itemKey = "item_lyrics_gemini_key",
+                id = "ai_gemini_key",
+                itemKey = "item_ai_gemini_key",
                 titleRes = R.string.lyrics_ai_gemini_key_title,
                 subtitleRes = R.string.lyrics_ai_gemini_key_dialog_title,
-                category = SettingsCategory.PLAYBACK,
-                subscreenRoute = Screen.LyricsSettings.createRoute(),
+                category = SettingsCategory.AI,
+                subscreenRoute = Screen.AiSettings.createRoute(),
                 type = SettingType.NAVIGABLE_CARD,
-                keywordsStatic = listOf("gemini", "api key", "ai", "clave", "google ai studio")
+                keywordsStatic = listOf("gemini", "api key", "ai", "ia", "clave", "google ai studio")
             ),
             SettingSpec(
-                id = "lyrics_gemini_model",
-                itemKey = "item_lyrics_gemini_model",
+                id = "ai_gemini_model",
+                itemKey = "item_ai_gemini_model",
                 titleRes = R.string.lyrics_ai_gemini_model_title,
                 subtitleRes = R.string.lyrics_ai_gemini_model_dialog_title,
-                category = SettingsCategory.PLAYBACK,
-                subscreenRoute = Screen.LyricsSettings.createRoute(),
+                category = SettingsCategory.AI,
+                subscreenRoute = Screen.AiSettings.createRoute(),
                 type = SettingType.NAVIGABLE_CARD,
                 keywordsStatic = listOf("gemini", "model", "modelo", "ai", "ia", "flash", "pro")
             ),
@@ -416,16 +418,6 @@ object SettingsRegistry {
                     "accounts", "navidrome", "jellyfin", "subsonic", "streaming",
                     "server", "login", "favorites", "favourites", "sync"
                 )
-            ),
-            SettingSpec(
-                id = "cloud_downloads",
-                itemKey = "item_cloud_downloads",
-                titleRes = R.string.cloud_downloads_title,
-                subtitleRes = R.string.cloud_downloads_settings_subtitle,
-                category = SettingsCategory.LIBRARY,
-                subscreenRoute = Screen.CloudDownloads.route,
-                type = SettingType.NAVIGABLE_CARD,
-                keywordsStatic = listOf("downloads", "offline", "cloud", "storage", "navidrome", "jellyfin")
             ),
             SettingSpec(
                 id = "accounts_listenbrainz",
