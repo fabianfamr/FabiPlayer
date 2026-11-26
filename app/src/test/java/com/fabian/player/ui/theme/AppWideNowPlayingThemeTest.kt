@@ -1,4 +1,4 @@
-﻿package com.fabian.player.ui.theme
+package com.fabian.player.ui.theme
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -62,6 +62,36 @@ class AppWideNowPlayingThemeTest {
             currentSongScheme = null,
             lastValidSongId = "song-1",
             lastValidScheme = lastScheme
+        )
+
+        assertThat(resolved).isNull()
+    }
+
+    @Test
+    fun `pending extraction retains previous song palette briefly`() {
+        val resolved = resolveAppWideNowPlayingColorSchemePair(
+            enabled = true,
+            currentSongId = "song-2",
+            isPlaying = true,
+            currentSongScheme = null,
+            lastValidSongId = "song-1",
+            lastValidScheme = lastScheme,
+            isPendingExtraction = true
+        )
+
+        assertThat(resolved).isSameInstanceAs(lastScheme)
+    }
+
+    @Test
+    fun `missing artwork without pending extraction returns null`() {
+        val resolved = resolveAppWideNowPlayingColorSchemePair(
+            enabled = true,
+            currentSongId = "song-2",
+            isPlaying = true,
+            currentSongScheme = null,
+            lastValidSongId = "song-1",
+            lastValidScheme = lastScheme,
+            isPendingExtraction = false
         )
 
         assertThat(resolved).isNull()

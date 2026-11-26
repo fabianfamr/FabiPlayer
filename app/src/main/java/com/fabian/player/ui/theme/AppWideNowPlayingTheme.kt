@@ -1,4 +1,4 @@
-﻿package com.fabian.player.ui.theme
+package com.fabian.player.ui.theme
 
 import com.fabian.player.presentation.viewmodel.ColorSchemePair
 
@@ -14,10 +14,12 @@ internal fun resolveAppWideNowPlayingColorSchemePair(
     isPlaying: Boolean,
     currentSongScheme: ColorSchemePair?,
     lastValidSongId: String?,
-    lastValidScheme: ColorSchemePair?
+    lastValidScheme: ColorSchemePair?,
+    isPendingExtraction: Boolean = false
 ): ColorSchemePair? {
     if (!enabled || currentSongId == null) return null
     if (currentSongScheme != null) return currentSongScheme
     if (!isPlaying && currentSongId == lastValidSongId) return lastValidScheme
+    if (isPendingExtraction && lastValidScheme != null) return lastValidScheme
     return null
 }

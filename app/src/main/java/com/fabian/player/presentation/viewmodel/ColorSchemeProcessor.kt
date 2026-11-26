@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.viewmodel
+package com.fabian.player.presentation.viewmodel
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -474,6 +474,6 @@ class ColorSchemeProcessor @Inject constructor(
     companion object {
         private const val TAG = "ColorSchemeProcessor"
         private const val CACHE_KEY_SEPARATOR = "|"
-        private const val CACHE_ALGORITHM_VERSION = "algo_v7"
+        private const val CACHE_ALGORITHM_VERSION = "algo_v8"
     }
 }

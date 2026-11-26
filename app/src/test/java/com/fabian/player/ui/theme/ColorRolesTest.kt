@@ -1,15 +1,10 @@
-﻿package com.fabian.player.ui.theme
+package com.fabian.player.ui.theme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.ColorUtils
-import com.google.android.material.color.utilities.DynamicScheme
 import com.google.android.material.color.utilities.Hct
-import com.google.android.material.color.utilities.SchemeExpressive
-import com.google.android.material.color.utilities.SchemeFruitSalad
-import com.google.android.material.color.utilities.SchemeTonalSpot
-import com.google.android.material.color.utilities.SchemeVibrant
 import com.google.common.truth.Truth.assertThat
 import com.fabian.player.data.preferences.AlbumArtColorAccuracy
 import com.fabian.player.data.preferences.AlbumArtPaletteStyle
@@ -34,21 +29,68 @@ class ColorRolesTest {
     @Test
     fun generateColorSchemeFromSeed_keepsStyleSpecificSchemeForMutedGreenSeeds() {
         val seed = Color(0xFF556B2F)
-        val sourceHct = Hct.fromInt(seed.toArgb())
 
-        AlbumArtPaletteStyle.entries.forEach { style ->
-            val actual = generateColorSchemeFromSeed(seed, style)
+        val generatedByStyle = AlbumArtPaletteStyle.entries.associateWith { style ->
+            generateColorSchemeFromSeed(seed, style)
+        }
 
-            assertThat(actual.light.toArgbList())
-                .containsExactlyElementsIn(
-                    expectedScheme(style, sourceHct, isDark = false).toArgbList()
-                )
-                .inOrder()
-            assertThat(actual.dark.toArgbList())
-                .containsExactlyElementsIn(
-                    expectedScheme(style, sourceHct, isDark = true).toArgbList()
-                )
-                .inOrder()
+        generatedByStyle.values.forEach { pair ->
+            assertThat(Hct.fromInt(pair.dark.background.toArgb()).chroma).isGreaterThan(8.0)
+            assertThat(Hct.fromInt(pair.dark.surfaceContainer.toArgb()).chroma).isGreaterThan(10.0)
+            assertThat(Hct.fromInt(pair.light.surfaceContainer.toArgb()).chroma).isGreaterThan(8.0)
+            assertThat(isGrayscaleArgb(pair.dark.secondaryContainer.toArgb())).isFalse()
+            assertThat(isGrayscaleArgb(pair.dark.tertiaryContainer.toArgb())).isFalse()
+        }
+
+        val distinctDarkSignatures = generatedByStyle.values.map { pair ->
+            listOf(pair.dark.primary, pair.dark.secondaryContainer, pair.dark.tertiaryContainer).map(Color::toArgb)
+        }.toSet()
+        assertThat(distinctDarkSignatures.size).isEqualTo(AlbumArtPaletteStyle.entries.size)
+    }
+
+    @Test
+    fun generateColorSchemeFromSeed_preservesAndTintsDarkAndCoolSeeds() {
+        val darkTealSeed = Color(0xFF141E1E)
+        val darkCyanSeed = Color(0xFF0A3B47)
+
+        val darkTealPair = generateColorSchemeFromSeed(darkTealSeed, AlbumArtPaletteStyle.TONAL_SPOT)
+        assertThat(isGrayscaleArgb(darkTealPair.dark.background.toArgb())).isFalse()
+        assertThat(Hct.fromInt(darkTealPair.dark.surfaceContainer.toArgb()).chroma).isGreaterThan(8.0)
+
+        val darkCyanPair = generateColorSchemeFromSeed(darkCyanSeed, AlbumArtPaletteStyle.TONAL_SPOT)
+        assertThat(Hct.fromInt(darkCyanPair.dark.background.toArgb()).chroma).isGreaterThan(10.0)
+        assertThat(Hct.fromInt(darkCyanPair.dark.surfaceContainer.toArgb()).chroma).isGreaterThan(12.0)
+        assertThat(Hct.fromInt(darkCyanPair.dark.surfaceContainerHigh.toArgb()).chroma).isGreaterThan(14.0)
+        assertThat(Hct.fromInt(darkCyanPair.dark.secondaryContainer.toArgb()).chroma).isGreaterThan(18.0)
+        assertThat(Hct.fromInt(darkCyanPair.light.surfaceContainer.toArgb()).chroma).isGreaterThan(10.0)
+    }
+
+    @Test
+    fun generateColorSchemeFromSeed_maintainsAccessibleContrastAcrossLightAndDarkRoles() {
+        val seeds = listOf(
+            Color(0xFF0A3B47),
+            Color(0xFFD97254),
+            Color(0xFF556B2F),
+            Color(0xFF6A48B8)
+        )
+
+        seeds.forEach { seed ->
+            AlbumArtPaletteStyle.entries.forEach { style ->
+                val pair = generateColorSchemeFromSeed(seed, style)
+                listOf(pair.light, pair.dark).forEach { scheme ->
+                    assertMinContrast(scheme.onBackground, scheme.background)
+                    assertMinContrast(scheme.onSurface, scheme.surface)
+                    assertMinContrast(scheme.onSurface, scheme.surfaceContainer)
+                    assertMinContrast(scheme.onSurface, scheme.surfaceContainerHigh)
+                    assertMinContrast(scheme.onSurface, scheme.surfaceContainerHighest)
+                    assertMinContrast(scheme.onSurfaceVariant, scheme.surfaceVariant)
+                    assertMinContrast(scheme.onPrimary, scheme.primary)
+                    assertMinContrast(scheme.onPrimaryContainer, scheme.primaryContainer)
+                    assertMinContrast(scheme.onSecondaryContainer, scheme.secondaryContainer)
+                    assertMinContrast(scheme.onTertiaryContainer, scheme.tertiaryContainer)
+                    assertMinContrast(scheme.primary, scheme.surfaceContainerHighest)
+                }
+            }
         }
     }
 
@@ -153,17 +195,9 @@ class ColorRolesTest {
             .isLessThan(hueDistance(accurateSeed, tealAccent))
     }
 
-    private fun expectedScheme(
-        style: AlbumArtPaletteStyle,
-        sourceHct: Hct,
-        isDark: Boolean
-    ): DynamicScheme {
-        return when (style) {
-            AlbumArtPaletteStyle.TONAL_SPOT -> SchemeTonalSpot(sourceHct, isDark, 0.0)
-            AlbumArtPaletteStyle.VIBRANT -> SchemeVibrant(sourceHct, isDark, 0.0)
-            AlbumArtPaletteStyle.EXPRESSIVE -> SchemeExpressive(sourceHct, isDark, 0.0)
-            AlbumArtPaletteStyle.FRUIT_SALAD -> SchemeFruitSalad(sourceHct, isDark, 0.0)
-        }
+    private fun assertMinContrast(foreground: Color, background: Color) {
+        val contrast = ColorUtils.calculateContrast(foreground.toArgb(), background.toArgb())
+        assertThat(contrast).isAtLeast(4.5)
     }
 
     private fun ColorScheme.toArgbList(): List<Int> {
@@ -217,59 +251,6 @@ class ColorRolesTest {
             onTertiaryFixed,
             onTertiaryFixedVariant
         ).map(Color::toArgb)
-    }
-
-    private fun DynamicScheme.toArgbList(): List<Int> {
-        return listOf(
-            getPrimary(),
-            getOnPrimary(),
-            getPrimaryContainer(),
-            getOnPrimaryContainer(),
-            getInversePrimary(),
-            getSecondary(),
-            getOnSecondary(),
-            getSecondaryContainer(),
-            getOnSecondaryContainer(),
-            getTertiary(),
-            getOnTertiary(),
-            getTertiaryContainer(),
-            getOnTertiaryContainer(),
-            getBackground(),
-            getOnBackground(),
-            getSurface(),
-            getOnSurface(),
-            getSurfaceVariant(),
-            getOnSurfaceVariant(),
-            getSurfaceTint(),
-            getInverseSurface(),
-            getInverseOnSurface(),
-            getError(),
-            getOnError(),
-            getErrorContainer(),
-            getOnErrorContainer(),
-            getOutline(),
-            getOutlineVariant(),
-            getScrim(),
-            getSurfaceBright(),
-            getSurfaceDim(),
-            getSurfaceContainer(),
-            getSurfaceContainerHigh(),
-            getSurfaceContainerHighest(),
-            getSurfaceContainerLow(),
-            getSurfaceContainerLowest(),
-            getPrimaryFixed(),
-            getPrimaryFixedDim(),
-            getOnPrimaryFixed(),
-            getOnPrimaryFixedVariant(),
-            getSecondaryFixed(),
-            getSecondaryFixedDim(),
-            getOnSecondaryFixed(),
-            getOnSecondaryFixedVariant(),
-            getTertiaryFixed(),
-            getTertiaryFixedDim(),
-            getOnTertiaryFixed(),
-            getOnTertiaryFixedVariant()
-        )
     }
 
     private fun isGrayscaleArgb(argb: Int): Boolean {

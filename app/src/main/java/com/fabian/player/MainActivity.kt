@@ -334,9 +334,11 @@ class MainActivity : ComponentActivity() {
                 .stablePlayerState
                 .collectAsStateWithLifecycle()
             val currentSongId = stablePlayerState.currentSong?.id
+            val currentSongArtworkUri = stablePlayerState.currentSong?.albumArtUriString
+            val isPendingAlbumArtExtraction =
+                !currentSongArtworkUri.isNullOrBlank() && currentSongArtworkUri != themedAlbumArtUri
             val currentSongScheme = activePlayerColorSchemePair.takeIf {
-                val artworkUri = stablePlayerState.currentSong?.albumArtUriString
-                !artworkUri.isNullOrBlank() && artworkUri == themedAlbumArtUri
+                !currentSongArtworkUri.isNullOrBlank() && currentSongArtworkUri == themedAlbumArtUri
             }
             var lastValidNowPlayingSongId by remember { mutableStateOf<String?>(null) }
             var lastValidNowPlayingScheme by remember {
@@ -360,7 +362,8 @@ class MainActivity : ComponentActivity() {
                 isPlaying = stablePlayerState.isPlaying,
                 currentSongScheme = currentSongScheme,
                 lastValidSongId = lastValidNowPlayingSongId,
-                lastValidScheme = lastValidNowPlayingScheme
+                lastValidScheme = lastValidNowPlayingScheme,
+                isPendingExtraction = isPendingAlbumArtExtraction
             )
             val isSetupComplete by mainViewModel.isSetupComplete.collectAsStateWithLifecycle()
             
