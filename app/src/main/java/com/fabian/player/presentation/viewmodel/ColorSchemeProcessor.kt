@@ -474,6 +474,6 @@ class ColorSchemeProcessor @Inject constructor(
     companion object {
         private const val TAG = "ColorSchemeProcessor"
         private const val CACHE_KEY_SEPARATOR = "|"
-        private const val CACHE_ALGORITHM_VERSION = "algo_v8"
+        private const val CACHE_ALGORITHM_VERSION = "algo_v9"
     }
 }

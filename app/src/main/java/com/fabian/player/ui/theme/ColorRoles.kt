@@ -563,6 +563,7 @@ private data class EnrichedPaletteSpec(
     val primaryChroma: Double,
     val secondaryChroma: Double,
     val tertiaryChroma: Double,
+    val secondaryHueOverride: Double? = null,
     val tertiaryHueOverride: Double? = null
 )
 
@@ -572,33 +573,36 @@ private fun paletteSpecFor(
 ): EnrichedPaletteSpec {
     return when (paletteStyle) {
         AlbumArtPaletteStyle.TONAL_SPOT -> EnrichedPaletteSpec(
-            neutralChroma = 22.0,
-            neutralVariantChroma = 26.0,
-            primaryChroma = 44.0,
-            secondaryChroma = 30.0,
-            tertiaryChroma = 32.0,
-            tertiaryHueOverride = MathUtils.sanitizeDegreesDouble(sourceHct.hue + 28.0)
+            neutralChroma = 32.0,
+            neutralVariantChroma = 36.0,
+            primaryChroma = 48.0,
+            secondaryChroma = 42.0,
+            tertiaryChroma = 44.0,
+            secondaryHueOverride = MathUtils.sanitizeDegreesDouble(sourceHct.hue - 8.0),
+            tertiaryHueOverride = MathUtils.sanitizeDegreesDouble(sourceHct.hue + 12.0)
         )
         AlbumArtPaletteStyle.VIBRANT -> EnrichedPaletteSpec(
-            neutralChroma = 28.0,
-            neutralVariantChroma = 32.0,
-            primaryChroma = 54.0,
-            secondaryChroma = 36.0,
-            tertiaryChroma = 38.0
+            neutralChroma = 36.0,
+            neutralVariantChroma = 40.0,
+            primaryChroma = 56.0,
+            secondaryChroma = 48.0,
+            tertiaryChroma = 48.0,
+            secondaryHueOverride = MathUtils.sanitizeDegreesDouble(sourceHct.hue - 10.0),
+            tertiaryHueOverride = MathUtils.sanitizeDegreesDouble(sourceHct.hue + 18.0)
         )
         AlbumArtPaletteStyle.EXPRESSIVE -> EnrichedPaletteSpec(
-            neutralChroma = 22.0,
-            neutralVariantChroma = 26.0,
-            primaryChroma = 46.0,
-            secondaryChroma = 32.0,
-            tertiaryChroma = 38.0
+            neutralChroma = 30.0,
+            neutralVariantChroma = 34.0,
+            primaryChroma = 48.0,
+            secondaryChroma = 42.0,
+            tertiaryChroma = 44.0
         )
         AlbumArtPaletteStyle.FRUIT_SALAD -> EnrichedPaletteSpec(
-            neutralChroma = 24.0,
-            neutralVariantChroma = 28.0,
-            primaryChroma = 50.0,
-            secondaryChroma = 38.0,
-            tertiaryChroma = 38.0
+            neutralChroma = 32.0,
+            neutralVariantChroma = 36.0,
+            primaryChroma = 52.0,
+            secondaryChroma = 46.0,
+            tertiaryChroma = 46.0
         )
     }
 }
@@ -620,45 +624,45 @@ private fun enrichDynamicColorScheme(
     val neutralHue = baseScheme.neutralPalette.getHue()
     val neutralVariantHue = baseScheme.neutralVariantPalette.getHue()
     val primaryHue = baseScheme.primaryPalette.getHue()
-    val secondaryHue = baseScheme.secondaryPalette.getHue()
+    val secondaryHue = spec.secondaryHueOverride ?: baseScheme.secondaryPalette.getHue()
     val tertiaryHue = spec.tertiaryHueOverride ?: baseScheme.tertiaryPalette.getHue()
 
-    val primary = hctColor(primaryHue, spec.primaryChroma, if (isDark) 80.0 else 36.0)
+    val primary = hctColor(primaryHue, spec.primaryChroma, if (isDark) 82.0 else 36.0)
     val onPrimary = hctColor(primaryHue, spec.primaryChroma * 0.45, if (isDark) 18.0 else 98.0)
-    val primaryContainer = hctColor(primaryHue, spec.primaryChroma * 0.90, if (isDark) 30.0 else 86.0)
-    val onPrimaryContainer = hctColor(primaryHue, spec.primaryChroma * 0.35, if (isDark) 92.0 else 12.0)
+    val primaryContainer = hctColor(primaryHue, spec.primaryChroma * 0.92, if (isDark) 30.0 else 86.0)
+    val onPrimaryContainer = hctColor(primaryHue, spec.primaryChroma * 0.35, if (isDark) 93.0 else 12.0)
     val inversePrimary = hctColor(primaryHue, spec.primaryChroma, if (isDark) 38.0 else 80.0)
 
-    val secondary = hctColor(secondaryHue, spec.secondaryChroma, if (isDark) 82.0 else 36.0)
+    val secondary = hctColor(secondaryHue, spec.secondaryChroma, if (isDark) 83.0 else 36.0)
     val onSecondary = hctColor(secondaryHue, spec.secondaryChroma * 0.45, if (isDark) 18.0 else 98.0)
-    val secondaryContainer = hctColor(secondaryHue, spec.secondaryChroma * 0.95, if (isDark) 28.0 else 86.0)
-    val onSecondaryContainer = hctColor(secondaryHue, spec.secondaryChroma * 0.35, if (isDark) 92.0 else 12.0)
+    val secondaryContainer = hctColor(secondaryHue, spec.secondaryChroma * 0.95, if (isDark) 26.0 else 82.0)
+    val onSecondaryContainer = hctColor(secondaryHue, spec.secondaryChroma * 0.35, if (isDark) 93.0 else 12.0)
 
-    val tertiary = hctColor(tertiaryHue, spec.tertiaryChroma, if (isDark) 82.0 else 36.0)
+    val tertiary = hctColor(tertiaryHue, spec.tertiaryChroma, if (isDark) 84.0 else 36.0)
     val onTertiary = hctColor(tertiaryHue, spec.tertiaryChroma * 0.45, if (isDark) 18.0 else 98.0)
-    val tertiaryContainer = hctColor(tertiaryHue, spec.tertiaryChroma * 0.95, if (isDark) 29.0 else 86.0)
-    val onTertiaryContainer = hctColor(tertiaryHue, spec.tertiaryChroma * 0.35, if (isDark) 92.0 else 12.0)
+    val tertiaryContainer = hctColor(tertiaryHue, spec.tertiaryChroma * 0.92, if (isDark) 34.0 else 88.0)
+    val onTertiaryContainer = hctColor(tertiaryHue, spec.tertiaryChroma * 0.35, if (isDark) 93.0 else 12.0)
 
-    val background = hctColor(neutralHue, spec.neutralChroma * if (isDark) 0.85 else 0.72, if (isDark) 9.0 else 95.0)
-    val onBackground = hctColor(neutralHue, spec.neutralChroma * 0.45, if (isDark) 92.0 else 11.0)
+    val background = hctColor(neutralHue, spec.neutralChroma * if (isDark) 0.90 else 0.62, if (isDark) 10.5 else 94.5)
+    val onBackground = hctColor(neutralHue, spec.neutralChroma * 0.40, if (isDark) 93.0 else 11.0)
     val surface = background
     val onSurface = onBackground
-    val surfaceVariant = hctColor(neutralVariantHue, spec.neutralVariantChroma, if (isDark) 28.0 else 86.0)
-    val onSurfaceVariant = hctColor(neutralVariantHue, spec.neutralVariantChroma * 0.62, if (isDark) 82.0 else 28.0)
+    val surfaceVariant = hctColor(neutralVariantHue, spec.neutralVariantChroma * if (isDark) 1.0 else 0.82, if (isDark) 28.5 else 85.5)
+    val onSurfaceVariant = hctColor(neutralVariantHue, spec.neutralVariantChroma * 0.55, if (isDark) 84.0 else 28.0)
     val surfaceTint = primary
     val inverseSurface = hctColor(neutralHue, spec.neutralChroma * if (isDark) 0.55 else 0.75, if (isDark) 90.0 else 20.0)
     val inverseOnSurface = hctColor(neutralHue, spec.neutralChroma * if (isDark) 0.60 else 0.45, if (isDark) 18.0 else 94.0)
 
-    val outline = hctColor(neutralVariantHue, spec.neutralVariantChroma * 0.72, if (isDark) 60.0 else 46.0)
-    val outlineVariant = hctColor(neutralVariantHue, spec.neutralVariantChroma * 0.88, if (isDark) 33.0 else 76.0)
+    val outline = hctColor(neutralVariantHue, spec.neutralVariantChroma * 0.72, if (isDark) 62.0 else 46.0)
+    val outlineVariant = hctColor(neutralVariantHue, spec.neutralVariantChroma * 0.88, if (isDark) 34.0 else 76.0)
 
-    val surfaceDim = hctColor(neutralHue, spec.neutralChroma * if (isDark) 0.80 else 0.85, if (isDark) 6.5 else 85.5)
-    val surfaceBright = hctColor(neutralHue, spec.neutralChroma * if (isDark) 1.0 else 0.65, if (isDark) 25.0 else 97.5)
-    val surfaceContainerLowest = hctColor(neutralHue, spec.neutralChroma * if (isDark) 0.75 else 0.55, if (isDark) 5.5 else 98.5)
-    val surfaceContainerLow = hctColor(neutralHue, spec.neutralChroma * if (isDark) 0.95 else 0.78, if (isDark) 13.0 else 92.5)
-    val surfaceContainer = hctColor(neutralHue, spec.neutralChroma * if (isDark) 1.0 else 0.84, if (isDark) 16.0 else 89.5)
-    val surfaceContainerHigh = hctColor(neutralVariantHue, spec.neutralVariantChroma * if (isDark) 0.92 else 0.86, if (isDark) 20.5 else 86.5)
-    val surfaceContainerHighest = hctColor(neutralVariantHue, spec.neutralVariantChroma * if (isDark) 0.96 else 0.90, if (isDark) 25.0 else 83.5)
+    val surfaceDim = hctColor(neutralHue, spec.neutralChroma * if (isDark) 0.85 else 0.72, if (isDark) 7.5 else 85.0)
+    val surfaceBright = hctColor(neutralHue, spec.neutralChroma * if (isDark) 1.0 else 0.55, if (isDark) 26.5 else 97.5)
+    val surfaceContainerLowest = hctColor(neutralHue, spec.neutralChroma * if (isDark) 0.80 else 0.45, if (isDark) 6.5 else 98.5)
+    val surfaceContainerLow = hctColor(neutralHue, spec.neutralChroma * if (isDark) 0.98 else 0.68, if (isDark) 14.5 else 92.0)
+    val surfaceContainer = hctColor(neutralHue, spec.neutralChroma * if (isDark) 1.05 else 0.75, if (isDark) 18.0 else 89.0)
+    val surfaceContainerHigh = hctColor(neutralVariantHue, spec.neutralVariantChroma * if (isDark) 1.0 else 0.78, if (isDark) 22.0 else 86.0)
+    val surfaceContainerHighest = hctColor(neutralVariantHue, spec.neutralVariantChroma * if (isDark) 1.05 else 0.82, if (isDark) 26.0 else 83.0)
 
     val primaryFixed = hctColor(primaryHue, spec.primaryChroma * 0.90, 86.0)
     val primaryFixedDim = hctColor(primaryHue, spec.primaryChroma * 0.95, 78.0)

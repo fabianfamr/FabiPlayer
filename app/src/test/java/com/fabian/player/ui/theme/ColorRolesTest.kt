@@ -95,6 +95,25 @@ class ColorRolesTest {
     }
 
     @Test
+    fun generateColorSchemeFromSeed_tonalSpotKeepsVioletContainersCohesiveAndChromatic() {
+        val violetSeed = Color(0xFF6E4CE6)
+        val pair = generateColorSchemeFromSeed(violetSeed, AlbumArtPaletteStyle.TONAL_SPOT)
+
+        listOf(pair.dark.secondaryContainer, pair.dark.tertiaryContainer).forEach { container ->
+            val containerHct = Hct.fromInt(container.toArgb())
+            assertThat(containerHct.chroma).isGreaterThan(30.0)
+            assertThat(
+                com.google.android.material.color.utilities.MathUtils.differenceDegrees(
+                    containerHct.hue,
+                    Hct.fromInt(pair.dark.primaryContainer.toArgb()).hue
+                )
+            ).isLessThan(20.0)
+        }
+        assertThat(Hct.fromInt(pair.dark.background.toArgb()).chroma).isGreaterThan(16.0)
+        assertThat(Hct.fromInt(pair.dark.surfaceContainer.toArgb()).chroma).isGreaterThan(22.0)
+    }
+
+    @Test
     fun selectSeedColorArgbFromPixels_keepsDistinctGreenAlbumsFromCollapsingIntoSharedAccent() {
         val sharedAccent = 0xFF39FF88.toInt()
 
