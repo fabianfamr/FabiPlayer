@@ -127,6 +127,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -180,6 +181,7 @@ import com.fabian.player.data.preferences.SwipeToQueueAction
 import com.fabian.player.data.preferences.ThemePreference
 import com.fabian.player.data.preferences.ThemePreset
 import com.fabian.player.data.preferences.InterfaceAppearance
+import com.fabian.player.utils.AppLocaleManager
 import com.fabian.player.utils.isIgnoringBatteryOptimizations
 import com.fabian.player.utils.openBatteryOptimizationSettings
 import com.fabian.player.data.model.Song
@@ -710,6 +712,24 @@ fun SettingsCategoryScreen(
                         }
                         SettingsCategory.APPEARANCE -> {
                             val useSmoothCorners by settingsViewModel.useSmoothCorners.collectAsStateWithLifecycle()
+                            var pendingLanguageTag by remember { mutableStateOf<String?>(null) }
+
+                            LaunchedEffect(pendingLanguageTag) {
+                                val targetTag = pendingLanguageTag ?: return@LaunchedEffect
+                                val normalized = AppLanguage.normalize(targetTag)
+                                if (normalized == uiState.appLanguageTag) {
+                                    pendingLanguageTag = null
+                                    return@LaunchedEffect
+                                }
+                                withFrameNanos { }
+                                withFrameNanos { }
+                                pendingLanguageTag = null
+                                val delegated = settingsViewModel.setAppLanguage(normalized)
+                                AppLocaleManager.restartActivityAfterLocaleChange(
+                                    activity = context as? Activity,
+                                    localeDelegatedToSystem = delegated
+                                )
+                            }
 
                             SettingsSubsection(title = stringResource(R.string.setcat_global_theme)) {
                                 ThemeSelectorItem(
@@ -719,8 +739,7 @@ fun SettingsCategoryScreen(
                                     selectedKey = uiState.appLanguageTag,
                                     onSelectionChanged = { selectedTag ->
                                         if (AppLanguage.normalize(selectedTag) != uiState.appLanguageTag) {
-                                            settingsViewModel.setAppLanguage(selectedTag)
-                                            (context as? Activity)?.recreate()
+                                            pendingLanguageTag = selectedTag
                                         }
                                     },
                                     leadingIcon = { Icon(Icons.Outlined.Language, null, tint = MaterialTheme.colorScheme.secondary) },

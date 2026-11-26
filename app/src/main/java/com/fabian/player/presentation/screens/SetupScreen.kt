@@ -1,4 +1,4 @@
-﻿
+
 package com.fabian.player.presentation.screens
 
 import com.fabian.player.ui.theme.rememberDisplayFont
@@ -118,6 +118,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -814,8 +815,27 @@ fun WelcomePage() {
 private fun SetupLanguagePill() {
     val context = LocalContext.current
     var showLanguageSheet by remember { mutableStateOf(false) }
+    var pendingLanguageTag by remember { mutableStateOf<String?>(null) }
     // recreate() rebuilds this composition after a change, so reading the tag once is enough.
     val currentLanguageTag = remember(context) { AppLocaleManager.currentLanguageTag(context) }
+
+    LaunchedEffect(pendingLanguageTag) {
+        val targetTag = pendingLanguageTag ?: return@LaunchedEffect
+        val normalized = AppLanguage.normalize(targetTag)
+        if (normalized == currentLanguageTag) {
+            pendingLanguageTag = null
+            return@LaunchedEffect
+        }
+        withFrameNanos { }
+        withFrameNanos { }
+        pendingLanguageTag = null
+        val delegated = AppLocaleManager.applyLanguage(context, normalized)
+        AppLocaleManager.restartActivityAfterLocaleChange(
+            activity = context as? Activity,
+            localeDelegatedToSystem = delegated
+        )
+    }
+
     val currentLanguage = remember(currentLanguageTag) {
         AppLanguage.entries.firstOrNull { it.tag == currentLanguageTag } ?: AppLanguage.SYSTEM
     }
@@ -863,8 +883,7 @@ private fun SetupLanguagePill() {
             onSelect = { tag ->
                 showLanguageSheet = false
                 if (tag != currentLanguageTag) {
-                    AppLocaleManager.applyLanguage(context, tag)
-                    (context as? Activity)?.recreate()
+                    pendingLanguageTag = tag
                 }
             },
             onDismiss = { showLanguageSheet = false }

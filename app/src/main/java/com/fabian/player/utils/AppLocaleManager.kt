@@ -1,5 +1,6 @@
 package com.fabian.player.utils
 
+import android.app.Activity
 import android.app.LocaleManager
 import android.content.ComponentCallbacks
 import android.content.Context
@@ -10,6 +11,7 @@ import android.os.LocaleList
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import com.fabian.player.data.preferences.AppLanguage
+import kotlinx.coroutines.delay
 import java.lang.ref.WeakReference
 import java.util.Locale
 
@@ -49,7 +51,12 @@ object AppLocaleManager {
                 .orEmpty()
         )
 
-    fun applyLanguage(context: Context, languageTag: String) {
+    /**
+     * Applies [languageTag] to preferences, application resources, and system per-app locales.
+     * Returns `true` when Android 13+'s system `LocaleManager` received a new tag and may trigger
+     * a configuration-driven Activity restart on its own.
+     */
+    fun applyLanguage(context: Context, languageTag: String): Boolean {
         val previousTag = currentLanguageTag(context)
         val normalized = AppLanguage.normalize(languageTag)
         if (normalized != previousTag) {
@@ -74,8 +81,31 @@ object AppLocaleManager {
             LocaleListCompat.forLanguageTags(normalized)
         }
 
-        if (AppCompatDelegate.getApplicationLocales().toLanguageTags() != locales.toLanguageTags()) {
+        val currentAppLocales = AppCompatDelegate.getApplicationLocales().toLanguageTags()
+        val nextAppLocales = locales.toLanguageTags()
+        if (currentAppLocales != nextAppLocales) {
             AppCompatDelegate.setApplicationLocales(locales)
+            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+        }
+        return false
+    }
+
+    /**
+     * Recreates [activity] once after the language picker sheet has unmounted, avoiding a
+     * second recreation when Android 13+ already restarts the activity via [LocaleManager].
+     */
+    suspend fun restartActivityAfterLocaleChange(
+        activity: Activity?,
+        localeDelegatedToSystem: Boolean
+    ) {
+        if (activity == null || activity.isDestroyed || activity.isFinishing) return
+        if (!localeDelegatedToSystem || Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            activity.recreate()
+            return
+        }
+        delay(120L)
+        if (!activity.isDestroyed && !activity.isFinishing) {
+            activity.recreate()
         }
     }
 

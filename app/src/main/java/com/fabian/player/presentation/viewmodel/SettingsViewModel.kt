@@ -793,10 +793,11 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun setAppLanguage(languageTag: String) {
+    fun setAppLanguage(languageTag: String): Boolean {
         val normalized = AppLanguage.normalize(languageTag)
-        AppLocaleManager.applyLanguage(context, normalized)
+        val delegated = AppLocaleManager.applyLanguage(context, normalized)
         _uiState.update { it.copy(appLanguageTag = normalized) }
+        return delegated
     }
 
     fun setAppThemeMode(mode: String) {

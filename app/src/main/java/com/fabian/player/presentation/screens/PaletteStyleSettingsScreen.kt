@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.screens
+package com.fabian.player.presentation.screens
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -71,6 +72,9 @@ import com.fabian.player.presentation.viewmodel.PlayerViewModel
 import com.fabian.player.presentation.viewmodel.SettingsViewModel
 import com.fabian.player.ui.theme.LocalPixelPlayerDarkTheme
 import com.fabian.player.ui.theme.generateColorSchemeFromSeed
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlin.math.roundToInt
 
 @androidx.annotation.OptIn(UnstableApi::class)
@@ -125,6 +129,46 @@ fun PaletteStyleSettingsScreen(
         pendingAccuracy = uiState.albumArtColorAccuracy
     }
 
+    var artworkStylePreviewPairs by remember(currentSong?.albumArtUriString) {
+        mutableStateOf<Map<AlbumArtPaletteStyle, ColorSchemePair>>(emptyMap())
+    }
+    LaunchedEffect(currentSong?.albumArtUriString, pendingAccuracy) {
+        val artUriString = currentSong?.albumArtUriString
+        if (artUriString.isNullOrBlank()) {
+            artworkStylePreviewPairs = emptyMap()
+            return@LaunchedEffect
+        }
+        val loaded = coroutineScope {
+            AlbumArtPaletteStyle.entries.map { style ->
+                async {
+                    style to settingsViewModel.getAlbumArtPalettePreview(
+                        uriString = artUriString,
+                        style = style,
+                        accuracyLevel = pendingAccuracy
+                    )
+                }
+            }.awaitAll()
+        }
+        val resolvedMap = buildMap {
+            loaded.forEach { (style, pair) ->
+                if (pair != null) put(style, pair)
+            }
+        }
+        if (resolvedMap.isNotEmpty()) {
+            artworkStylePreviewPairs = resolvedMap
+        }
+    }
+
+    val resolvedStyleSchemes = remember(styleSchemes, artworkStylePreviewPairs, isDarkTheme) {
+        AlbumArtPaletteStyle.entries.associateWith { style ->
+            val previewPair = artworkStylePreviewPairs[style]
+            when {
+                previewPair != null -> if (isDarkTheme) previewPair.dark else previewPair.light
+                else -> styleSchemes[style] ?: albumScheme
+            }
+        }
+    }
+
     var previewSchemePair by remember(currentSong?.albumArtUriString) {
         mutableStateOf<ColorSchemePair?>(albumSchemePair)
     }
@@ -134,7 +178,8 @@ fun PaletteStyleSettingsScreen(
         pendingAccuracy,
         uiState.albumArtPaletteStyle,
         uiState.albumArtColorAccuracy,
-        albumSchemePair
+        albumSchemePair,
+        artworkStylePreviewPairs
     ) {
         val artUriString = currentSong?.albumArtUriString
         if (artUriString.isNullOrBlank()) {
@@ -148,7 +193,7 @@ fun PaletteStyleSettingsScreen(
         previewSchemePair = if (matchesApplied && albumSchemePair != null) {
             albumSchemePair
         } else {
-            settingsViewModel.getAlbumArtPalettePreview(
+            artworkStylePreviewPairs[pendingStyle] ?: settingsViewModel.getAlbumArtPalettePreview(
                 uriString = artUriString,
                 style = pendingStyle,
                 accuracyLevel = pendingAccuracy
@@ -161,7 +206,7 @@ fun PaletteStyleSettingsScreen(
             pendingAccuracy != uiState.albumArtColorAccuracy
     val previewScheme = previewSchemePair?.let { pair ->
         if (isDarkTheme) pair.dark else pair.light
-    } ?: styleSchemes[pendingStyle] ?: albumScheme
+    } ?: resolvedStyleSchemes[pendingStyle] ?: albumScheme
     val bottomInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     val contentBottomPadding = bottomInset + if (isMiniPlayerVisible) MiniPlayerHeight + 12.dp else 16.dp
 
@@ -181,96 +226,174 @@ fun PaletteStyleSettingsScreen(
             )
         }
     ) { innerPadding ->
-        Column(
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(innerPadding),
+            contentAlignment = Alignment.TopCenter
         ) {
-            MiniFullPlayerSkeletonPreview(
-                scheme = previewScheme,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 2.dp)
-            )
-
-            Surface(
-                color = previewScheme.surfaceContainer,
-                shape = RoundedCornerShape(34.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(
+            val isWideLayout = maxWidth >= 680.dp
+            if (isWideLayout) {
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 18.dp, vertical = 20.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                        .fillMaxSize()
+                        .widthIn(max = 1040.dp)
+                        .padding(horizontal = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(24.dp),
+                    verticalAlignment = Alignment.Top
                 ) {
-                    Text(
-                        text = stringResource(R.string.presentation_batch_f_palette_style_heading),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = previewScheme.onSurface,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        text = stringResource(R.string.presentation_batch_f_palette_style_subtitle),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = previewScheme.onSurfaceVariant
-                    )
-
-                    Row(
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 4.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            .weight(0.38f)
+                            .verticalScroll(rememberScrollState())
+                            .padding(top = 8.dp, bottom = contentBottomPadding),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        AlbumArtPaletteStyle.entries.forEach { style ->
-                            PaletteSwatchSquare(
-                                scheme = styleSchemes[style] ?: previewScheme,
-                                selected = style == pendingStyle,
-                                onClick = { pendingStyle = style },
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = albumArtPaletteStyleLabel(pendingStyle),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = previewScheme.onSurface,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                color = previewScheme.tertiaryContainer,
-                                shape = CircleShape
-                            )
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .padding(start = 4.dp),
-                            text = albumArtPaletteStyleDescription(pendingStyle),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = previewScheme.onTertiaryContainer
+                        MiniFullPlayerSkeletonPreview(
+                            scheme = previewScheme,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(2.dp))
-                    PaletteAccuracySlider(
+                    Column(
+                        modifier = Modifier
+                            .weight(0.62f)
+                            .verticalScroll(rememberScrollState())
+                            .padding(top = 8.dp, bottom = contentBottomPadding)
+                    ) {
+                        PaletteStyleControlsCard(
+                            previewScheme = previewScheme,
+                            styleSchemes = resolvedStyleSchemes,
+                            pendingStyle = pendingStyle,
+                            onStyleSelected = { pendingStyle = it },
+                            pendingAccuracy = pendingAccuracy,
+                            hapticsEnabled = uiState.hapticsEnabled,
+                            onAccuracyChanged = { pendingAccuracy = it }
+                        )
+                    }
+                }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .widthIn(max = 560.dp)
+                        .padding(horizontal = 16.dp)
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    MiniFullPlayerSkeletonPreview(
                         scheme = previewScheme,
-                        value = pendingAccuracy,
-                        hapticsEnabled = uiState.hapticsEnabled,
-                        onValueChange = { pendingAccuracy = it }
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 2.dp)
                     )
+
+                    PaletteStyleControlsCard(
+                        previewScheme = previewScheme,
+                        styleSchemes = resolvedStyleSchemes,
+                        pendingStyle = pendingStyle,
+                        onStyleSelected = { pendingStyle = it },
+                        pendingAccuracy = pendingAccuracy,
+                        hapticsEnabled = uiState.hapticsEnabled,
+                        onAccuracyChanged = { pendingAccuracy = it }
+                    )
+
+                    Spacer(modifier = Modifier.height(contentBottomPadding))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PaletteStyleControlsCard(
+    previewScheme: ColorScheme,
+    styleSchemes: Map<AlbumArtPaletteStyle, ColorScheme>,
+    pendingStyle: AlbumArtPaletteStyle,
+    onStyleSelected: (AlbumArtPaletteStyle) -> Unit,
+    pendingAccuracy: Int,
+    hapticsEnabled: Boolean,
+    onAccuracyChanged: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        color = previewScheme.surfaceContainer,
+        shape = RoundedCornerShape(30.dp),
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 18.dp, vertical = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.presentation_batch_f_palette_style_heading),
+                style = MaterialTheme.typography.titleLarge,
+                color = previewScheme.onSurface,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                text = stringResource(R.string.presentation_batch_f_palette_style_subtitle),
+                style = MaterialTheme.typography.bodyMedium,
+                color = previewScheme.onSurfaceVariant
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AlbumArtPaletteStyle.entries.forEach { style ->
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        PaletteSwatchSquare(
+                            scheme = styleSchemes[style] ?: previewScheme,
+                            selected = style == pendingStyle,
+                            onClick = { onStyleSelected(style) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .widthIn(max = 84.dp)
+                        )
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.height(contentBottomPadding))
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = albumArtPaletteStyleLabel(pendingStyle),
+                style = MaterialTheme.typography.titleMedium,
+                color = previewScheme.onSurface,
+                fontWeight = FontWeight.Medium
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = previewScheme.tertiaryContainer,
+                        shape = RoundedCornerShape(16.dp)
+                    )
+            ) {
+                Text(
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                    text = albumArtPaletteStyleDescription(pendingStyle),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = previewScheme.onTertiaryContainer
+                )
+            }
+
+            Spacer(modifier = Modifier.height(2.dp))
+            PaletteAccuracySlider(
+                scheme = previewScheme,
+                value = pendingAccuracy,
+                hapticsEnabled = hapticsEnabled,
+                onValueChange = onAccuracyChanged
+            )
         }
     }
 }
@@ -340,7 +463,6 @@ private fun MiniFullPlayerSkeletonPreview(
 ) {
     val sizeFactor = 0.7f
     fun scaled(dp: Dp): Dp = (dp.value * sizeFactor).dp
-    val cardWidthFraction = 0.72f * sizeFactor
 
     val placeholderColor = scheme.onPrimaryContainer.copy(alpha = 0.1f)
     val placeholderOnColor = scheme.onPrimaryContainer.copy(alpha = 0.2f)
@@ -353,7 +475,9 @@ private fun MiniFullPlayerSkeletonPreview(
         Surface(
             color = scheme.primaryContainer,
             shape = RoundedCornerShape(scaled(34.dp)),
-            modifier = Modifier.fillMaxWidth(cardWidthFraction)
+            modifier = Modifier
+                .widthIn(min = 200.dp, max = 256.dp)
+                .fillMaxWidth()
         ) {
             Column(
                 modifier = Modifier

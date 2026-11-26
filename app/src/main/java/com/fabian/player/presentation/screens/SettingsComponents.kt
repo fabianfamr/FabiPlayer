@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.screens
+package com.fabian.player.presentation.screens
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
@@ -48,12 +48,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -305,8 +308,8 @@ fun ThemeSelectorItem(
             options = options,
             selectedKey = selectedKey,
             onSelect = { key ->
-                onSelectionChanged(key)
                 showSheet = false
+                onSelectionChanged(key)
             },
             onDismiss = { showSheet = false },
             optionDescriptions = optionDescriptions,
@@ -316,9 +319,9 @@ fun ThemeSelectorItem(
 }
 
 /**
- * Bottom sheet listing [options] (key to label) with [selectedKey] checked. [onSelect] receives
- * the tapped key; callers decide whether to dismiss. Keys in [disabledOptionKeys] are shown but
- * cannot be picked.
+ * Bottom sheet listing [options] (key to label) with [selectedKey] checked. [onSelect] runs
+ * after the sheet finishes hiding so callers such as activity recreation never leave the sheet
+ * lingering over entry animations. Keys in [disabledOptionKeys] are shown but cannot be picked.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -331,8 +334,18 @@ fun OptionSelectionSheet(
         optionDescriptions: Map<String, String> = emptyMap(),
         disabledOptionKeys: Set<String> = emptySet()
 ) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+    var isClosing by remember { mutableStateOf(false) }
+
     androidx.compose.material3.ModalBottomSheet(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {
+            if (!isClosing) {
+                isClosing = true
+                onDismiss()
+            }
+        },
+        sheetState = sheetState,
         containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.onSurface
     ) {
@@ -366,7 +379,18 @@ fun OptionSelectionSheet(
                     )
 
                     Surface(
-                        onClick = { onSelect(key) },
+                        onClick = {
+                            if (!isClosing) {
+                                isClosing = true
+                                scope.launch {
+                                    try {
+                                        sheetState.hide()
+                                    } finally {
+                                        onSelect(key)
+                                    }
+                                }
+                            }
+                        },
                         enabled = isEnabled,
                         shape = RoundedCornerShape(24.dp),
                         color = containerColor,
