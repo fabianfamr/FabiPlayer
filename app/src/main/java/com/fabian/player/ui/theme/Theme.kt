@@ -1,12 +1,10 @@
-﻿package com.fabian.player.ui.theme
+package com.fabian.player.ui.theme
 
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.os.Build
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -19,11 +17,18 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.toArgb
+import kotlinx.coroutines.isActive
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
@@ -61,24 +66,27 @@ fun PixelPlayerStatusBarStyle(
     if (view.isInEditMode) return
 
     val updateNavigationBar = navigationColor != null
-    SideEffect {
-        val window = view.context.findActivity()?.window ?: return@SideEffect
-        window.statusBarColor = android.graphics.Color.TRANSPARENT
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            window.isStatusBarContrastEnforced = false
-        }
+    DisposableEffect(view, useDarkIcons, updateNavigationBar, useDarkNavigationIcons) {
+        val window = view.context.findActivity()?.window
+        if (window != null) {
+            window.statusBarColor = android.graphics.Color.TRANSPARENT
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                window.isStatusBarContrastEnforced = false
+            }
 
-        WindowCompat.getInsetsController(window, view).run {
-            isAppearanceLightStatusBars = useDarkIcons
+            WindowCompat.getInsetsController(window, view).run {
+                isAppearanceLightStatusBars = useDarkIcons
 
-            if (updateNavigationBar) {
-                window.navigationBarColor = android.graphics.Color.TRANSPARENT
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    window.isNavigationBarContrastEnforced = false
+                if (updateNavigationBar) {
+                    window.navigationBarColor = android.graphics.Color.TRANSPARENT
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        window.isNavigationBarContrastEnforced = false
+                    }
+                    isAppearanceLightNavigationBars = useDarkNavigationIcons
                 }
-                isAppearanceLightNavigationBars = useDarkNavigationIcons
             }
         }
+        onDispose {}
     }
 }
 
@@ -174,31 +182,28 @@ fun PixelPlayerTheme(
 ) {
     val context = LocalContext.current
     val isAmoled = isAmoledThemePreset(themePreset)
-    val targetColorScheme = when {
-        isAmoled -> remember(context, colorSchemePairOverride) {
-            getAmoledColorScheme(context, colorSchemePairOverride)
-        }
-        colorSchemePairOverride == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            try {
-                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-            } catch (e: Exception) {
-                if (darkTheme) DarkColorScheme else LightColorScheme
+    val targetColorScheme = remember(context, isAmoled, darkTheme, colorSchemePairOverride) {
+        when {
+            isAmoled -> getAmoledColorScheme(context, colorSchemePairOverride)
+            colorSchemePairOverride == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                try {
+                    if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+                } catch (e: Exception) {
+                    if (darkTheme) DarkColorScheme else LightColorScheme
+                }
             }
+            colorSchemePairOverride != null -> {
+                if (darkTheme) colorSchemePairOverride.dark else colorSchemePairOverride.light
+            }
+            darkTheme -> DarkColorScheme
+            else -> LightColorScheme
         }
-        colorSchemePairOverride != null -> {
-            if (darkTheme) colorSchemePairOverride.dark else colorSchemePairOverride.light
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
     }
-    val finalColorScheme = if (themeTransitionDurationMs > 0) {
-        rememberAnimatedColorScheme(
-            target = targetColorScheme,
-            durationMs = themeTransitionDurationMs
-        )
-    } else {
-        targetColorScheme
-    }
+    val finalColorScheme = rememberSmoothColorScheme(
+        target = targetColorScheme,
+        durationMs = themeTransitionDurationMs,
+        minStepIntervalMs = GLOBAL_THEME_MIN_STEP_INTERVAL_MS
+    )
 
     PixelPlayerStatusBarStyle(
         color = targetColorScheme.background,
@@ -236,62 +241,122 @@ fun PixelPlayerTheme(
     }
 }
 
+private const val GLOBAL_THEME_MIN_STEP_INTERVAL_MS = 45L
+
+/**
+ * Smoothly interpolates a [ColorScheme] with a single frame-budgeted loop instead of 48
+ * concurrent [animateColorAsState] instances.
+ *
+ * Because Material 3's `LocalColorScheme` is a `staticCompositionLocalOf`, every emitted
+ * [ColorScheme] invalidates the consuming subtree. Pacing emissions by [minStepIntervalMs] and
+ * adapting to measured frame cost keeps the color transition visually smooth while leaving most
+ * of the main-thread budget free for scrolling, gestures, and navigation.
+ */
 @Composable
-private fun rememberAnimatedColorScheme(
+internal fun rememberSmoothColorScheme(
     target: ColorScheme,
-    durationMs: Int
+    durationMs: Int,
+    minStepIntervalMs: Long = GLOBAL_THEME_MIN_STEP_INTERVAL_MS,
+    snapImmediately: Boolean = false
 ): ColorScheme {
-    val spec = remember(durationMs) {
-        tween<Color>(durationMillis = durationMs, easing = FastOutSlowInEasing)
+    var displayedScheme by remember { mutableStateOf(target) }
+
+    LaunchedEffect(target, durationMs, snapImmediately) {
+        if (snapImmediately || durationMs <= 0) {
+            displayedScheme = target
+            return@LaunchedEffect
+        }
+        if (displayedScheme == target) return@LaunchedEffect
+
+        val startScheme = displayedScheme
+        val startNanos = withFrameNanos { it }
+        val durationNanos = durationMs.toLong() * 1_000_000L
+        val minStepNanos = minStepIntervalMs.coerceAtLeast(16L) * 1_000_000L
+        var lastEmitNanos = startNanos
+        var lastFrameIntervalNanos = 0L
+        var awaitingFrameCost = false
+
+        while (isActive) {
+            val frameNanos = withFrameNanos { it }
+            if (awaitingFrameCost) {
+                lastFrameIntervalNanos = (frameNanos - lastEmitNanos).coerceAtLeast(0L)
+                awaitingFrameCost = false
+            }
+
+            val elapsedNanos = (frameNanos - startNanos).coerceAtLeast(0L)
+            if (elapsedNanos >= durationNanos) {
+                displayedScheme = target
+                break
+            }
+
+            val requiredIntervalNanos = maxOf(minStepNanos, lastFrameIntervalNanos * 2L)
+            if (frameNanos - lastEmitNanos >= requiredIntervalNanos) {
+                val rawFraction = (elapsedNanos.toFloat() / durationNanos.toFloat()).coerceIn(0f, 1f)
+                val easedFraction = FastOutSlowInEasing.transform(rawFraction)
+                val nextScheme = lerpColorScheme(startScheme, target, easedFraction)
+                lastEmitNanos = frameNanos
+                if (nextScheme != displayedScheme) {
+                    displayedScheme = nextScheme
+                    awaitingFrameCost = true
+                }
+            }
+        }
     }
+
+    return if (snapImmediately || durationMs <= 0) target else displayedScheme
+}
+
+internal fun lerpColorScheme(from: ColorScheme, to: ColorScheme, t: Float): ColorScheme {
+    if (t <= 0f) return from
+    if (t >= 1f || from == to) return to
     return ColorScheme(
-        primary = animateColorAsState(target.primary, spec, label = "theme_primary").value,
-        onPrimary = animateColorAsState(target.onPrimary, spec, label = "theme_onPrimary").value,
-        primaryContainer = animateColorAsState(target.primaryContainer, spec, label = "theme_primaryContainer").value,
-        onPrimaryContainer = animateColorAsState(target.onPrimaryContainer, spec, label = "theme_onPrimaryContainer").value,
-        inversePrimary = animateColorAsState(target.inversePrimary, spec, label = "theme_inversePrimary").value,
-        secondary = animateColorAsState(target.secondary, spec, label = "theme_secondary").value,
-        onSecondary = animateColorAsState(target.onSecondary, spec, label = "theme_onSecondary").value,
-        secondaryContainer = animateColorAsState(target.secondaryContainer, spec, label = "theme_secondaryContainer").value,
-        onSecondaryContainer = animateColorAsState(target.onSecondaryContainer, spec, label = "theme_onSecondaryContainer").value,
-        tertiary = animateColorAsState(target.tertiary, spec, label = "theme_tertiary").value,
-        onTertiary = animateColorAsState(target.onTertiary, spec, label = "theme_onTertiary").value,
-        tertiaryContainer = animateColorAsState(target.tertiaryContainer, spec, label = "theme_tertiaryContainer").value,
-        onTertiaryContainer = animateColorAsState(target.onTertiaryContainer, spec, label = "theme_onTertiaryContainer").value,
-        background = animateColorAsState(target.background, spec, label = "theme_background").value,
-        onBackground = animateColorAsState(target.onBackground, spec, label = "theme_onBackground").value,
-        surface = animateColorAsState(target.surface, spec, label = "theme_surface").value,
-        onSurface = animateColorAsState(target.onSurface, spec, label = "theme_onSurface").value,
-        surfaceVariant = animateColorAsState(target.surfaceVariant, spec, label = "theme_surfaceVariant").value,
-        onSurfaceVariant = animateColorAsState(target.onSurfaceVariant, spec, label = "theme_onSurfaceVariant").value,
-        surfaceTint = animateColorAsState(target.surfaceTint, spec, label = "theme_surfaceTint").value,
-        inverseSurface = animateColorAsState(target.inverseSurface, spec, label = "theme_inverseSurface").value,
-        inverseOnSurface = animateColorAsState(target.inverseOnSurface, spec, label = "theme_inverseOnSurface").value,
-        error = animateColorAsState(target.error, spec, label = "theme_error").value,
-        onError = animateColorAsState(target.onError, spec, label = "theme_onError").value,
-        errorContainer = animateColorAsState(target.errorContainer, spec, label = "theme_errorContainer").value,
-        onErrorContainer = animateColorAsState(target.onErrorContainer, spec, label = "theme_onErrorContainer").value,
-        outline = animateColorAsState(target.outline, spec, label = "theme_outline").value,
-        outlineVariant = animateColorAsState(target.outlineVariant, spec, label = "theme_outlineVariant").value,
-        scrim = animateColorAsState(target.scrim, spec, label = "theme_scrim").value,
-        surfaceBright = animateColorAsState(target.surfaceBright, spec, label = "theme_surfaceBright").value,
-        surfaceDim = animateColorAsState(target.surfaceDim, spec, label = "theme_surfaceDim").value,
-        surfaceContainer = animateColorAsState(target.surfaceContainer, spec, label = "theme_surfaceContainer").value,
-        surfaceContainerHigh = animateColorAsState(target.surfaceContainerHigh, spec, label = "theme_surfaceContainerHigh").value,
-        surfaceContainerHighest = animateColorAsState(target.surfaceContainerHighest, spec, label = "theme_surfaceContainerHighest").value,
-        surfaceContainerLow = animateColorAsState(target.surfaceContainerLow, spec, label = "theme_surfaceContainerLow").value,
-        surfaceContainerLowest = animateColorAsState(target.surfaceContainerLowest, spec, label = "theme_surfaceContainerLowest").value,
-        primaryFixed = animateColorAsState(target.primaryFixed, spec, label = "theme_primaryFixed").value,
-        primaryFixedDim = animateColorAsState(target.primaryFixedDim, spec, label = "theme_primaryFixedDim").value,
-        onPrimaryFixed = animateColorAsState(target.onPrimaryFixed, spec, label = "theme_onPrimaryFixed").value,
-        onPrimaryFixedVariant = animateColorAsState(target.onPrimaryFixedVariant, spec, label = "theme_onPrimaryFixedVariant").value,
-        secondaryFixed = animateColorAsState(target.secondaryFixed, spec, label = "theme_secondaryFixed").value,
-        secondaryFixedDim = animateColorAsState(target.secondaryFixedDim, spec, label = "theme_secondaryFixedDim").value,
-        onSecondaryFixed = animateColorAsState(target.onSecondaryFixed, spec, label = "theme_onSecondaryFixed").value,
-        onSecondaryFixedVariant = animateColorAsState(target.onSecondaryFixedVariant, spec, label = "theme_onSecondaryFixedVariant").value,
-        tertiaryFixed = animateColorAsState(target.tertiaryFixed, spec, label = "theme_tertiaryFixed").value,
-        tertiaryFixedDim = animateColorAsState(target.tertiaryFixedDim, spec, label = "theme_tertiaryFixedDim").value,
-        onTertiaryFixed = animateColorAsState(target.onTertiaryFixed, spec, label = "theme_onTertiaryFixed").value,
-        onTertiaryFixedVariant = animateColorAsState(target.onTertiaryFixedVariant, spec, label = "theme_onTertiaryFixedVariant").value,
+        primary = lerp(from.primary, to.primary, t),
+        onPrimary = lerp(from.onPrimary, to.onPrimary, t),
+        primaryContainer = lerp(from.primaryContainer, to.primaryContainer, t),
+        onPrimaryContainer = lerp(from.onPrimaryContainer, to.onPrimaryContainer, t),
+        inversePrimary = lerp(from.inversePrimary, to.inversePrimary, t),
+        secondary = lerp(from.secondary, to.secondary, t),
+        onSecondary = lerp(from.onSecondary, to.onSecondary, t),
+        secondaryContainer = lerp(from.secondaryContainer, to.secondaryContainer, t),
+        onSecondaryContainer = lerp(from.onSecondaryContainer, to.onSecondaryContainer, t),
+        tertiary = lerp(from.tertiary, to.tertiary, t),
+        onTertiary = lerp(from.onTertiary, to.onTertiary, t),
+        tertiaryContainer = lerp(from.tertiaryContainer, to.tertiaryContainer, t),
+        onTertiaryContainer = lerp(from.onTertiaryContainer, to.onTertiaryContainer, t),
+        background = lerp(from.background, to.background, t),
+        onBackground = lerp(from.onBackground, to.onBackground, t),
+        surface = lerp(from.surface, to.surface, t),
+        onSurface = lerp(from.onSurface, to.onSurface, t),
+        surfaceVariant = lerp(from.surfaceVariant, to.surfaceVariant, t),
+        onSurfaceVariant = lerp(from.onSurfaceVariant, to.onSurfaceVariant, t),
+        surfaceTint = lerp(from.surfaceTint, to.surfaceTint, t),
+        inverseSurface = lerp(from.inverseSurface, to.inverseSurface, t),
+        inverseOnSurface = lerp(from.inverseOnSurface, to.inverseOnSurface, t),
+        error = lerp(from.error, to.error, t),
+        onError = lerp(from.onError, to.onError, t),
+        errorContainer = lerp(from.errorContainer, to.errorContainer, t),
+        onErrorContainer = lerp(from.onErrorContainer, to.onErrorContainer, t),
+        outline = lerp(from.outline, to.outline, t),
+        outlineVariant = lerp(from.outlineVariant, to.outlineVariant, t),
+        scrim = lerp(from.scrim, to.scrim, t),
+        surfaceBright = lerp(from.surfaceBright, to.surfaceBright, t),
+        surfaceDim = lerp(from.surfaceDim, to.surfaceDim, t),
+        surfaceContainer = lerp(from.surfaceContainer, to.surfaceContainer, t),
+        surfaceContainerHigh = lerp(from.surfaceContainerHigh, to.surfaceContainerHigh, t),
+        surfaceContainerHighest = lerp(from.surfaceContainerHighest, to.surfaceContainerHighest, t),
+        surfaceContainerLow = lerp(from.surfaceContainerLow, to.surfaceContainerLow, t),
+        surfaceContainerLowest = lerp(from.surfaceContainerLowest, to.surfaceContainerLowest, t),
+        primaryFixed = lerp(from.primaryFixed, to.primaryFixed, t),
+        primaryFixedDim = lerp(from.primaryFixedDim, to.primaryFixedDim, t),
+        onPrimaryFixed = lerp(from.onPrimaryFixed, to.onPrimaryFixed, t),
+        onPrimaryFixedVariant = lerp(from.onPrimaryFixedVariant, to.onPrimaryFixedVariant, t),
+        secondaryFixed = lerp(from.secondaryFixed, to.secondaryFixed, t),
+        secondaryFixedDim = lerp(from.secondaryFixedDim, to.secondaryFixedDim, t),
+        onSecondaryFixed = lerp(from.onSecondaryFixed, to.onSecondaryFixed, t),
+        onSecondaryFixedVariant = lerp(from.onSecondaryFixedVariant, to.onSecondaryFixedVariant, t),
+        tertiaryFixed = lerp(from.tertiaryFixed, to.tertiaryFixed, t),
+        tertiaryFixedDim = lerp(from.tertiaryFixedDim, to.tertiaryFixedDim, t),
+        onTertiaryFixed = lerp(from.onTertiaryFixed, to.onTertiaryFixed, t),
+        onTertiaryFixedVariant = lerp(from.onTertiaryFixedVariant, to.onTertiaryFixedVariant, t)
     )
 }

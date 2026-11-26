@@ -81,8 +81,8 @@ android {
         applicationId = "com.fabian.player"
         minSdk = 30
         targetSdk = 37
-        versionCode = (project.findProperty("APP_VERSION_CODE") as? String)?.toInt() ?: 7
-        versionName = (project.findProperty("APP_VERSION_NAME") as? String) ?: "0.6.1"
+        versionCode = (project.findProperty("APP_VERSION_CODE") as? String)?.toInt() ?: 8
+        versionName = (project.findProperty("APP_VERSION_NAME") as? String) ?: "0.6.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
