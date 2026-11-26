@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.components
+package com.fabian.player.presentation.components
 
 import android.animation.ValueAnimator
 import android.content.ClipData
@@ -197,10 +197,10 @@ internal fun lyricsSheetColors(colorScheme: ColorScheme): LyricsSheetColors {
             preferred = accent,
             fallback = content
         ),
-        playPauseContainer = colorScheme.tertiaryFixedDim,
-        playPauseContent = colorScheme.onTertiaryFixed,
-        syncButtonContainer = colorScheme.secondaryFixedDim,
-        syncButtonContent = colorScheme.onSecondaryFixed
+        playPauseContainer = colorScheme.primary,
+        playPauseContent = colorScheme.onPrimary,
+        syncButtonContainer = colorScheme.primary.copy(alpha = 0.84f),
+        syncButtonContent = colorScheme.onPrimary
     )
 }
 

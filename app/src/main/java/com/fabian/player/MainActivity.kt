@@ -262,24 +262,34 @@ class MainActivity : ComponentActivity() {
 
         val isBenchmarkMode = intent.getBooleanExtra("is_benchmark", false)
 
-        // The animated splash plays on fresh launches only (not on recreation), and never
-        // when the user has turned animations off or a benchmark is timing startup.
-        val playAnimatedSplash = savedInstanceState == null &&
-            !isBenchmarkMode &&
+        // The animated splash plays on fresh launches and after an in-app language change,
+        // and never when the user has turned animations off or a benchmark is timing startup.
+        val isLanguageChangeRestart = AppLocaleManager.hasPendingEntryAnimation()
+        val animationsEnabled =
             Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) > 0f
+        val playAnimatedSplash = (savedInstanceState == null || isLanguageChangeRestart) &&
+            !isBenchmarkMode &&
+            animationsEnabled
         if (playAnimatedSplash) {
-            // PixelPlayerSplash's first frame is the system splash's last one, so the system view
-            // only needs a short fade to cover device-specific icon rendering differences.
-            splashScreen.setOnExitAnimationListener { provider ->
-                provider.view.animate()
-                    .alpha(0f)
-                    .setDuration(SYSTEM_SPLASH_HANDOFF_MS)
-                    .withEndAction {
-                        provider.remove()
-                        systemSplashGone.value = true
-                    }
-                    .start()
+            if (isLanguageChangeRestart) {
+                // No system splash screen runs during Activity.recreate(), so hand off immediately.
+                systemSplashGone.value = true
+            } else {
+                // PixelPlayerSplash's first frame is the system splash's last one, so the system view
+                // only needs a short fade to cover device-specific icon rendering differences.
+                splashScreen.setOnExitAnimationListener { provider ->
+                    provider.view.animate()
+                        .alpha(0f)
+                        .setDuration(SYSTEM_SPLASH_HANDOFF_MS)
+                        .withEndAction {
+                            provider.remove()
+                            systemSplashGone.value = true
+                        }
+                        .start()
+                }
             }
+        } else if (isLanguageChangeRestart) {
+            AppLocaleManager.clearPendingEntryAnimation()
         }
         val shouldBenchmarkRebuildDatabase =
             isBenchmarkMode && intent.getBooleanExtra("benchmark_rebuild_database", false)
@@ -412,6 +422,13 @@ class MainActivity : ComponentActivity() {
 
                 var showAnimatedSplash by remember { mutableStateOf(playAnimatedSplash) }
 
+                LaunchedEffect(showAnimatedSplash) {
+                    if (showAnimatedSplash && isLanguageChangeRestart) {
+                        delay(150L)
+                        AppLocaleManager.clearPendingEntryAnimation()
+                    }
+                }
+
                 Box(modifier = Modifier.fillMaxSize()) {
                     Surface(
                         modifier = Modifier.fillMaxSize().graphicsLayer { alpha = contentAlpha },
@@ -456,7 +473,10 @@ class MainActivity : ComponentActivity() {
                     if (showAnimatedSplash) {
                         PixelPlayerSplash(
                             systemSplashGone = systemSplashGone.value,
-                            onFinished = { showAnimatedSplash = false }
+                            onFinished = {
+                                showAnimatedSplash = false
+                                AppLocaleManager.clearPendingEntryAnimation()
+                            }
                         )
                     }
                 }

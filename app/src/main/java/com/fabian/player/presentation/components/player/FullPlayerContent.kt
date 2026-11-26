@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.components.player
+package com.fabian.player.presentation.components.player
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -328,11 +328,7 @@ fun FullPlayerContent(
     val playerAccentColor = LocalMaterialTheme.current.primary
     val playerOnAccentColor = LocalMaterialTheme.current.onPrimary
     val transportPlayPauseColors = expressivePlayPauseButtonColors(LocalMaterialTheme.current)
-    val transportSkipColors = expressiveSkipButtonColors(LocalMaterialTheme.current)
-    val transportSkipButtonColors = TransportButtonColors(
-        container = playerAccentColor,
-        content = playerOnAccentColor
-    )
+    val transportSkipButtonColors = expressiveSkipButtonColors(LocalMaterialTheme.current)
     val progressActiveColor = playerOnBaseColor
 
     val placeholderColor = playerOnBaseColor.copy(alpha = 0.1f)
@@ -2712,15 +2708,15 @@ private data class TransportButtonColors(
 
 private fun expressivePlayPauseButtonColors(colorScheme: ColorScheme): TransportButtonColors {
     return TransportButtonColors(
-        container = colorScheme.tertiaryFixedDim,
-        content = colorScheme.onTertiaryFixed
+        container = colorScheme.primary,
+        content = colorScheme.onPrimary
     )
 }
 
 private fun expressiveSkipButtonColors(colorScheme: ColorScheme): TransportButtonColors {
     return TransportButtonColors(
-        container = colorScheme.secondaryFixedDim,
-        content = colorScheme.onSecondaryFixed
+        container = colorScheme.primary.copy(alpha = 0.84f),
+        content = colorScheme.onPrimary
     )
 }
 

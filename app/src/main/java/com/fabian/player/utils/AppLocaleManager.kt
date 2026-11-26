@@ -1,4 +1,4 @@
-﻿package com.fabian.player.utils
+package com.fabian.player.utils
 
 import android.app.LocaleManager
 import android.content.ComponentCallbacks
@@ -16,9 +16,30 @@ import java.util.Locale
 object AppLocaleManager {
     private const val PREFERENCES_NAME = "app_locale_preferences"
     private const val KEY_LANGUAGE_TAG = "app_language_tag"
+    private const val PENDING_ENTRY_ANIMATION_WINDOW_NS = 3_000_000_000L
 
     /** The application context whose resources [keepApplicationLocale] already watches. */
     private var keptApplicationContext = WeakReference<Context>(null)
+
+    @Volatile
+    private var pendingEntryAnimationAtNs: Long = 0L
+
+    fun markPendingEntryAnimation() {
+        pendingEntryAnimationAtNs = System.nanoTime()
+    }
+
+    fun hasPendingEntryAnimation(): Boolean {
+        val markedAt = pendingEntryAnimationAtNs
+        if (markedAt == 0L) return false
+        val elapsed = System.nanoTime() - markedAt
+        if (elapsed in 0L..PENDING_ENTRY_ANIMATION_WINDOW_NS) return true
+        pendingEntryAnimationAtNs = 0L
+        return false
+    }
+
+    fun clearPendingEntryAnimation() {
+        pendingEntryAnimationAtNs = 0L
+    }
 
     fun currentLanguageTag(context: Context): String =
         AppLanguage.normalize(
@@ -29,7 +50,11 @@ object AppLocaleManager {
         )
 
     fun applyLanguage(context: Context, languageTag: String) {
+        val previousTag = currentLanguageTag(context)
         val normalized = AppLanguage.normalize(languageTag)
+        if (normalized != previousTag) {
+            markPendingEntryAnimation()
+        }
         context
             .getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
             .edit()

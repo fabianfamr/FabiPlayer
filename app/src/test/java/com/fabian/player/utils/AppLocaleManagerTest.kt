@@ -1,4 +1,4 @@
-﻿package com.fabian.player.utils
+package com.fabian.player.utils
 
 import android.content.ComponentCallbacks
 import android.content.Context
@@ -20,6 +20,8 @@ import io.mockk.verify
 import java.util.Locale
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -73,6 +75,7 @@ class AppLocaleManagerTest {
 
     @AfterEach
     fun tearDown() {
+        AppLocaleManager.clearPendingEntryAnimation()
         Locale.setDefault(originalDefaultLocale)
         unmockkAll()
     }
@@ -121,5 +124,27 @@ class AppLocaleManagerTest {
         verify(exactly = 1) { applicationContext.registerComponentCallbacks(any()) }
         callbacks.captured.onConfigurationChanged(Configuration())
         assertEquals(Locale.FRENCH, Locale.getDefault())
+    }
+
+    @Test
+    fun `changing to a different language schedules entry animation and clear resets it`() {
+        AppLocaleManager.clearPendingEntryAnimation()
+        assertFalse(AppLocaleManager.hasPendingEntryAnimation())
+
+        AppLocaleManager.applyLanguage(applicationContext, "es")
+        assertTrue(AppLocaleManager.hasPendingEntryAnimation())
+
+        AppLocaleManager.clearPendingEntryAnimation()
+        assertFalse(AppLocaleManager.hasPendingEntryAnimation())
+    }
+
+    @Test
+    fun `re-applying the same language does not schedule entry animation`() {
+        storedTag = "es"
+        AppLocaleManager.clearPendingEntryAnimation()
+
+        AppLocaleManager.applyLanguage(applicationContext, "es")
+
+        assertFalse(AppLocaleManager.hasPendingEntryAnimation())
     }
 }

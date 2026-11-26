@@ -717,9 +717,11 @@ fun SettingsCategoryScreen(
                                     description = stringResource(R.string.setcat_app_language_desc),
                                     options = AppLanguage.getLanguageOptions(context),
                                     selectedKey = uiState.appLanguageTag,
-                                    onSelectionChanged = {
-                                        settingsViewModel.setAppLanguage(it)
-                                        (context as? Activity)?.recreate()
+                                    onSelectionChanged = { selectedTag ->
+                                        if (AppLanguage.normalize(selectedTag) != uiState.appLanguageTag) {
+                                            settingsViewModel.setAppLanguage(selectedTag)
+                                            (context as? Activity)?.recreate()
+                                        }
                                     },
                                     leadingIcon = { Icon(Icons.Outlined.Language, null, tint = MaterialTheme.colorScheme.secondary) },
                                     modifier = Modifier.settingHighlight("item_appearance_app_language", highlightKey)

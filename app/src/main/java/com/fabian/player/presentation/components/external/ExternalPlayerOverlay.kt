@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.components.external
+package com.fabian.player.presentation.components.external
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -170,10 +170,10 @@ fun ExternalPlayerOverlay(
                     val position = playbackPosition.coerceIn(0L, totalDuration)
                     val progressFraction = if (totalDuration > 0) position.toFloat() / totalDuration else 0f
                     val colorScheme = MaterialTheme.colorScheme
-                    val skipContainer = colorScheme.secondaryFixedDim
-                    val skipContent = colorScheme.onSecondaryFixed
-                    val playPauseContainer = colorScheme.tertiaryFixedDim
-                    val playPauseContent = colorScheme.onTertiaryFixed
+                    val skipContainer = colorScheme.primary.copy(alpha = 0.84f)
+                    val skipContent = colorScheme.onPrimary
+                    val playPauseContainer = colorScheme.primary
+                    val playPauseContent = colorScheme.onPrimary
                     val progressColor = colorScheme.primary
 
                     // Keep this state identity stable: WavySliderExpressive tracks the value it is
