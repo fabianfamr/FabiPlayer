@@ -1,5 +1,7 @@
-﻿package com.fabian.player.utils
+package com.fabian.player.utils
 
+import android.content.Context
+import com.fabian.player.R
 import com.fabian.player.data.model.Lyrics
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -139,6 +141,23 @@ object LyricsImportSecurity {
                 parsedLyrics = parsed
             )
         )
+    }
+
+    fun messageFor(context: Context, reason: LyricsImportFailureReason): String {
+        return when (reason) {
+            LyricsImportFailureReason.UNSUPPORTED_EXTENSION ->
+                context.getString(R.string.lyrics_import_error_unsupported_extension)
+            LyricsImportFailureReason.UNSUPPORTED_MIME_TYPE ->
+                context.getString(R.string.lyrics_import_error_unsupported_mime)
+            LyricsImportFailureReason.FILE_TOO_LARGE ->
+                context.getString(R.string.lyrics_import_error_too_large)
+            LyricsImportFailureReason.EMPTY_CONTENT ->
+                context.getString(R.string.lyrics_import_error_empty)
+            LyricsImportFailureReason.INVALID_ENCODING ->
+                context.getString(R.string.lyrics_import_error_invalid_encoding)
+            LyricsImportFailureReason.INVALID_LYRICS_CONTENT ->
+                context.getString(R.string.lyrics_import_error_invalid_content)
+        }
     }
 
     fun messageFor(reason: LyricsImportFailureReason): String {

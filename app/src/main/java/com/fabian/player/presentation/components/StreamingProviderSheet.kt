@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.components
+package com.fabian.player.presentation.components
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -100,8 +100,8 @@ fun StreamingProviderSheet(
                     ProviderRow(
                         iconPainter = painterResource(R.drawable.ic_navidrome_md3),
                         iconTint = Color(0xFFE8A54B),
-                        title = "Subsonic",
-                        subtitle = if (isNavidromeLoggedIn) "Connected · Navidrome/Airsonic" else "Connect Navidrome & others",
+                        title = stringResource(R.string.accounts_provider_subsonic),
+                        subtitle = if (isNavidromeLoggedIn) stringResource(R.string.streaming_subsonic_connected) else stringResource(R.string.streaming_subsonic_connect),
                         shape = providerSegmentItemShape,
                         isConnected = isNavidromeLoggedIn,
                         onClick = {
@@ -117,8 +117,8 @@ fun StreamingProviderSheet(
                     ProviderRow(
                         iconPainter = painterResource(R.drawable.ic_jellyfin),
                         iconTint = Color(0xFF00A4DC),
-                        title = "Jellyfin",
-                        subtitle = if (isJellyfinLoggedIn) "Connected" else "Connect your Jellyfin server",
+                        title = stringResource(R.string.accounts_provider_jellyfin),
+                        subtitle = if (isJellyfinLoggedIn) stringResource(R.string.streaming_jellyfin_connected) else stringResource(R.string.streaming_jellyfin_connect),
                         shape = providerSegmentItemShape,
                         isConnected = isJellyfinLoggedIn,
                         onClick = {

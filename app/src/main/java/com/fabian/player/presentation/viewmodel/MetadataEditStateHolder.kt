@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.viewmodel
+package com.fabian.player.presentation.viewmodel
 
 import android.content.Context
 import android.net.Uri
@@ -40,7 +40,21 @@ class MetadataEditStateHolder @Inject constructor(
         /**
          * Returns a user-friendly error message based on the error type
          */
-        fun getUserFriendlyErrorMessage(): String {
+        fun getUserFriendlyErrorMessage(context: Context? = null): String {
+            if (context != null) {
+                return when (error) {
+                    MetadataEditError.FILE_NOT_FOUND -> context.getString(com.fabian.player.R.string.metadata_error_file_not_found)
+                    MetadataEditError.NO_WRITE_PERMISSION -> context.getString(com.fabian.player.R.string.metadata_error_no_write_permission)
+                    MetadataEditError.INVALID_INPUT -> errorMessage ?: context.getString(com.fabian.player.R.string.metadata_error_invalid_input)
+                    MetadataEditError.UNSUPPORTED_FORMAT -> context.getString(com.fabian.player.R.string.metadata_error_unsupported_format)
+                    MetadataEditError.TAGLIB_ERROR -> context.getString(com.fabian.player.R.string.metadata_error_taglib)
+                    MetadataEditError.TIMEOUT -> context.getString(com.fabian.player.R.string.metadata_error_timeout)
+                    MetadataEditError.FILE_CORRUPTED -> context.getString(com.fabian.player.R.string.metadata_error_corrupted)
+                    MetadataEditError.IO_ERROR -> context.getString(com.fabian.player.R.string.metadata_error_io)
+                    MetadataEditError.WRITE_INTERRUPTED -> errorMessage ?: context.getString(com.fabian.player.R.string.metadata_edit_write_interrupted)
+                    MetadataEditError.UNKNOWN, null -> errorMessage ?: context.getString(com.fabian.player.R.string.metadata_error_unknown)
+                }
+            }
             return when (error) {
                 MetadataEditError.FILE_NOT_FOUND -> "The song file could not be found. It may have been moved or deleted."
                 MetadataEditError.NO_WRITE_PERMISSION -> "Cannot edit this file. You may need to grant additional permissions or the file is on read-only storage."

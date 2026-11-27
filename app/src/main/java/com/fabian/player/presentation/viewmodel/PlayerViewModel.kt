@@ -1016,7 +1016,7 @@ class PlayerViewModel @Inject constructor(
                             currentState.lyrics == null &&
                             hydratedSong.improvesLyricsLookupComparedTo(currentSong)
 
-                    if (shouldApplyPersistedLyrics || shouldReloadLyrics) {
+                    if (shouldReloadLyrics) {
                         lyricsStateHolder.cancelLoading()
                     }
 
@@ -1030,6 +1030,10 @@ class PlayerViewModel @Inject constructor(
                         if (_selectedSongForInfo.value?.id == hydratedSong.id) {
                             _selectedSongForInfo.value = hydratedSong
                         }
+                    }
+
+                    if (shouldApplyPersistedLyrics && persistedLyrics != null) {
+                        lyricsStateHolder.applyPersistedLyrics(hydratedSong, persistedLyrics)
                     }
 
                     if (shouldReloadLyrics) {
@@ -4982,7 +4986,7 @@ class PlayerViewModel @Inject constructor(
 
             _toastEvents.emit(context.getString(R.string.metadata_updated_successfully))
         } else {
-            val errorMessage = result.getUserFriendlyErrorMessage()
+            val errorMessage = result.getUserFriendlyErrorMessage(context)
             Timber.tag("PlayerViewModel").e("METADATA_EDIT_VM: Failed - ${result.error}: $errorMessage")
             _toastEvents.emit(errorMessage)
         }

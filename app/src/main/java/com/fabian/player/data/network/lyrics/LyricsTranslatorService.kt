@@ -79,6 +79,22 @@ class LyricsTranslatorService @Inject constructor(
         val normalizedLang = targetLanguageCode.trim().ifBlank { "es" }
         val trimmedKey = geminiApiKey.trim()
         val resolvedModel = sanitizeModelId(geminiModel)
+        val cached = findCachedTranslation(
+            songId = songId,
+            targetLanguageCode = normalizedLang,
+            lyrics = lyrics,
+            geminiApiKey = trimmedKey,
+            geminiModel = resolvedModel
+        )
+        if (cached != null) {
+            return@withContext Result.success(
+                LyricsTranslationOutcome(
+                    lyrics = cached,
+                    usedGemini = trimmedKey.isNotEmpty(),
+                    fromCache = true
+                )
+            )
+        }
         val cacheFile = cacheFileFor(
             songId = songId,
             targetLang = normalizedLang,
@@ -88,15 +104,6 @@ class LyricsTranslatorService @Inject constructor(
                 geminiModel = resolvedModel
             )
         )
-        readCachedLyrics(cacheFile)?.let { cached ->
-            return@withContext Result.success(
-                LyricsTranslationOutcome(
-                    lyrics = cached,
-                    usedGemini = trimmedKey.isNotEmpty(),
-                    fromCache = true
-                )
-            )
-        }
 
         val entireLyricsHasKana = linesToTranslate.any { (_, text) ->
             MultiLangRomanizer.isJapanese(text, entireLyricsHasKana = false)
@@ -297,14 +304,73 @@ class LyricsTranslatorService @Inject constructor(
         }
     }
 
+    suspend fun findCachedTranslation(
+        songId: String,
+        targetLanguageCode: String,
+        lyrics: Lyrics,
+        geminiApiKey: String = "",
+        geminiModel: String = DEFAULT_GEMINI_MODEL
+    ): Lyrics? = withContext(Dispatchers.IO) {
+        val lines = extractTranslatableLines(lyrics)
+        if (lines.isEmpty()) return@withContext null
+        val normalizedLang = targetLanguageCode.trim().ifBlank { "es" }
+        val trimmedKey = geminiApiKey.trim()
+        val resolvedModel = sanitizeModelId(geminiModel)
+        val hash = contentHash(lyrics)
+
+        // 1. Direct match with current model / mode
+        val primaryFile = cacheFileFor(
+            songId = songId,
+            targetLang = normalizedLang,
+            fingerprint = fingerprintLyrics(
+                lyrics = lyrics,
+                useGemini = trimmedKey.isNotEmpty(),
+                geminiModel = resolvedModel
+            )
+        )
+        readCachedLyrics(primaryFile)?.let { return@withContext it }
+
+        // 2. Direct match with alternative mode (free vs gemini)
+        val altFile = cacheFileFor(
+            songId = songId,
+            targetLang = normalizedLang,
+            fingerprint = fingerprintLyrics(
+                lyrics = lyrics,
+                useGemini = trimmedKey.isEmpty(),
+                geminiModel = resolvedModel
+            )
+        )
+        readCachedLyrics(altFile)?.let { return@withContext it }
+
+        // 3. Any cached file for this song and targetLang ending with content hash
+        val songPrefix = "${safeFilePart(songId)}_${safeFilePart(normalizedLang)}_"
+        val candidate = cacheDir.listFiles { file ->
+            file.name.startsWith(songPrefix) && file.name.endsWith(".json")
+        }?.firstNotNullOfOrNull { readCachedLyrics(it) }
+        if (candidate != null) return@withContext candidate
+
+        // 4. Any cached file for the exact targetLang where contentHash matches (e.g. MediaStore songId change)
+        val hashSuffix = "_${hash}.json"
+        val fallbackCandidate = cacheDir.listFiles { file ->
+            file.name.contains("_${safeFilePart(normalizedLang)}_") && file.name.endsWith(hashSuffix)
+        }?.firstNotNullOfOrNull { readCachedLyrics(it) }
+        if (fallbackCandidate != null) return@withContext fallbackCandidate
+
+        null
+    }
+
     private fun cacheFileFor(songId: String, targetLang: String, fingerprint: String): File =
         File(cacheDir, "${safeFilePart(songId)}_${safeFilePart(targetLang)}_$fingerprint.json")
 
     private fun readCachedLyrics(file: File): Lyrics? {
         if (!file.isFile) return null
-        return runCatching {
+        val parsed = runCatching {
             json.decodeFromString<Lyrics>(file.readText())
-        }.getOrNull()
+        }.getOrNull() ?: return null
+        val hasContent = parsed.synced?.any { !it.translation.isNullOrBlank() || !it.romanization.isNullOrBlank() } == true ||
+            parsed.plainTranslations?.any { !it.isNullOrBlank() } == true ||
+            parsed.plainRomanizations?.any { !it.isNullOrBlank() } == true
+        return if (hasContent) parsed else null
     }
 
     private fun writeCachedLyrics(file: File, lyrics: Lyrics) {
@@ -519,6 +585,24 @@ class LyricsTranslatorService @Inject constructor(
         private fun extractGeminiErrorMessage(body: String): String? = runCatching {
             JSONObject(body).optJSONObject("error")?.optString("message")?.takeIf { it.isNotBlank() }
         }.getOrNull()
+
+        fun stripTranslations(lyrics: Lyrics): Lyrics {
+            val strippedSynced = lyrics.synced?.map { it.copy(translation = null, romanization = null) }
+            return lyrics.copy(
+                synced = strippedSynced,
+                plainTranslations = null,
+                plainRomanizations = null
+            )
+        }
+
+        fun contentHash(lyrics: Lyrics): String {
+            val raw = buildString {
+                lyrics.synced?.forEach { append(it.time).append(':').append(it.line.trim()).append('\n') }
+                lyrics.plain?.forEach { append(it.trim()).append('\n') }
+            }
+            val digest = MessageDigest.getInstance("SHA-256").digest(raw.toByteArray(Charsets.UTF_8))
+            return digest.take(8).joinToString("") { "%02x".format(it) }
+        }
 
         private fun fingerprintLyrics(
             lyrics: Lyrics,

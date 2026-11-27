@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.screens
+package com.fabian.player.presentation.screens
 
 import com.fabian.player.presentation.navigation.navigateSafely
 import com.fabian.player.presentation.navigation.navigateSafelyReplacing
@@ -1204,11 +1204,12 @@ fun SearchResultsList(
                 }
         }
     }
-    val searchQueueName = remember(searchQuery) {
+    val context = LocalContext.current
+    val searchQueueName = remember(searchQuery, context) {
         searchQuery.trim()
             .takeIf { it.isNotEmpty() }
-            ?.let { "Search: $it" }
-            ?: "Search Results"
+            ?.let { context.getString(R.string.search_queue_name_format, it) }
+            ?: context.getString(R.string.search_queue_results)
     }
     val onSongResultClick = remember(playerViewModel, onItemSelected, songResultsQueue, searchQueueName) {
         { song: Song ->
@@ -1406,7 +1407,7 @@ fun SearchResultsList(
                                             )
                                             if (playerStableState.isShuffleEnabled) playerViewModel.toggleShuffle()
                                         } else {
-                                            playerViewModel.sendToast("Empty playlist")
+                                            playerViewModel.sendToast(context.getString(R.string.playlist_empty_toast))
                                         }
                                         onItemSelected()
                                     }

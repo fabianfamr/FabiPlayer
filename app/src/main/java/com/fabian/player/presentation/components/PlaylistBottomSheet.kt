@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.components
+package com.fabian.player.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -192,7 +192,7 @@ fun PlaylistBottomSheet(
                     isFoldersTab = false,
                     currentFolder = null,
                     folderRootPath = "",
-                    folderRootLabel = "Internal Storage",
+                    folderRootLabel = stringResource(R.string.internal_storage),
                     onFolderClick = { },
                     onNavigateBack = { }
                 )

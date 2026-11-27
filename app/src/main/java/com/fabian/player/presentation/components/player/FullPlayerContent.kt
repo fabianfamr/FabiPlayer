@@ -298,7 +298,7 @@ fun FullPlayerContent(
                             is LyricsImportValidationResult.Valid -> validation.value
                             is LyricsImportValidationResult.Invalid -> {
                                 playerViewModel.sendToast(
-                                    LyricsImportSecurity.messageFor(validation.reason)
+                                    LyricsImportSecurity.messageFor(context, validation.reason)
                                 )
                                 return@launch
                             }
@@ -306,7 +306,7 @@ fun FullPlayerContent(
 
                         val currentSongId = currentSong?.id?.toLongOrNull()
                         if (currentSongId == null) {
-                            playerViewModel.sendToast("No song selected for lyrics import.")
+                            playerViewModel.sendToast(context.getString(R.string.lyrics_import_no_song))
                             return@launch
                         }
 
@@ -315,7 +315,7 @@ fun FullPlayerContent(
                         showLyricsSheet = true
                     } catch (e: Exception) {
                         Timber.e(e, "Error reading imported lyrics file")
-                        playerViewModel.sendToast("Error reading file.")
+                        playerViewModel.sendToast(context.getString(R.string.lyrics_import_read_error))
                     }
                 }
             }

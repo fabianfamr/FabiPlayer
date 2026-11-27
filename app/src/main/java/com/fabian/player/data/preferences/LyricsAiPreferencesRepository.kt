@@ -90,10 +90,7 @@ class LyricsAiPreferencesRepository @Inject constructor(
     }
 
     suspend fun ensureTranslationAndPronunciationVisible() {
-        dataStore.edit { prefs ->
-            prefs[Keys.SHOW_TRANSLATION] = true
-            prefs[Keys.SHOW_ROMANIZATION] = true
-        }
+        // Preserves user's explicit toggles. Do not force override user settings.
     }
 
     fun getGeminiApiKey(): String = _geminiApiKeyFlow.value
@@ -117,7 +114,9 @@ class LyricsAiPreferencesRepository @Inject constructor(
     fun resolveTargetLanguageCode(storedCode: String = _targetCodeSnapshot()): String {
         val sanitized = sanitizeLanguageCode(storedCode)
         if (sanitized != LANG_AUTO) return sanitized
-        return Locale.getDefault().language.takeIf { it.isNotBlank() } ?: "es"
+        val appLanguage = runCatching { androidx.appcompat.app.AppCompatDelegate.getApplicationLocales() }
+            .getOrNull()?.takeIf { !it.isEmpty }?.get(0)?.language?.takeIf { it.isNotBlank() }
+        return appLanguage ?: Locale.getDefault().language.takeIf { it.isNotBlank() } ?: "es"
     }
 
     private fun _targetCodeSnapshot(): String = LANG_AUTO

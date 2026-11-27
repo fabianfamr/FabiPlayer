@@ -1,4 +1,4 @@
-﻿@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
 
 package com.fabian.player.presentation.components
 
@@ -210,7 +210,7 @@ fun FileExplorerContent(
     onStorageSelected: (Int) -> Unit,
     onDone: () -> Unit,
     onDismiss: () -> Unit,
-    title: String = "Excluded folders",
+    title: String? = null,
     leadingContent: @Composable (() -> Unit)? = null,
     /** Replaces the default close button — a hosting screen passes a back arrow here. */
     navigationIcon: @Composable (() -> Unit)? = null,
@@ -229,6 +229,7 @@ fun FileExplorerContent(
     onRequestAllFolders: (forceRefresh: Boolean) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val resolvedTitle = title ?: stringResource(R.string.file_explorer_default_title)
     val listState = rememberLazyListState()
     val allFoldersListState = rememberLazyListState()
     val supportsAllFolders = allFolders != null
@@ -267,16 +268,19 @@ fun FileExplorerContent(
             isLoading || isPriming || !isReady || !isCurrentDirectoryResolved
         )
     }
-    val loadingMessage = remember(isPriming, isReady) {
+    val preparingMessage = stringResource(R.string.file_explorer_preparing_folders)
+    val loadingFoldersMessage = stringResource(R.string.file_explorer_loading_folders)
+    val preparingHint = stringResource(R.string.file_explorer_preparing_hint)
+    val loadingMessage = remember(isPriming, isReady, preparingMessage, loadingFoldersMessage) {
         if (isPriming || !isReady) {
-            "Preparing folders…"
+            preparingMessage
         } else {
-            "Loading folders…"
+            loadingFoldersMessage
         }
     }
-    val loadingHint = remember(isPriming, isReady) {
+    val loadingHint = remember(isPriming, isReady, preparingHint) {
         if (isPriming || !isReady) {
-            "This can take a moment while FabiPlayer scans the available subfolders."
+            preparingHint
         } else {
             null
         }
@@ -289,7 +293,7 @@ fun FileExplorerContent(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = title,
+                        text = resolvedTitle,
                         fontFamily = RoundedSans,
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontSize = 22.sp,
@@ -860,9 +864,10 @@ private fun FileExplorerHeader(
         })
     }
 
-    val rootLabel = remember(rootDirectory) {
+    val internalStorageLabel = stringResource(R.string.internal_storage)
+    val rootLabel = remember(rootDirectory, internalStorageLabel) {
         when (rootDirectory.name) {
-            "0", "" -> "Internal storage"
+            "0", "" -> internalStorageLabel
             else -> rootDirectory.name
         }
     }

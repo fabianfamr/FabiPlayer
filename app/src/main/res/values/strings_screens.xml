@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="nav_error_genre_id_missing">Error: Genre ID missing</string>
 
@@ -25,6 +25,36 @@
         <item quantity="other">Delete %1$d moments?</item>
     </plurals>
     <string name="audio_bookmarks_delete_moments_message">The selected saved moments will be permanently removed. This can\'t be undone.</string>
+    <string name="audio_bookmarks_search_hint">Search bookmarks</string>
+    <string name="audio_bookmarks_clear_search">Clear bookmark search</string>
+    <string name="audio_bookmarks_cd_open_actions">Open bookmark actions</string>
+    <string name="audio_bookmarks_cd_close_actions">Close bookmark actions</string>
+    <string name="audio_bookmarks_sort_most_moments">Most moments</string>
+    <string name="audio_bookmarks_sort_recent">Recent</string>
+    <string name="audio_bookmarks_sort_az">A-Z</string>
+    <string name="audio_bookmarks_cd_sort_most_moments">Sort bookmarks by most moments</string>
+    <string name="audio_bookmarks_cd_sort_recent">Sort bookmarks by recent moments</string>
+    <string name="audio_bookmarks_cd_sort_az">Sort bookmarks alphabetically</string>
+    <string name="audio_bookmarks_saved_moments">Saved moments</string>
+    <plurals name="audio_bookmarks_moments_count">
+        <item quantity="one">1 moment</item>
+        <item quantity="other">%1$d moments</item>
+    </plurals>
+    <string name="audio_bookmarks_empty_title">No bookmarked audio yet</string>
+    <string name="audio_bookmarks_empty_subtitle">Saved moments will appear here grouped by track.</string>
+    <string name="audio_bookmarks_empty_search_title">No bookmark folders found</string>
+    <string name="audio_bookmarks_empty_search_subtitle">Try searching by song, artist, album, cue, or bookmark tag.</string>
+    <string name="audio_bookmarks_folder_empty_title">No moments in this folder</string>
+    <string name="audio_bookmarks_folder_empty_subtitle">Bookmarks for this track may have been deleted.</string>
+    <string name="audio_bookmarks_file_not_found">Audio file not found</string>
+    <string name="audio_bookmarks_cue_format">Cue %1$s</string>
+    <string name="audio_bookmarks_copy_cue">Copy cue</string>
+    <string name="audio_bookmarks_cue_copied">Cue copied</string>
+    <string name="audio_bookmarks_cue_label">Bookmark cue</string>
+    <string name="audio_bookmarks_delete_bookmark">Delete bookmark</string>
+    <string name="audio_bookmarks_rename_title">Rename bookmark</string>
+    <string name="audio_bookmarks_rename_subtitle">Update the label for this saved cue.</string>
+    <string name="audio_bookmarks_unknown_audio">Unknown audio</string>
     <string name="easter_egg_thank_you">Thank you for using FabiPlayer!</string>
 
     <string name="word_delimiter_section_title">Current Word Delimiters</string>

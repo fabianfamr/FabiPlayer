@@ -30,12 +30,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.collections.immutable.toImmutableList
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Callback interface for lyrics loading results.
@@ -94,6 +97,8 @@ class LyricsStateHolder @Inject constructor(
     )
     val messageEvents = _messageEvents.asSharedFlow()
 
+    private val baseLyricsBySongId = ConcurrentHashMap<String, Lyrics>()
+
     /**
      * Initialize with coroutine scope and callback from ViewModel.
      */
@@ -115,6 +120,31 @@ class LyricsStateHolder @Inject constructor(
                         updateSyncOffsetForSong(songId)
                     }
                 }
+        }
+
+        val aiPrefs = lyricsAiPreferencesRepository
+        if (aiPrefs != null) {
+            coroutineScope.launch {
+                combine(
+                    aiPrefs.autoTranslateLyricsFlow,
+                    aiPrefs.targetLanguageFlow
+                ) { autoTranslate, targetLang -> autoTranslate to targetLang }
+                    .distinctUntilChanged()
+                    .drop(1)
+                    .collect { (autoTranslate, _) ->
+                        val current = stablePlayerState.value
+                        val currentSong = current.currentSong ?: return@collect
+                        val currentLyrics = current.lyrics ?: return@collect
+                        val base = baseLyricsBySongId[currentSong.id]
+                            ?: LyricsTranslatorService.stripTranslations(currentLyrics)
+                        if (hasValidLyrics(base)) {
+                            baseLyricsBySongId[currentSong.id] = base
+                            if (autoTranslate) {
+                                launchTranslation(currentSong, base, showFeedback = false)
+                            }
+                        }
+                    }
+            }
         }
     }
 
@@ -148,12 +178,78 @@ class LyricsStateHolder @Inject constructor(
             }
 
             if (pendingLoad === request) pendingLoad = null
-            loadCallback?.onLyricsLoaded(targetSongId, fetchedLyrics)
 
             if (fetchedLyrics != null && hasValidLyrics(fetchedLyrics)) {
+                val base = LyricsTranslatorService.stripTranslations(fetchedLyrics)
+                baseLyricsBySongId[targetSongId] = base
+
+                val translator = lyricsTranslatorService
                 val aiPrefs = lyricsAiPreferencesRepository
-                if (aiPrefs != null && aiPrefs.getAutoTranslateLyrics()) {
-                    launchTranslation(song = song, lyrics = fetchedLyrics, showFeedback = false)
+                val autoTranslate = aiPrefs?.getAutoTranslateLyrics() == true
+
+                var deliveredLyrics = fetchedLyrics
+                if (translator != null && aiPrefs != null) {
+                    val storedLang = aiPrefs.getTargetLanguage()
+                    val resolvedLang = aiPrefs.resolveTargetLanguageCode(storedLang)
+                    val apiKey = aiPrefs.getGeminiApiKey()
+                    val geminiModel = aiPrefs.getGeminiModel()
+                    val cached = translator.findCachedTranslation(
+                        songId = targetSongId,
+                        targetLanguageCode = resolvedLang,
+                        lyrics = base,
+                        geminiApiKey = apiKey,
+                        geminiModel = geminiModel
+                    )
+                    if (cached != null) {
+                        deliveredLyrics = cached
+                    }
+                }
+
+                loadCallback?.onLyricsLoaded(targetSongId, deliveredLyrics)
+
+                if (deliveredLyrics === fetchedLyrics && autoTranslate) {
+                    launchTranslation(song = song, lyrics = base, showFeedback = false)
+                }
+            } else {
+                loadCallback?.onLyricsLoaded(targetSongId, fetchedLyrics)
+            }
+        }
+    }
+
+    /**
+     * Applies persisted lyrics from repository and restores any cached translation.
+     */
+    fun applyPersistedLyrics(song: Song, persistedLyrics: Lyrics) {
+        if (!hasValidLyrics(persistedLyrics)) return
+        val targetSongId = song.id
+        val base = LyricsTranslatorService.stripTranslations(persistedLyrics)
+        baseLyricsBySongId[targetSongId] = base
+
+        val translator = lyricsTranslatorService
+        val aiPrefs = lyricsAiPreferencesRepository
+        if (translator == null || aiPrefs == null) {
+            loadCallback?.onLyricsLoaded(targetSongId, persistedLyrics)
+            return
+        }
+
+        scope?.launch {
+            val storedLang = aiPrefs.getTargetLanguage()
+            val resolvedLang = aiPrefs.resolveTargetLanguageCode(storedLang)
+            val apiKey = aiPrefs.getGeminiApiKey()
+            val geminiModel = aiPrefs.getGeminiModel()
+            val cached = translator.findCachedTranslation(
+                songId = targetSongId,
+                targetLanguageCode = resolvedLang,
+                lyrics = base,
+                geminiApiKey = apiKey,
+                geminiModel = geminiModel
+            )
+            if (cached != null) {
+                loadCallback?.onLyricsLoaded(targetSongId, cached)
+            } else {
+                loadCallback?.onLyricsLoaded(targetSongId, persistedLyrics)
+                if (aiPrefs.getAutoTranslateLyrics()) {
+                    launchTranslation(song = song, lyrics = base, showFeedback = false)
                 }
             }
         }
@@ -174,13 +270,18 @@ class LyricsStateHolder @Inject constructor(
      */
     fun translateLyricsForSong(song: Song, currentLyrics: Lyrics) {
         if (!hasValidLyrics(currentLyrics)) return
-        launchTranslation(song = song, lyrics = currentLyrics, showFeedback = true)
+        val base = baseLyricsBySongId[song.id] ?: LyricsTranslatorService.stripTranslations(currentLyrics)
+        baseLyricsBySongId[song.id] = base
+        launchTranslation(song = song, lyrics = base, showFeedback = true)
     }
 
     private fun launchTranslation(song: Song, lyrics: Lyrics, showFeedback: Boolean) {
         val translator = lyricsTranslatorService ?: return
         val aiPrefs = lyricsAiPreferencesRepository ?: return
         val targetSongId = song.id
+        val baseLyrics = baseLyricsBySongId[targetSongId] ?: LyricsTranslatorService.stripTranslations(lyrics)
+        baseLyricsBySongId[targetSongId] = baseLyrics
+
         translationJob?.cancel()
         translationJob = scope?.launch {
             loadCallback?.onTranslatingChanged(targetSongId, true)
@@ -194,12 +295,11 @@ class LyricsStateHolder @Inject constructor(
                     songId = targetSongId,
                     title = song.title,
                     artist = song.displayArtist,
-                    lyrics = lyrics,
+                    lyrics = baseLyrics,
                     targetLanguageCode = resolvedLang,
                     geminiApiKey = apiKey,
                     geminiModel = geminiModel
                 ).onSuccess { outcome ->
-                    aiPrefs.ensureTranslationAndPronunciationVisible()
                     loadCallback?.onLyricsLoaded(targetSongId, outcome.lyrics)
                     if (showFeedback) {
                         val ctx = context
@@ -403,7 +503,7 @@ class LyricsStateHolder @Inject constructor(
                 }
             }
 
-            _messageEvents.emit("Lyrics imported successfully!")
+            _messageEvents.emit(context?.getString(R.string.lyrics_imported_success) ?: "Lyrics imported successfully!")
         }
     }
 
@@ -433,9 +533,9 @@ class LyricsStateHolder @Inject constructor(
 
     private fun handleError(error: Throwable) {
         _searchUiState.value = if (error is NoLyricsFoundException) {
-            LyricsSearchUiState.NotFound("Lyrics not found")
+            LyricsSearchUiState.NotFound(context?.getString(R.string.lyrics_not_found) ?: "Lyrics not found")
         } else {
-            LyricsSearchUiState.Error(error.message ?: "Unknown error")
+            LyricsSearchUiState.Error(error.message ?: context?.getString(R.string.error_unknown) ?: "Unknown error")
         }
     }
 

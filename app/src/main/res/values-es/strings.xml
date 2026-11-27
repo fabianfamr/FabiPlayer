@@ -265,4 +265,109 @@
     <string name="musicbrainz_match_score">Confianza de la coincidencia: %1$d%%</string>
     <string name="musicbrainz_applied">Identificadores de MusicBrainz guardados. Se completaron el año que faltaba y los nombres provisionales.</string>
     <string name="cloud_playlist_download">Descargar lista de reproducción</string>
+
+    <!-- Importación y traducción de letras -->
+    <string name="lyrics_imported_success">¡Letras importadas con éxito!</string>
+    <string name="lyrics_import_no_song">Ninguna canción seleccionada para importar letras.</string>
+    <string name="lyrics_import_read_error">Error al leer el archivo.</string>
+    <string name="lyrics_import_error_unsupported_extension">Solo se admiten archivos de letras .lrc y .ttml.</string>
+    <string name="lyrics_import_error_unsupported_mime">El tipo de archivo seleccionado no es un archivo de letras compatible.</string>
+    <string name="lyrics_import_error_too_large">El archivo de letras es demasiado grande.</string>
+    <string name="lyrics_import_error_empty">El archivo de letras está vacío.</string>
+    <string name="lyrics_import_error_invalid_encoding">No se pudo descodificar el archivo de letras de forma segura.</string>
+    <string name="lyrics_import_error_invalid_content">El archivo no contiene letras válidas.</string>
+
+    <!-- Pantalla de búsqueda -->
+    <string name="search_queue_name_format">Búsqueda: %1$s</string>
+    <string name="search_queue_results">Resultados de búsqueda</string>
+    <string name="playlist_empty_toast">Lista de reproducción vacía</string>
+
+    <!-- Cuentas y streaming -->
+    <string name="accounts_provider_subsonic">Subsonic</string>
+    <string name="accounts_provider_jellyfin">Jellyfin</string>
+    <string name="accounts_provider_listenbrainz">ListenBrainz</string>
+    <string name="accounts_subsonic_connected_fallback">Cuenta Subsonic conectada</string>
+    <string name="accounts_jellyfin_connected_fallback">Cuenta Jellyfin conectada</string>
+    <string name="accounts_listenbrainz_connected_fallback">Cuenta ListenBrainz conectada</string>
+    <string name="accounts_listenbrainz_scrobbling_active">Enviando reproducciones mientras escuchas</string>
+    <string name="accounts_listenbrainz_search_subtitle">Envía tus reproducciones a ListenBrainz</string>
+    <plurals name="accounts_synced_playlists_count">
+        <item quantity="one">1 lista sincronizada</item>
+        <item quantity="other">%1$d listas sincronizadas</item>
+    </plurals>
+    <plurals name="accounts_queued_listens_count">
+        <item quantity="one">1 reproducción en cola</item>
+        <item quantity="other">%1$d reproducciones en cola</item>
+    </plurals>
+    <string name="streaming_subsonic_connected">Conectado · Navidrome/Airsonic</string>
+    <string name="streaming_subsonic_connect">Conectar Navidrome y otros</string>
+    <string name="streaming_jellyfin_connected">Conectado</string>
+    <string name="streaming_jellyfin_connect">Conectar tu servidor Jellyfin</string>
+
+    <!-- Explorador de archivos y almacenamiento -->
+    <string name="file_explorer_default_title">Carpetas excluidas</string>
+    <string name="file_explorer_preparing_folders">Preparando carpetas…</string>
+    <string name="file_explorer_loading_folders">Cargando carpetas…</string>
+    <string name="file_explorer_preparing_hint">Esto puede tardar un momento mientras FabiPlayer analiza las subcarpetas disponibles.</string>
+    <string name="internal_storage">Almacenamiento interno</string>
+
+    <!-- Ordenación de biblioteca -->
+    <string name="sort_view_section_title">Vista</string>
+    <string name="sort_playlist_view_label">Vista de listas</string>
+
+    <!-- Conectividad -->
+    <string name="connectivity_wifi_connected">WiFi conectado</string>
+
+    <!-- Errores al editar metadatos -->
+    <string name="metadata_error_file_not_found">No se pudo encontrar el archivo de la canción. Es posible que se haya movido o eliminado.</string>
+    <string name="metadata_error_no_write_permission">No se puede editar este archivo. Puede que necesites conceder permisos adicionales o el archivo está en almacenamiento de solo lectura.</string>
+    <string name="metadata_error_invalid_input">Datos introducidos no válidos.</string>
+    <string name="metadata_error_unsupported_format">Este formato de archivo no es compatible para edición.</string>
+    <string name="metadata_error_taglib">Error al escribir metadatos en el archivo. El archivo puede estar dañado.</string>
+    <string name="metadata_error_timeout">La operación tardó demasiado y fue cancelada.</string>
+    <string name="metadata_error_corrupted">El archivo parece estar dañado o en un formato incompatible.</string>
+    <string name="metadata_error_io">Ocurrió un error al acceder al archivo. Inténtalo de nuevo.</string>
+    <string name="metadata_error_unknown">Ocurrió un error desconocido al editar los metadatos.</string>
+
+    <!-- Sincronización M3U y Cloud/Dashboard -->
+    <string name="m3u_sync_folder_error">No se puede usar la carpeta seleccionada</string>
+    <string name="m3u_sync_failed">Error en la sincronización de listas</string>
+    <string name="m3u_sync_disable_error">No se puede desactivar la sincronización de listas</string>
+    <string name="auth_login_failed">Error al iniciar sesión</string>
+    <string name="dash_sync_failed">Error en la sincronización</string>
+    <string name="dash_jellyfin_syncing_all">Sincronizando todas las listas y canciones…</string>
+    <string name="dash_jellyfin_synced_all_format">Sincronizadas %1$d listas, %2$d canciones</string>
+    <string name="dash_jellyfin_synced_all_with_failures_format">Sincronizadas %1$d listas, %2$d canciones (%3$d fallidas)</string>
+    <string name="dash_jellyfin_sync_failed_format">Error al sincronizar: %1$s</string>
+    <string name="dash_jellyfin_syncing_playlists">Sincronizando listas…</string>
+    <string name="dash_jellyfin_synced_playlists_count">Sincronizadas %1$d listas</string>
+    <string name="dash_jellyfin_syncing_songs">Sincronizando canciones…</string>
+    <string name="dash_jellyfin_synced_songs_count">Sincronizadas %1$d canciones</string>
+
+    <!-- Secciones de copia de seguridad -->
+    <string name="backup_section_playlists_label">Listas de reproducción</string>
+    <string name="backup_section_playlists_desc">Tus listas personalizadas y preferencias de orden.</string>
+    <string name="backup_section_global_settings_label">Ajustes globales</string>
+    <string name="backup_section_global_settings_desc">Temas, comportamiento, reproducción y preferencias de la app.</string>
+    <string name="backup_section_favorites_label">Favoritos</string>
+    <string name="backup_section_favorites_desc">Canciones marcadas como favoritas.</string>
+    <string name="backup_section_lyrics_label">Letras guardadas</string>
+    <string name="backup_section_lyrics_desc">Letras que has guardado o importado.</string>
+    <string name="backup_section_search_history_label">Historial de búsqueda</string>
+    <string name="backup_section_search_history_desc">Términos de búsqueda recientes en la aplicación.</string>
+    <string name="backup_section_transitions_label">Reglas de transición</string>
+    <string name="backup_section_transitions_desc">Ajustes de transición personalizados entre canciones.</string>
+    <string name="backup_section_engagement_stats_label">Estadísticas de uso</string>
+    <string name="backup_section_engagement_stats_desc">Contador de reproducciones y tiempo de escucha por canción.</string>
+    <string name="backup_section_playback_history_label">Historial de reproducción</string>
+    <string name="backup_section_playback_history_desc">Historial de reproducción cronológico para estadísticas.</string>
+    <string name="backup_section_quick_fill_label">Géneros QuickFill</string>
+    <string name="backup_section_quick_fill_desc">Géneros personalizados y sus iconos.</string>
+    <string name="backup_section_artist_images_label">Imágenes de artistas</string>
+    <string name="backup_section_artist_images_desc">URLs en caché de imágenes de artistas de Deezer.</string>
+    <string name="backup_section_equalizer_label">Ecualizador</string>
+    <string name="backup_section_equalizer_desc">Tus preajustes de ecualizador y perfiles de audio personalizados.</string>
+    <string name="backup_section_audio_bookmarks_label">Marcadores de audio</string>
+    <string name="backup_section_audio_bookmarks_desc">Marcas de tiempo guardadas en canciones y audiolibros.</string>
+
 </resources>

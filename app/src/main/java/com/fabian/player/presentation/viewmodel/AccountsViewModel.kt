@@ -1,7 +1,9 @@
-﻿package com.fabian.player.presentation.viewmodel
+package com.fabian.player.presentation.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fabian.player.R
 import com.fabian.player.data.jellyfin.JellyfinRepository
 import com.fabian.player.data.listenbrainz.InvalidServerUrlException
 import com.fabian.player.data.listenbrainz.ListenBrainzProfileStats
@@ -9,6 +11,7 @@ import com.fabian.player.data.listenbrainz.ListenBrainzRepository
 import com.fabian.player.data.navidrome.NavidromeRepository
 import com.fabian.player.data.preferences.ListenBrainzPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -81,6 +84,7 @@ data class AccountsUiState(
 
 @HiltViewModel
 class AccountsViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val navidromeRepository: NavidromeRepository,
     private val jellyfinRepository: JellyfinRepository,
     private val listenBrainzRepository: ListenBrainzRepository,
@@ -183,14 +187,14 @@ class AccountsViewModel @Inject constructor(
                 add(
                     ExternalAccountUiModel(
                         service = ExternalServiceAccount.NAVIDROME,
-                        title = "Subsonic",
+                        title = context.getString(R.string.accounts_provider_subsonic),
                         accountLabel = navidromeRepository.username
                             ?.takeIf { it.isNotBlank() }
-                            ?: "Subsonic account connected",
-                        syncedContentLabel = formatCount(
-                            count = navidromePlaylistCount,
-                            singular = "synced playlist",
-                            plural = "synced playlists"
+                            ?: context.getString(R.string.accounts_subsonic_connected_fallback),
+                        syncedContentLabel = context.resources.getQuantityString(
+                            R.plurals.accounts_synced_playlists_count,
+                            navidromePlaylistCount,
+                            navidromePlaylistCount
                         ),
                         isLoggingOut = ExternalServiceAccount.NAVIDROME in activeLogouts
                     )
@@ -200,14 +204,14 @@ class AccountsViewModel @Inject constructor(
                 add(
                     ExternalAccountUiModel(
                         service = ExternalServiceAccount.JELLYFIN,
-                        title = "Jellyfin",
+                        title = context.getString(R.string.accounts_provider_jellyfin),
                         accountLabel = jellyfinRepository.username
                             ?.takeIf { it.isNotBlank() }
-                            ?: "Jellyfin account connected",
-                        syncedContentLabel = formatCount(
-                            count = jellyfinPlaylistCount,
-                            singular = "synced playlist",
-                            plural = "synced playlists"
+                            ?: context.getString(R.string.accounts_jellyfin_connected_fallback),
+                        syncedContentLabel = context.resources.getQuantityString(
+                            R.plurals.accounts_synced_playlists_count,
+                            jellyfinPlaylistCount,
+                            jellyfinPlaylistCount
                         ),
                         isLoggingOut = ExternalServiceAccount.JELLYFIN in activeLogouts
                     )
@@ -217,18 +221,18 @@ class AccountsViewModel @Inject constructor(
                 add(
                     ExternalAccountUiModel(
                         service = ExternalServiceAccount.LISTENBRAINZ,
-                        title = "ListenBrainz",
+                        title = context.getString(R.string.accounts_provider_listenbrainz),
                         accountLabel = listenBrainz.userName
                             ?.takeIf { it.isNotBlank() }
-                            ?: "ListenBrainz account connected",
+                            ?: context.getString(R.string.accounts_listenbrainz_connected_fallback),
                         syncedContentLabel = if (listenBrainz.pendingCount > 0) {
-                            formatCount(
-                                count = listenBrainz.pendingCount,
-                                singular = "queued listen",
-                                plural = "queued listens"
+                            context.resources.getQuantityString(
+                                R.plurals.accounts_queued_listens_count,
+                                listenBrainz.pendingCount,
+                                listenBrainz.pendingCount
                             )
                         } else {
-                            "Scrobbling listens as you play"
+                            context.getString(R.string.accounts_listenbrainz_scrobbling_active)
                         },
                         isLoggingOut = ExternalServiceAccount.LISTENBRAINZ in activeLogouts
                     )

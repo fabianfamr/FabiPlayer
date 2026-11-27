@@ -311,4 +311,108 @@
     <string name="musicbrainz_match_score">Match confidence: %1$d%%</string>
     <string name="musicbrainz_applied">MusicBrainz identifiers saved. Missing year and placeholder names were enriched.</string>
 
+    <!-- Lyrics Import & Translation -->
+    <string name="lyrics_imported_success">Lyrics imported successfully!</string>
+    <string name="lyrics_import_no_song">No song selected for lyrics import.</string>
+    <string name="lyrics_import_read_error">Error reading file.</string>
+    <string name="lyrics_import_error_unsupported_extension">Only .lrc and .ttml lyrics files are supported.</string>
+    <string name="lyrics_import_error_unsupported_mime">The selected file type is not a supported lyrics file.</string>
+    <string name="lyrics_import_error_too_large">Lyrics file is too large.</string>
+    <string name="lyrics_import_error_empty">Lyrics file is empty.</string>
+    <string name="lyrics_import_error_invalid_encoding">Lyrics file could not be decoded safely.</string>
+    <string name="lyrics_import_error_invalid_content">File does not contain valid lyrics.</string>
+
+    <!-- Search Screen -->
+    <string name="search_queue_name_format">Search: %1$s</string>
+    <string name="search_queue_results">Search Results</string>
+    <string name="playlist_empty_toast">Empty playlist</string>
+
+    <!-- Accounts & Streaming -->
+    <string name="accounts_provider_subsonic">Subsonic</string>
+    <string name="accounts_provider_jellyfin">Jellyfin</string>
+    <string name="accounts_provider_listenbrainz">ListenBrainz</string>
+    <string name="accounts_subsonic_connected_fallback">Subsonic account connected</string>
+    <string name="accounts_jellyfin_connected_fallback">Jellyfin account connected</string>
+    <string name="accounts_listenbrainz_connected_fallback">ListenBrainz account connected</string>
+    <string name="accounts_listenbrainz_scrobbling_active">Scrobbling listens as you play</string>
+    <string name="accounts_listenbrainz_search_subtitle">Scrobble your listens to ListenBrainz</string>
+    <plurals name="accounts_synced_playlists_count">
+        <item quantity="one">1 synced playlist</item>
+        <item quantity="other">%1$d synced playlists</item>
+    </plurals>
+    <plurals name="accounts_queued_listens_count">
+        <item quantity="one">1 queued listen</item>
+        <item quantity="other">%1$d queued listens</item>
+    </plurals>
+    <string name="streaming_subsonic_connected">Connected · Navidrome/Airsonic</string>
+    <string name="streaming_subsonic_connect">Connect Navidrome &amp; others</string>
+    <string name="streaming_jellyfin_connected">Connected</string>
+    <string name="streaming_jellyfin_connect">Connect your Jellyfin server</string>
+
+    <!-- File Explorer & Storage -->
+    <string name="file_explorer_default_title">Excluded folders</string>
+    <string name="file_explorer_preparing_folders">Preparing folders…</string>
+    <string name="file_explorer_loading_folders">Loading folders…</string>
+    <string name="file_explorer_preparing_hint">This can take a moment while FabiPlayer scans the available subfolders.</string>
+    <string name="internal_storage">Internal storage</string>
+
+    <!-- Library Sorting -->
+    <string name="sort_view_section_title">View</string>
+    <string name="sort_playlist_view_label">Playlist View</string>
+
+    <!-- Connectivity -->
+    <string name="connectivity_wifi_connected">WiFi Connected</string>
+
+    <!-- Metadata Edit Errors -->
+    <string name="metadata_error_file_not_found">The song file could not be found. It may have been moved or deleted.</string>
+    <string name="metadata_error_no_write_permission">Cannot edit this file. You may need to grant additional permissions or the file is on read-only storage.</string>
+    <string name="metadata_error_invalid_input">Invalid input provided.</string>
+    <string name="metadata_error_unsupported_format">This file format is not supported for editing.</string>
+    <string name="metadata_error_taglib">Failed to write metadata to the file. The file may be corrupted.</string>
+    <string name="metadata_error_timeout">The operation took too long and was cancelled.</string>
+    <string name="metadata_error_corrupted">The file appears to be corrupted or in an unsupported format.</string>
+    <string name="metadata_error_io">An error occurred while accessing the file. Please try again.</string>
+    <string name="metadata_error_unknown">An unknown error occurred while editing metadata.</string>
+
+    <!-- M3U Sync & Cloud Auth/Dashboard -->
+    <string name="m3u_sync_folder_error">Unable to use the selected folder</string>
+    <string name="m3u_sync_failed">Playlist synchronization failed</string>
+    <string name="m3u_sync_disable_error">Unable to disable playlist synchronization</string>
+    <string name="auth_login_failed">Login failed</string>
+    <string name="dash_sync_failed">Sync failed</string>
+    <string name="dash_jellyfin_syncing_all">Syncing all playlists and songs…</string>
+    <string name="dash_jellyfin_synced_all_format">Synced %1$d playlists, %2$d songs</string>
+    <string name="dash_jellyfin_synced_all_with_failures_format">Synced %1$d playlists, %2$d songs (%3$d failed)</string>
+    <string name="dash_jellyfin_sync_failed_format">Sync failed: %1$s</string>
+    <string name="dash_jellyfin_syncing_playlists">Syncing playlists…</string>
+    <string name="dash_jellyfin_synced_playlists_count">Synced %1$d playlists</string>
+    <string name="dash_jellyfin_syncing_songs">Syncing songs…</string>
+    <string name="dash_jellyfin_synced_songs_count">Synced %1$d songs</string>
+
+    <!-- Backup Sections -->
+    <string name="backup_section_playlists_label">Playlists</string>
+    <string name="backup_section_playlists_desc">Your custom playlists and ordering preferences.</string>
+    <string name="backup_section_global_settings_label">Global Settings</string>
+    <string name="backup_section_global_settings_desc">Themes, behavior, playback, and app preferences.</string>
+    <string name="backup_section_favorites_label">Favorites</string>
+    <string name="backup_section_favorites_desc">Songs marked as favorite.</string>
+    <string name="backup_section_lyrics_label">Saved Lyrics</string>
+    <string name="backup_section_lyrics_desc">Lyrics you\'ve saved or imported.</string>
+    <string name="backup_section_search_history_label">Search History</string>
+    <string name="backup_section_search_history_desc">Recent search terms in the app.</string>
+    <string name="backup_section_transitions_label">Transition Rules</string>
+    <string name="backup_section_transitions_desc">Custom transition settings between songs.</string>
+    <string name="backup_section_engagement_stats_label">Engagement Stats</string>
+    <string name="backup_section_engagement_stats_desc">Play count and listening duration per song.</string>
+    <string name="backup_section_playback_history_label">Playback History</string>
+    <string name="backup_section_playback_history_desc">Timeline-based listening history for stats.</string>
+    <string name="backup_section_quick_fill_label">QuickFill Genres</string>
+    <string name="backup_section_quick_fill_desc">Custom genres and their icons.</string>
+    <string name="backup_section_artist_images_label">Artist Images</string>
+    <string name="backup_section_artist_images_desc">Cached artist image URLs from Deezer.</string>
+    <string name="backup_section_equalizer_label">Equalizer</string>
+    <string name="backup_section_equalizer_desc">Your custom equalizer presets and audio profiles.</string>
+    <string name="backup_section_audio_bookmarks_label">Audio Bookmarks</string>
+    <string name="backup_section_audio_bookmarks_desc">Saved timestamps inside songs and audiobooks.</string>
+
 </resources>
