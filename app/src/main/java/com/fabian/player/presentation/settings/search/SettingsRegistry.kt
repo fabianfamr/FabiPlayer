@@ -512,6 +512,18 @@ object SettingsRegistry {
                 )
             ),
             SettingSpec(
+                id = "appearance_global_theme_transition_mode",
+                itemKey = "item_appearance_global_theme_transition_mode",
+                titleRes = R.string.setcat_global_now_playing_theme_transition_mode_label,
+                subtitleRes = R.string.setcat_global_now_playing_theme_transition_mode_desc,
+                category = SettingsCategory.APPEARANCE,
+                subscreenRoute = Screen.SettingsCategory.createRoute("appearance"),
+                type = SettingType.NAVIGABLE_CARD,
+                keywordsStatic = listOf(
+                    "transition", "style", "gradual", "progressive", "delay", "wait", "transición", "comportamiento", "progresiva", "esperar"
+                )
+            ),
+            SettingSpec(
                 id = "appearance_smooth_corners",
                 itemKey = "item_appearance_smooth_corners",
                 titleRes = R.string.setcat_smooth_corners_title,

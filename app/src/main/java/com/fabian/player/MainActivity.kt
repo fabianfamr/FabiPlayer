@@ -324,6 +324,11 @@ class MainActivity : ComponentActivity() {
                 .collectAsStateWithLifecycle(
                     initialValue = com.fabian.player.data.preferences.ThemePreferencesRepository.DEFAULT_GLOBAL_THEME_TRANSITION_MS
                 )
+            val globalNowPlayingThemeTransitionMode by themePreferencesRepository
+                .globalNowPlayingThemeTransitionModeFlow
+                .collectAsStateWithLifecycle(
+                    initialValue = com.fabian.player.data.preferences.GlobalThemeTransitionMode.GRADUAL
+                )
             val activePlayerColorSchemePair by playerViewModel
                 .activePlayerColorSchemePair
                 .collectAsStateWithLifecycle()
@@ -409,6 +414,11 @@ class MainActivity : ComponentActivity() {
                     globalNowPlayingThemeTransitionMs
                 } else {
                     350
+                },
+                themeTransitionMode = if (globalNowPlayingThemeEnabled) {
+                    globalNowPlayingThemeTransitionMode
+                } else {
+                    com.fabian.player.data.preferences.GlobalThemeTransitionMode.GRADUAL
                 }
             ) {
                 var contentVisible by remember { mutableStateOf(false) }

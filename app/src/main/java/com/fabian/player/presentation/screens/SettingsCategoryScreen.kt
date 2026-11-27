@@ -90,6 +90,7 @@ import androidx.compose.material.icons.rounded.Restore
 import androidx.compose.material.icons.rounded.Science
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Timer
+import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material.icons.rounded.UnfoldMore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
@@ -173,6 +174,7 @@ import com.fabian.player.data.preferences.AppLanguage
 import com.fabian.player.data.preferences.AppThemeMode
 import com.fabian.player.data.preferences.CollagePattern
 import com.fabian.player.data.preferences.CarouselStyle
+import com.fabian.player.data.preferences.GlobalThemeTransitionMode
 import com.fabian.player.data.preferences.LaunchTab
 import com.fabian.player.data.preferences.LibraryNavigationMode
 import com.fabian.player.data.preferences.NavBarStyle
@@ -802,23 +804,45 @@ fun SettingsCategoryScreen(
                                     enter = expandVertically() + fadeIn(),
                                     exit = shrinkVertically() + fadeOut()
                                 ) {
-                                    var themeTransitionDraft by remember(uiState.globalNowPlayingThemeTransitionMs) {
-                                        mutableStateOf(uiState.globalNowPlayingThemeTransitionMs.toFloat())
+                                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                                        ThemeSelectorItem(
+                                            label = stringResource(R.string.setcat_global_now_playing_theme_transition_mode_label),
+                                            description = stringResource(R.string.setcat_global_now_playing_theme_transition_mode_desc),
+                                            options = mapOf(
+                                                GlobalThemeTransitionMode.GRADUAL.storageKey to stringResource(R.string.setcat_global_now_playing_theme_transition_mode_gradual),
+                                                GlobalThemeTransitionMode.AFTER_DELAY.storageKey to stringResource(R.string.setcat_global_now_playing_theme_transition_mode_after_delay)
+                                            ),
+                                            optionDescriptions = mapOf(
+                                                GlobalThemeTransitionMode.GRADUAL.storageKey to stringResource(R.string.setcat_global_now_playing_theme_transition_mode_gradual_desc),
+                                                GlobalThemeTransitionMode.AFTER_DELAY.storageKey to stringResource(R.string.setcat_global_now_playing_theme_transition_mode_after_delay_desc)
+                                            ),
+                                            selectedKey = uiState.globalNowPlayingThemeTransitionMode.storageKey,
+                                            onSelectionChanged = { selectedKey ->
+                                                settingsViewModel.setGlobalNowPlayingThemeTransitionMode(
+                                                    GlobalThemeTransitionMode.fromStorageKey(selectedKey)
+                                                )
+                                            },
+                                            leadingIcon = { Icon(Icons.Rounded.Tune, null, tint = MaterialTheme.colorScheme.secondary) },
+                                            modifier = Modifier.settingHighlight("item_appearance_global_theme_transition_mode", highlightKey)
+                                        )
+                                        var themeTransitionDraft by remember(uiState.globalNowPlayingThemeTransitionMs) {
+                                            mutableStateOf(uiState.globalNowPlayingThemeTransitionMs.toFloat())
+                                        }
+                                        SliderSettingsItem(
+                                            label = stringResource(R.string.setcat_global_now_playing_theme_transition_title),
+                                            value = themeTransitionDraft,
+                                            valueRange = 1000f..4000f,
+                                            steps = 5,
+                                            onValueChange = { themeTransitionDraft = it },
+                                            onValueChangeFinished = {
+                                                settingsViewModel.setGlobalNowPlayingThemeTransitionMs(themeTransitionDraft.toInt())
+                                            },
+                                            valueText = { value ->
+                                                String.format(java.util.Locale.US, "%.1fs", value / 1000f)
+                                            },
+                                            modifier = Modifier.settingHighlight("item_appearance_global_theme_transition", highlightKey)
+                                        )
                                     }
-                                    SliderSettingsItem(
-                                        label = stringResource(R.string.setcat_global_now_playing_theme_transition_title),
-                                        value = themeTransitionDraft,
-                                        valueRange = 1000f..4000f,
-                                        steps = 5,
-                                        onValueChange = { themeTransitionDraft = it },
-                                        onValueChangeFinished = {
-                                            settingsViewModel.setGlobalNowPlayingThemeTransitionMs(themeTransitionDraft.toInt())
-                                        },
-                                        valueText = { value ->
-                                            String.format(java.util.Locale.US, "%.1fs", value / 1000f)
-                                        },
-                                        modifier = Modifier.settingHighlight("item_appearance_global_theme_transition", highlightKey)
-                                    )
                                 }
                                 SwitchSettingItem(
                                     title = stringResource(R.string.setcat_smooth_corners_title),

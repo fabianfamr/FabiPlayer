@@ -123,6 +123,12 @@
     <string name="setcat_global_now_playing_theme_title">Use now playing colors across the app</string>
     <string name="setcat_global_now_playing_theme_subtitle">Colors the whole app from the current song\'s album art. Light and dark mode are still respected.</string>
     <string name="setcat_global_now_playing_theme_transition_title">Color transition duration</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_label">Color transition style</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_desc">Choose whether app colors shift progressively during the selected time or wait until it elapses.</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_gradual">Progressive</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_gradual_desc">Starts subtly and reaches full color intensity across the configured duration.</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_after_delay">Wait before changing</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_after_delay_desc">Waits the configured duration before applying the new colors, ideal when skipping tracks quickly.</string>
     <string name="setcat_theme_preset_label">Theme preset</string>
     <string name="setcat_theme_preset_desc">Default follows your wallpaper colors. AMOLED uses true black surfaces and always stays dark.</string>
     <string name="setcat_theme_preset_default">Default</string>

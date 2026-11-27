@@ -57,6 +57,7 @@ import javax.inject.Inject
 
 import com.fabian.player.R
 import com.fabian.player.data.preferences.NavBarStyle
+import com.fabian.player.data.preferences.GlobalThemeTransitionMode
 import com.fabian.player.data.preferences.LaunchTab
 import com.fabian.player.data.model.Song
 import com.fabian.player.data.service.player.HiFiCapabilityChecker
@@ -72,6 +73,7 @@ data class SettingsUiState(
     val appThemeMode: String = AppThemeMode.FOLLOW_SYSTEM,
     val globalNowPlayingThemeEnabled: Boolean = true,
     val globalNowPlayingThemeTransitionMs: Int = ThemePreferencesRepository.DEFAULT_GLOBAL_THEME_TRANSITION_MS,
+    val globalNowPlayingThemeTransitionMode: GlobalThemeTransitionMode = GlobalThemeTransitionMode.GRADUAL,
     val themePreset: String = ThemePreset.DEFAULT,
     val interfaceAppearance: InterfaceAppearance = InterfaceAppearance(),
     val playerThemePreference: String = ThemePreference.ALBUM_ART,
@@ -480,6 +482,12 @@ class SettingsViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+            themePreferencesRepository.globalNowPlayingThemeTransitionModeFlow.collect { mode ->
+                _uiState.update { it.copy(globalNowPlayingThemeTransitionMode = mode) }
+            }
+        }
+
+        viewModelScope.launch {
             combine(
                 combine(
                     lyricsAiPreferencesRepository.geminiApiKeyFlow,
@@ -703,6 +711,12 @@ class SettingsViewModel @Inject constructor(
     fun setGlobalNowPlayingThemeTransitionMs(durationMs: Int) {
         viewModelScope.launch {
             themePreferencesRepository.setGlobalNowPlayingThemeTransitionMs(durationMs)
+        }
+    }
+
+    fun setGlobalNowPlayingThemeTransitionMode(mode: GlobalThemeTransitionMode) {
+        viewModelScope.launch {
+            themePreferencesRepository.setGlobalNowPlayingThemeTransitionMode(mode)
         }
     }
 

@@ -1,4 +1,4 @@
-﻿package com.fabian.player.data.preferences
+package com.fabian.player.data.preferences
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -22,6 +22,7 @@ class ThemePreferencesRepository @Inject constructor(
         val APP_THEME_MODE = stringPreferencesKey("app_theme_mode")
         val GLOBAL_NOW_PLAYING_THEME_ENABLED = booleanPreferencesKey("global_now_playing_theme_enabled_v1")
         val GLOBAL_NOW_PLAYING_THEME_TRANSITION_MS = intPreferencesKey("global_now_playing_theme_transition_ms_v1")
+        val GLOBAL_NOW_PLAYING_THEME_TRANSITION_MODE = stringPreferencesKey("global_now_playing_theme_transition_mode_v1")
         val THEME_PRESET = stringPreferencesKey("theme_preset")
         val USE_SYSTEM_FONT = booleanPreferencesKey("use_system_font")
         val INTERFACE_SCALE = intPreferencesKey("interface_scale_percent")
@@ -42,6 +43,12 @@ class ThemePreferencesRepository @Inject constructor(
     val globalNowPlayingThemeTransitionMsFlow: Flow<Int> = dataStore.data.map { preferences ->
         sanitizeGlobalThemeTransitionMs(
             preferences[Keys.GLOBAL_NOW_PLAYING_THEME_TRANSITION_MS] ?: DEFAULT_GLOBAL_THEME_TRANSITION_MS
+        )
+    }
+
+    val globalNowPlayingThemeTransitionModeFlow: Flow<GlobalThemeTransitionMode> = dataStore.data.map { preferences ->
+        GlobalThemeTransitionMode.fromStorageKey(
+            preferences[Keys.GLOBAL_NOW_PLAYING_THEME_TRANSITION_MODE]
         )
     }
 
@@ -83,6 +90,11 @@ class ThemePreferencesRepository @Inject constructor(
         dataStore.edit { preferences ->
             preferences[Keys.GLOBAL_NOW_PLAYING_THEME_TRANSITION_MS] =
                 sanitizeGlobalThemeTransitionMs(durationMs)
+        }
+
+    suspend fun setGlobalNowPlayingThemeTransitionMode(mode: GlobalThemeTransitionMode) =
+        dataStore.edit { preferences ->
+            preferences[Keys.GLOBAL_NOW_PLAYING_THEME_TRANSITION_MODE] = mode.storageKey
         }
 
     suspend fun setThemePreset(preset: String) =
@@ -151,4 +163,14 @@ object ThemePreset {
     const val AMOLED = "amoled"
 
     fun sanitize(value: String?): String = if (value == AMOLED) AMOLED else DEFAULT
+}
+
+enum class GlobalThemeTransitionMode(val storageKey: String) {
+    GRADUAL("gradual"),
+    AFTER_DELAY("after_delay");
+
+    companion object {
+        fun fromStorageKey(value: String?): GlobalThemeTransitionMode =
+            entries.firstOrNull { it.storageKey == value } ?: GRADUAL
+    }
 }

@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.os.Build
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
@@ -36,10 +38,12 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.core.view.WindowCompat
+import com.fabian.player.data.preferences.GlobalThemeTransitionMode
 import com.fabian.player.data.preferences.InterfaceAppearance
 import com.fabian.player.data.preferences.ThemePreset
 import com.fabian.player.presentation.viewmodel.ColorSchemePair
 import androidx.core.graphics.ColorUtils
+import kotlinx.coroutines.delay
 
 val LocalPixelPlayerDarkTheme = staticCompositionLocalOf { false }
 val LocalPixelPlayerAmoledTheme = staticCompositionLocalOf { false }
@@ -178,6 +182,7 @@ fun PixelPlayerTheme(
     themePreset: String = ThemePreset.DEFAULT,
     interfaceAppearance: InterfaceAppearance = InterfaceAppearance(),
     themeTransitionDurationMs: Int = 0,
+    themeTransitionMode: GlobalThemeTransitionMode = GlobalThemeTransitionMode.GRADUAL,
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
@@ -202,7 +207,8 @@ fun PixelPlayerTheme(
     val finalColorScheme = rememberSmoothColorScheme(
         target = targetColorScheme,
         durationMs = themeTransitionDurationMs,
-        minStepIntervalMs = GLOBAL_THEME_MIN_STEP_INTERVAL_MS
+        minStepIntervalMs = GLOBAL_THEME_MIN_STEP_INTERVAL_MS,
+        transitionMode = themeTransitionMode
     )
 
     PixelPlayerStatusBarStyle(
@@ -241,37 +247,53 @@ fun PixelPlayerTheme(
     }
 }
 
-private const val GLOBAL_THEME_MIN_STEP_INTERVAL_MS = 45L
+private const val GLOBAL_THEME_MIN_STEP_INTERVAL_MS = 32L
+private const val MAX_THEME_STEP_INTERVAL_MS = 120L
+private const val AFTER_DELAY_FADE_MS = 350
+private val GradualThemeEasing = CubicBezierEasing(0.45f, 0f, 0.85f, 1f)
 
 /**
  * Smoothly interpolates a [ColorScheme] with a single frame-budgeted loop instead of 48
  * concurrent [animateColorAsState] instances.
  *
  * Because Material 3's `LocalColorScheme` is a `staticCompositionLocalOf`, every emitted
- * [ColorScheme] invalidates the consuming subtree. Pacing emissions by [minStepIntervalMs] and
- * adapting to measured frame cost keeps the color transition visually smooth while leaving most
- * of the main-thread budget free for scrolling, gestures, and navigation.
+ * [ColorScheme] invalidates the consuming subtree. Pacing emissions between [minStepIntervalMs]
+ * and [MAX_THEME_STEP_INTERVAL_MS] adapts to frame cost without freezing the transition during
+ * heavy track-change frames.
  */
 @Composable
 internal fun rememberSmoothColorScheme(
     target: ColorScheme,
     durationMs: Int,
     minStepIntervalMs: Long = GLOBAL_THEME_MIN_STEP_INTERVAL_MS,
+    transitionMode: GlobalThemeTransitionMode = GlobalThemeTransitionMode.GRADUAL,
     snapImmediately: Boolean = false
 ): ColorScheme {
     var displayedScheme by remember { mutableStateOf(target) }
 
-    LaunchedEffect(target, durationMs, snapImmediately) {
+    LaunchedEffect(target, durationMs, transitionMode, snapImmediately) {
         if (snapImmediately || durationMs <= 0) {
             displayedScheme = target
             return@LaunchedEffect
         }
         if (displayedScheme == target) return@LaunchedEffect
 
+        val activeDurationMs: Int
+        val activeEasing: Easing
+        if (transitionMode == GlobalThemeTransitionMode.AFTER_DELAY) {
+            delay(durationMs.toLong())
+            activeDurationMs = AFTER_DELAY_FADE_MS
+            activeEasing = FastOutSlowInEasing
+        } else {
+            activeDurationMs = durationMs
+            activeEasing = GradualThemeEasing
+        }
+
         val startScheme = displayedScheme
         val startNanos = withFrameNanos { it }
-        val durationNanos = durationMs.toLong() * 1_000_000L
+        val durationNanos = activeDurationMs.toLong() * 1_000_000L
         val minStepNanos = minStepIntervalMs.coerceAtLeast(16L) * 1_000_000L
+        val maxStepNanos = MAX_THEME_STEP_INTERVAL_MS.coerceAtLeast(minStepIntervalMs) * 1_000_000L
         var lastEmitNanos = startNanos
         var lastFrameIntervalNanos = 0L
         var awaitingFrameCost = false
@@ -289,10 +311,11 @@ internal fun rememberSmoothColorScheme(
                 break
             }
 
-            val requiredIntervalNanos = maxOf(minStepNanos, lastFrameIntervalNanos * 2L)
+            val adaptiveStepNanos = (lastFrameIntervalNanos * 2L).coerceAtMost(maxStepNanos)
+            val requiredIntervalNanos = maxOf(minStepNanos, adaptiveStepNanos)
             if (frameNanos - lastEmitNanos >= requiredIntervalNanos) {
                 val rawFraction = (elapsedNanos.toFloat() / durationNanos.toFloat()).coerceIn(0f, 1f)
-                val easedFraction = FastOutSlowInEasing.transform(rawFraction)
+                val easedFraction = activeEasing.transform(rawFraction)
                 val nextScheme = lerpColorScheme(startScheme, target, easedFraction)
                 lastEmitNanos = frameNanos
                 if (nextScheme != displayedScheme) {

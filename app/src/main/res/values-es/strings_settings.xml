@@ -358,6 +358,12 @@
     <string name="setcat_global_now_playing_theme_title">Usar los colores de la reproducción actual en toda la app</string>
     <string name="setcat_global_now_playing_theme_subtitle">Colorea toda la app a partir de la carátula de la canción actual. Se siguen respetando los modos claro y oscuro.</string>
     <string name="setcat_global_now_playing_theme_transition_title">Duración de transición del color</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_label">Comportamiento de transición de color</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_desc">Elige si los colores cambian de forma progresiva durante el tiempo configurado o si esperan a que pase ese tiempo.</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_gradual">Progresiva</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_gradual_desc">Comienza de forma sutil y gana intensidad gradualmente durante el tiempo configurado.</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_after_delay">Esperar antes de cambiar</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_after_delay_desc">Espera el tiempo configurado antes de aplicar los nuevos colores, útil al cambiar de canción rápido.</string>
     <string name="setcat_keep_screen_awake_title">Mantener la pantalla encendida durante la reproducción</string>
     <string name="setcat_keep_screen_awake_subtitle">Evita que la pantalla se apague mientras suena música y la app está visible.</string>
     <string name="setcat_playback_behavior">Reproducción</string>
