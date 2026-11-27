@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.components
+package com.fabian.player.presentation.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColor
@@ -97,14 +97,16 @@ fun LibrarySortBottomSheet(
     advancedSortingEnabled: Boolean? = null,
     onAdvancedSortingChange: (Boolean) -> Unit = {},
     showViewToggle: Boolean = false,
-    viewSectionTitle: String = "View",
-    viewToggleLabel: String = "Playlist View",
+    viewSectionTitle: String? = null,
+    viewToggleLabel: String? = null,
     viewToggleChecked: Boolean = false,
     onViewToggleChange: (Boolean) -> Unit = {},
     viewToggleContent: (@Composable () -> Unit)? = null,
     sourceToggleContent: (@Composable () -> Unit)? = null,
     extraContent: (@Composable () -> Unit)? = null
 ) {
+    val resolvedViewSectionTitle = viewSectionTitle ?: stringResource(R.string.sort_view_section_title)
+    val resolvedViewToggleLabel = viewToggleLabel ?: stringResource(R.string.sort_playlist_view_label)
     val sheetState = rememberModalSheetState(skipPartiallyExpanded = true)
 
     val selectedColor = MaterialTheme.colorScheme.secondaryContainer
@@ -201,7 +203,7 @@ fun LibrarySortBottomSheet(
             if (showViewToggle || viewToggleContent != null) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = viewSectionTitle,
+                    text = resolvedViewSectionTitle,
                     style = MaterialTheme.typography.headlineSmall,
                     fontFamily = RoundedSans,
                     fontWeight = FontWeight.Bold,
@@ -212,7 +214,7 @@ fun LibrarySortBottomSheet(
                     viewToggleContent()
                 } else {
                     LibrarySheetToggleCard(
-                        label = viewToggleLabel,
+                        label = resolvedViewToggleLabel,
                         checked = viewToggleChecked,
                         boxBackgroundColor = boxBackgroundColor,
                         boxCornerRadius = boxCornerRadius,
