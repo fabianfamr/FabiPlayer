@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_add_to_queue">Aggiungi alla coda</string>
     <string name="action_create">Crea</string>
@@ -98,11 +98,28 @@
     <string name="lyrics_more_keep_screen_on">Keep screen on</string>
     <string name="lyrics_more_show_romanization">Mostra romanizzazione</string>
     <string name="lyrics_more_show_translations">Mostra traduzioni</string>
-    <string name="multi_selection_playlists_count_upper">%1$d PLAYLIST</string>
-    <string name="multi_selection_genres_count_upper">%1$d GENERI</string>
+    <plurals name="multi_selection_playlists_count_upper">
+        <item quantity="one">%1$d PLAYLIST</item>
+        <item quantity="other">%1$d PLAYLIST</item>
+    </plurals>
+    <plurals name="multi_selection_genres_count_upper">
+        <item quantity="one">%1$d GENERE</item>
+        <item quantity="other">%1$d GENERI</item>
+    </plurals>
     <string name="multi_selection_genres_queue_hint">Esegui operazioni batch su tutti i brani all\'interno di questi generi.</string>
     <string name="multi_selection_selected">selezionati</string>
-    <string name="multi_selection_songs_count_upper">%1$d BRANI</string>
+    <plurals name="multi_selection_selected_feminine">
+        <item quantity="one">selezionata</item>
+        <item quantity="other">selezionate</item>
+    </plurals>
+    <plurals name="multi_selection_selected_masculine">
+        <item quantity="one">selezionato</item>
+        <item quantity="other">selezionati</item>
+    </plurals>
+    <plurals name="multi_selection_songs_count_upper">
+        <item quantity="one">%1$d BRANO</item>
+        <item quantity="other">%1$d BRANI</item>
+    </plurals>
     <string name="no_internet_dialog_message">Questo contenuto richiede una connessione internet. Controlla le impostazioni di rete e riprova.</string>
     <string name="no_internet_dialog_title">Nessuna connessione internet</string>
     <string name="offline_screen_message">Controlla la tua connessione internet e riprova per accedere a questo contenuto.</string>

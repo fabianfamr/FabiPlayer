@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_add_to_queue">Добавить в очередь</string>
     <string name="action_create">Создать</string>
@@ -98,11 +98,26 @@
     <string name="lyrics_more_keep_screen_on">Не выключать экран</string>
     <string name="lyrics_more_show_romanization">Показать романизацию</string>
     <string name="lyrics_more_show_translations">Показать переводы</string>
-    <string name="multi_selection_playlists_count_upper">%1$d ПЛЕЙЛИСТОВ</string>
-    <string name="multi_selection_genres_count_upper">%1$d ЖАНРОВ</string>
+    <plurals name="multi_selection_playlists_count_upper">
+        <item quantity="one">%1$d ПЛЕЙЛИСТ</item>
+        <item quantity="few">%1$d ПЛЕЙЛИСТА</item>
+        <item quantity="many">%1$d ПЛЕЙЛИСТОВ</item>
+        <item quantity="other">%1$d ПЛЕЙЛИСТОВ</item>
+    </plurals>
+    <plurals name="multi_selection_genres_count_upper">
+        <item quantity="one">%1$d ЖАНР</item>
+        <item quantity="few">%1$d ЖАНРА</item>
+        <item quantity="many">%1$d ЖАНРОВ</item>
+        <item quantity="other">%1$d ЖАНРОВ</item>
+    </plurals>
     <string name="multi_selection_genres_queue_hint">Выполняйте пакетные операции для всех треков в этих жанрах.</string>
     <string name="multi_selection_selected">выбрано</string>
-    <string name="multi_selection_songs_count_upper">%1$d ТРЕКОВ</string>
+    <plurals name="multi_selection_songs_count_upper">
+        <item quantity="one">%1$d ТРЕК</item>
+        <item quantity="few">%1$d ТРЕКА</item>
+        <item quantity="many">%1$d ТРЕКОВ</item>
+        <item quantity="other">%1$d ТРЕКОВ</item>
+    </plurals>
     <string name="no_internet_dialog_message">Для этого контента требуется подключение к интернету. Проверьте настройки сети и попробуйте снова.</string>
     <string name="no_internet_dialog_title">Нет подключения к интернету</string>
     <string name="offline_screen_message">Проверьте подключение к интернету и попробуйте снова получить доступ к этому контенту.</string>

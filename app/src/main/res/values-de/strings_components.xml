@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_add_to_queue">Zur Queue</string>
     <string name="action_create">Erstellen</string>
@@ -98,11 +98,20 @@
     <string name="lyrics_more_keep_screen_on">Bildschirm an lassen</string>
     <string name="lyrics_more_show_romanization">Romanisierung anzeigen</string>
     <string name="lyrics_more_show_translations">Übersetzungen anzeigen</string>
-    <string name="multi_selection_playlists_count_upper">%1$d PLAYLISTS</string>
-    <string name="multi_selection_genres_count_upper">%1$d GENRES</string>
+    <plurals name="multi_selection_playlists_count_upper">
+        <item quantity="one">%1$d PLAYLIST</item>
+        <item quantity="other">%1$d PLAYLISTS</item>
+    </plurals>
+    <plurals name="multi_selection_genres_count_upper">
+        <item quantity="one">%1$d GENRE</item>
+        <item quantity="other">%1$d GENRES</item>
+    </plurals>
     <string name="multi_selection_genres_queue_hint">Führe Stapelaktionen für alle Songs in diesen Genres aus.</string>
     <string name="multi_selection_selected">ausgewählt</string>
-    <string name="multi_selection_songs_count_upper">%1$d SONGS</string>
+    <plurals name="multi_selection_songs_count_upper">
+        <item quantity="one">%1$d SONG</item>
+        <item quantity="other">%1$d SONGS</item>
+    </plurals>
     <string name="no_internet_dialog_message">Dieser Inhalt erfordert eine Internetverbindung. Bitte überprüfe deine Netzwerkeinstellungen und versuche es erneut.</string>
     <string name="no_internet_dialog_title">Keine Internetverbindung</string>
     <string name="offline_screen_message">Bitte überprüfe deine Internetverbindung und versuche es erneut, um auf diesen Inhalt zuzugreifen.</string>

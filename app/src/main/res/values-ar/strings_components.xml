@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_add_to_queue">إضافة إلى قائمة الانتظار</string>
     <string name="action_create">إنشاء</string>
@@ -98,11 +98,20 @@
     <string name="lyrics_more_keep_screen_on">إبقاء الشاشة قيد التشغيل</string>
     <string name="lyrics_more_show_romanization">إظهار اللتنّة (Romanization)</string>
     <string name="lyrics_more_show_translations">إظهار الترجمات</string>
-    <string name="multi_selection_playlists_count_upper">%1$d قائمة تشغيل</string>
-    <string name="multi_selection_genres_count_upper">%1$d أنواع</string>
+    <plurals name="multi_selection_playlists_count_upper">
+        <item quantity="one">%1$d قائمة تشغيل</item>
+        <item quantity="other">%1$d قائمة تشغيل</item>
+    </plurals>
+    <plurals name="multi_selection_genres_count_upper">
+        <item quantity="one">%1$d نوع</item>
+        <item quantity="other">%1$d أنواع</item>
+    </plurals>
     <string name="multi_selection_genres_queue_hint">نفّذ عمليات جماعية على كل الأغاني ضمن هذه الأنواع.</string>
     <string name="multi_selection_selected">تم تحديدها</string>
-    <string name="multi_selection_songs_count_upper">%1$d أغنية</string>
+    <plurals name="multi_selection_songs_count_upper">
+        <item quantity="one">%1$d أغنية</item>
+        <item quantity="other">%1$d أغنية</item>
+    </plurals>
     <string name="no_internet_dialog_message">يتطلب هذا المحتوى اتصالاً بالإنترنت. يرجى التحقق من إعدادات الشبكة والمحاولة مرة أخرى.</string>
     <string name="no_internet_dialog_title">لا يوجد اتصال بالإنترنت</string>
     <string name="offline_screen_message">يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى للوصول إلى هذا المحتوى.</string>

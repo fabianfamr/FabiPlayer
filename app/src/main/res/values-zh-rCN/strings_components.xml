@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="widget_tap_to_open">点击打开</string>
     <string name="widget_album_art">专辑封面</string>
@@ -130,7 +130,9 @@
     <string name="song_info_tab_info_badge">详情</string>
     <string name="cd_details_tab">详情</string>
 
-    <string name="multi_selection_songs_count_upper">%1$d 首歌曲</string>
+    <plurals name="multi_selection_songs_count_upper">
+        <item quantity="other">%1$d 首歌曲</item>
+    </plurals>
     <string name="multi_selection_selected">已选中</string>
     <string name="cd_play_all">全部播放</string>
     <string name="action_play_all">全部播放</string>
@@ -152,8 +154,12 @@
     <string name="playlist_picker_select_playlists">选择歌单</string>
     <string name="search_playlists_hint">搜索歌单…</string>
 
-    <string name="multi_selection_playlists_count_upper">%1$d 个歌单</string>
-    <string name="multi_selection_genres_count_upper">%1$d 个流派</string>
+    <plurals name="multi_selection_playlists_count_upper">
+        <item quantity="other">%1$d 个歌单</item>
+    </plurals>
+    <plurals name="multi_selection_genres_count_upper">
+        <item quantity="other">%1$d 个流派</item>
+    </plurals>
     <string name="multi_selection_genres_queue_hint">对这些流派中的所有歌曲进行批量操作。</string>
     <string name="cd_export_all">全部导出</string>
     <string name="cd_merge_all">全部合并</string>

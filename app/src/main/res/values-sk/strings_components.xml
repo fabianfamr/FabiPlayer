@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="widget_tap_to_open">Ťuknutím otvorte</string>
     <string name="widget_album_art">Obal albumu</string>
@@ -129,7 +129,10 @@
     <string name="song_info_tab_details">Podrobnosti</string>
     <string name="song_info_tab_info_badge">ÚDAJE</string>
     <string name="cd_details_tab">Podrobnosti</string>
-    <string name="multi_selection_songs_count_upper">SKLADBY: %1$d</string>
+    <plurals name="multi_selection_songs_count_upper">
+        <item quantity="one">SKLADBA: %1$d</item>
+        <item quantity="other">SKLADBY: %1$d</item>
+    </plurals>
     <string name="multi_selection_selected">vybrané</string>
     <string name="cd_play_all">Prehrať všetko</string>
     <string name="action_play_all">Prehrať všetko</string>
@@ -149,8 +152,14 @@
     <string name="playlist_picker_add_songs_title">Pridať skladby do… (počet: %1$d)</string>
     <string name="playlist_picker_select_playlists">Vybrať zoznamy skladieb</string>
     <string name="search_playlists_hint">Hľadať zoznamy skladieb…</string>
-    <string name="multi_selection_playlists_count_upper">ZOZNAMY SKLADIEB: %1$d</string>
-    <string name="multi_selection_genres_count_upper">ŽÁNRE: %1$d</string>
+    <plurals name="multi_selection_playlists_count_upper">
+        <item quantity="one">ZOZNAM SKLADIEB: %1$d</item>
+        <item quantity="other">ZOZNAMY SKLADIEB: %1$d</item>
+    </plurals>
+    <plurals name="multi_selection_genres_count_upper">
+        <item quantity="one">ŽÁNER: %1$d</item>
+        <item quantity="other">ŽÁNRE: %1$d</item>
+    </plurals>
     <string name="multi_selection_genres_queue_hint">Vykonať hromadné akcie pre všetky skladby v týchto žánroch.</string>
     <string name="cd_export_all">Exportovať všetko</string>
     <string name="cd_merge_all">Zlúčiť všetko</string>

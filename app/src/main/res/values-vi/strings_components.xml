@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="widget_tap_to_open">Nhấn để mở</string>
     <string name="widget_album_art">Ảnh bìa album</string>
@@ -140,7 +140,9 @@
     <string name="song_info_tab_info_badge">THÔNG TIN</string>
     <string name="cd_details_tab">Chi tiết</string>
 
-    <string name="multi_selection_songs_count_upper">%1$d BÀI HÁT</string>
+    <plurals name="multi_selection_songs_count_upper">
+        <item quantity="other">%1$d BÀI HÁT</item>
+    </plurals>
     <string name="multi_selection_selected">đã chọn</string>
     <string name="cd_play_all">Phát tất cả</string>
     <string name="action_play_all">Phát tất cả</string>
@@ -162,8 +164,12 @@
     <string name="playlist_picker_select_playlists">Chọn danh sách phát</string>
     <string name="search_playlists_hint">Tìm kiếm danh sách phát…</string>
 
-    <string name="multi_selection_playlists_count_upper">%1$d DANH SÁCH PHÁT</string>
-    <string name="multi_selection_genres_count_upper">%1$d THỂ LOẠI</string>
+    <plurals name="multi_selection_playlists_count_upper">
+        <item quantity="other">%1$d DANH SÁCH PHÁT</item>
+    </plurals>
+    <plurals name="multi_selection_genres_count_upper">
+        <item quantity="other">%1$d THỂ LOẠI</item>
+    </plurals>
     <string name="multi_selection_genres_queue_hint">Thực hiện tác vụ hàng loạt trên tất cả các bài hát trong các thể loại này.</string>
     <string name="cd_export_all">Xuất tất cả</string>
     <string name="cd_merge_all">Hợp nhất tất cả</string>

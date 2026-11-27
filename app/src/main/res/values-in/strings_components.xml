@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_add_to_queue">Tambah ke antrean</string>
     <string name="action_create">Buat</string>
@@ -98,11 +98,17 @@
     <string name="lyrics_more_keep_screen_on">Layar tetap menyala</string>
     <string name="lyrics_more_show_romanization">Tampilkan romanisasi</string>
     <string name="lyrics_more_show_translations">Tampilkan terjemahan</string>
-    <string name="multi_selection_playlists_count_upper">%1$d PLAYLIST</string>
-    <string name="multi_selection_genres_count_upper">%1$d GENRE</string>
+    <plurals name="multi_selection_playlists_count_upper">
+        <item quantity="other">%1$d PLAYLIST</item>
+    </plurals>
+    <plurals name="multi_selection_genres_count_upper">
+        <item quantity="other">%1$d GENRE</item>
+    </plurals>
     <string name="multi_selection_genres_queue_hint">Lakukan operasi batch pada semua lagu dalam genre ini.</string>
     <string name="multi_selection_selected">terpilih</string>
-    <string name="multi_selection_songs_count_upper">%1$d LAGU</string>
+    <plurals name="multi_selection_songs_count_upper">
+        <item quantity="other">%1$d LAGU</item>
+    </plurals>
     <string name="no_internet_dialog_message">Konten ini memerlukan koneksi internet. Silakan periksa pengaturan jaringan Anda dan coba lagi.</string>
     <string name="no_internet_dialog_title">Tidak ada koneksi internet</string>
     <string name="offline_screen_message">Silakan periksa koneksi internet Anda dan coba lagi untuk mengakses konten ini.</string>

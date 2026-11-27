@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_add_to_queue">Añadir a la cola</string>
     <string name="action_create">Crear</string>
@@ -98,11 +98,28 @@
     <string name="lyrics_more_keep_screen_on">Mantener pantalla encendida</string>
     <string name="lyrics_more_show_romanization">Mostrar romanización</string>
     <string name="lyrics_more_show_translations">Mostrar traducciones</string>
-    <string name="multi_selection_playlists_count_upper">%1$d LISTAS</string>
-    <string name="multi_selection_genres_count_upper">%1$d GÉNEROS</string>
+    <plurals name="multi_selection_playlists_count_upper">
+        <item quantity="one">%1$d LISTA</item>
+        <item quantity="other">%1$d LISTAS</item>
+    </plurals>
+    <plurals name="multi_selection_genres_count_upper">
+        <item quantity="one">%1$d GÉNERO</item>
+        <item quantity="other">%1$d GÉNEROS</item>
+    </plurals>
     <string name="multi_selection_genres_queue_hint">Realizar operaciones por lotes en todas las canciones de estos géneros.</string>
     <string name="multi_selection_selected">seleccionadas</string>
-    <string name="multi_selection_songs_count_upper">%1$d CANCIONES</string>
+    <plurals name="multi_selection_selected_feminine">
+        <item quantity="one">seleccionada</item>
+        <item quantity="other">seleccionadas</item>
+    </plurals>
+    <plurals name="multi_selection_selected_masculine">
+        <item quantity="one">seleccionado</item>
+        <item quantity="other">seleccionados</item>
+    </plurals>
+    <plurals name="multi_selection_songs_count_upper">
+        <item quantity="one">%1$d CANCIÓN</item>
+        <item quantity="other">%1$d CANCIONES</item>
+    </plurals>
     <string name="no_internet_dialog_message">Este contenido requiere conexión a internet. Comprueba la red e inténtalo de nuevo.</string>
     <string name="no_internet_dialog_title">Sin conexión a internet</string>
     <string name="offline_screen_message">Comprueba tu conexión a internet e inténtalo de nuevo para acceder a este contenido.</string>

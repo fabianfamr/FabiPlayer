@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.components
+package com.fabian.player.presentation.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
@@ -40,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -91,7 +92,7 @@ fun GenreMultiSelectionOptionSheet(
 
                 Column {
                     AutoSizingTextToFill(
-                        text = stringResource(R.string.multi_selection_genres_count_upper, selectedGenres.size),
+                        text = pluralStringResource(R.plurals.multi_selection_genres_count_upper, selectedGenres.size, selectedGenres.size),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                         fontFamily = RoundedSans,
@@ -101,7 +102,7 @@ fun GenreMultiSelectionOptionSheet(
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        text = stringResource(R.string.multi_selection_selected),
+                        text = pluralStringResource(R.plurals.multi_selection_selected_masculine, selectedGenres.size),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontFamily = RoundedSans,

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="widget_tap_to_open">Klepnutím otevřete</string>
     <string name="widget_album_art">Obal alba</string>
@@ -128,7 +128,10 @@
     <string name="song_info_tab_options_badge">MOŽNOSTI</string>
     <string name="song_info_tab_details">Podrobnosti</string>
     <string name="cd_details_tab">Podrobnosti</string>
-    <string name="multi_selection_songs_count_upper">SKLADEB: %1$d</string>
+    <plurals name="multi_selection_songs_count_upper">
+        <item quantity="one">SKLADBA: %1$d</item>
+        <item quantity="other">SKLADEB: %1$d</item>
+    </plurals>
     <string name="multi_selection_selected">vybráno</string>
     <string name="cd_play_all">Přehrát vše</string>
     <string name="action_play_all">Přehrát vše</string>
@@ -148,8 +151,14 @@
     <string name="playlist_picker_add_songs_title">Přidat skladby (%1$d) do…</string>
     <string name="playlist_picker_select_playlists">Vybrat playlisty</string>
     <string name="search_playlists_hint">Hledat playlisty…</string>
-    <string name="multi_selection_playlists_count_upper">PLAYLISTŮ: %1$d</string>
-    <string name="multi_selection_genres_count_upper">ŽÁNRŮ: %1$d</string>
+    <plurals name="multi_selection_playlists_count_upper">
+        <item quantity="one">PLAYLIST: %1$d</item>
+        <item quantity="other">PLAYLISTŮ: %1$d</item>
+    </plurals>
+    <plurals name="multi_selection_genres_count_upper">
+        <item quantity="one">ŽÁNR: %1$d</item>
+        <item quantity="other">ŽÁNRŮ: %1$d</item>
+    </plurals>
     <string name="multi_selection_genres_queue_hint">Proveďte hromadnou akci se všemi skladbami z těchto žánrů.</string>
     <string name="cd_export_all">Exportovat vše</string>
     <string name="cd_merge_all">Sloučit vše</string>

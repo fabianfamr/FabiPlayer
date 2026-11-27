@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_add_to_queue">Legg til i kø</string>
     <string name="action_create">Opprett</string>
@@ -98,11 +98,20 @@
     <string name="lyrics_more_keep_screen_on">Hold skjermen på</string>
     <string name="lyrics_more_show_romanization">Vis romanisering</string>
     <string name="lyrics_more_show_translations">Vis oversettelser</string>
-    <string name="multi_selection_playlists_count_upper">%1$d SPILLELISTER</string>
-    <string name="multi_selection_genres_count_upper">%1$d SJANGERE</string>
+    <plurals name="multi_selection_playlists_count_upper">
+        <item quantity="one">%1$d SPILLELISTE</item>
+        <item quantity="other">%1$d SPILLELISTER</item>
+    </plurals>
+    <plurals name="multi_selection_genres_count_upper">
+        <item quantity="one">%1$d SJANGER</item>
+        <item quantity="other">%1$d SJANGERE</item>
+    </plurals>
     <string name="multi_selection_genres_queue_hint">Utfør gruppehandlinger på alle sanger i disse sjangerne.</string>
     <string name="multi_selection_selected">valgt</string>
-    <string name="multi_selection_songs_count_upper">%1$d SANGER</string>
+    <plurals name="multi_selection_songs_count_upper">
+        <item quantity="one">%1$d SANG</item>
+        <item quantity="other">%1$d SANGER</item>
+    </plurals>
     <string name="no_internet_dialog_message">Dette innholdet krever internettforbindelse. Vennligst sjekk nettverksinnstillingene dine og prøv igjen.</string>
     <string name="no_internet_dialog_title">Ingen internettforbindelse</string>
     <string name="offline_screen_message">Vennligst sjekk internettforbindelsen din for å få tilgang til dette innholdet.</string>

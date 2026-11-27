@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.components
+package com.fabian.player.presentation.components
 
 import android.app.Activity
 import androidx.compose.animation.animateContentSize
@@ -63,6 +63,7 @@ import com.fabian.player.presentation.components.subcomps.TightWrapText
 import com.fabian.player.ui.theme.RoundedSans
 import com.fabian.player.utils.resolvePlaylistCoverContentColor
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.fabian.player.R
 import kotlinx.collections.immutable.ImmutableList
@@ -138,7 +139,7 @@ fun PlaylistMultiSelectionBottomSheet(
                     Column {
                         // Inherits LocalContentColor, which is onSurface inside the sheet.
                         AutoSizingTextToFill(
-                            text = stringResource(R.string.multi_selection_playlists_count_upper, selectedPlaylists.size),
+                            text = pluralStringResource(R.plurals.multi_selection_playlists_count_upper, selectedPlaylists.size, selectedPlaylists.size),
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold,
                             fontFamily = RoundedSans,
@@ -148,7 +149,7 @@ fun PlaylistMultiSelectionBottomSheet(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = stringResource(R.string.multi_selection_selected),
+                            text = pluralStringResource(R.plurals.multi_selection_selected_feminine, selectedPlaylists.size),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontFamily = RoundedSans,

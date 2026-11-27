@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.components
+package com.fabian.player.presentation.components
 
 import android.app.Activity
 import androidx.compose.animation.animateColorAsState
@@ -89,6 +89,7 @@ import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
  * @param onDeleteAll Delete all from device (with confirmation)
  */
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.fabian.player.R
 import com.fabian.player.presentation.components.subcomps.AutoSizingTextToFill
@@ -197,7 +198,7 @@ fun MultiSelectionBottomSheet(
                         verticalArrangement = Arrangement.Center
                     ){
                         AutoSizingTextToFill(
-                            text = stringResource(R.string.multi_selection_songs_count_upper, selectedSongs.size),
+                            text = pluralStringResource(R.plurals.multi_selection_songs_count_upper, selectedSongs.size, selectedSongs.size),
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold,
                             fontFamily = RoundedSans,
@@ -208,7 +209,7 @@ fun MultiSelectionBottomSheet(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = stringResource(R.string.multi_selection_selected),
+                            text = pluralStringResource(R.plurals.multi_selection_selected_feminine, selectedSongs.size),
                             style = MaterialTheme.typography.bodyLarge,
                             fontFamily = RoundedSans,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
