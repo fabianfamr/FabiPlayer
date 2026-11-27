@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.viewmodel
+package com.fabian.player.presentation.viewmodel
 
 import android.content.ComponentCallbacks2
 import android.os.Trace
@@ -572,11 +572,17 @@ class LibraryStateHolder @Inject constructor(
         _allSongs.update { currentList ->
             currentList.map { if (it.id == updatedSong.id) updatedSong else it }.toImmutableList()
         }
+        _allSongsById.update { currentMap ->
+            currentMap + (updatedSong.id to updatedSong)
+        }
     }
 
     fun removeSong(songId: String) {
         _allSongs.update { currentList ->
             currentList.filter { it.id != songId }.toImmutableList()
+        }
+        _allSongsById.update { currentMap ->
+            currentMap - songId
         }
     }
 

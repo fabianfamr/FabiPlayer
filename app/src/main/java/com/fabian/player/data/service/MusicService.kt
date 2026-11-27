@@ -1,4 +1,4 @@
-﻿package com.fabian.player.data.service
+package com.fabian.player.data.service
 
 import android.app.BackgroundServiceStartNotAllowedException
 import android.app.ForegroundServiceStartNotAllowedException
@@ -1271,7 +1271,14 @@ class MusicService : MediaSessionService() {
                 player.seekToNextMediaItem()
                 player.prepare()
             } else {
+                Timber.tag(TAG).w(
+                    "Stopping playback after player error (consecutiveErrors=%d, hasNext=%b)",
+                    consecutivePlaybackErrors,
+                    player.hasNextMediaItem()
+                )
                 consecutivePlaybackErrors = 0
+                player.playWhenReady = false
+                player.stop()
             }
         }
     }

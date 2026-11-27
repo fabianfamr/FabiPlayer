@@ -1,14 +1,13 @@
-﻿package com.fabian.player.data.listenbrainz
+package com.fabian.player.data.listenbrainz
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
 import com.fabian.player.data.database.ListenBrainzDao
 import com.fabian.player.data.database.ListenBrainzPendingListenEntity
+import com.fabian.player.data.preferences.SecurePreferencesFactory
 import com.fabian.player.data.worker.ScrobbleFlushWorker
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -76,31 +75,8 @@ class ListenBrainzRepository @Inject constructor(
 
     val pendingListenCount = listenBrainzDao.countFlow()
 
-    private fun createEncryptedPrefs(): SharedPreferences {
-        val masterKey = MasterKey.Builder(context)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
-        return EncryptedSharedPreferences.create(
-            context,
-            PREFS_NAME,
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    }
-
-    private fun createCredentialPrefs(): SharedPreferences = try {
-        createEncryptedPrefs()
-    } catch (e: Exception) {
-        Timber.e(e, "$TAG: EncryptedSharedPreferences unreadable, deleting and recreating")
-        context.deleteSharedPreferences(PREFS_NAME)
-        try {
-            createEncryptedPrefs()
-        } catch (e2: Exception) {
-            Timber.e(e2, "$TAG: Encrypted prefs unavailable, falling back to plain")
-            context.getSharedPreferences("${PREFS_NAME}_plain", Context.MODE_PRIVATE)
-        }
-    }
+    private fun createCredentialPrefs(): SharedPreferences =
+        SecurePreferencesFactory.open(context, PREFS_NAME, TAG)
 
     fun hasToken(): Boolean = cachedToken != null
 

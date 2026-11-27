@@ -1,10 +1,8 @@
-﻿@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION")
 package com.fabian.player.data.jellyfin
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import com.fabian.player.BuildConfig
 import com.fabian.player.data.database.AlbumEntity
 import com.fabian.player.data.database.ArtistEntity
@@ -26,6 +24,7 @@ import com.fabian.player.data.model.Song
 import com.fabian.player.data.network.jellyfin.JellyfinApiService
 import com.fabian.player.data.network.jellyfin.JellyfinResponseParser
 import com.fabian.player.data.preferences.PlaylistPreferencesRepository
+import com.fabian.player.data.preferences.SecurePreferencesFactory
 import com.fabian.player.data.preferences.UserPreferencesRepository
 import com.fabian.player.data.stream.BulkSyncResult
 import com.fabian.player.data.stream.CloudMusicUtils
@@ -87,31 +86,8 @@ class JellyfinRepository @Inject constructor(
 
     private val prefs: SharedPreferences = createCredentialPrefs()
 
-    private fun createEncryptedPrefs(): SharedPreferences {
-        val masterKey = MasterKey.Builder(context)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
-        return EncryptedSharedPreferences.create(
-            context,
-            PREFS_NAME,
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    }
-
-    private fun createCredentialPrefs(): SharedPreferences = try {
-        createEncryptedPrefs()
-    } catch (e: Exception) {
-        Timber.e(e, "$TAG: EncryptedSharedPreferences unreadable, deleting and recreating")
-        context.deleteSharedPreferences(PREFS_NAME)
-        try {
-            createEncryptedPrefs()
-        } catch (e2: Exception) {
-            Timber.e(e2, "$TAG: Encrypted prefs unavailable, falling back to plain")
-            context.getSharedPreferences("${PREFS_NAME}_plain", Context.MODE_PRIVATE)
-        }
-    }
+    private fun createCredentialPrefs(): SharedPreferences =
+        SecurePreferencesFactory.open(context, PREFS_NAME, TAG)
 
     private val _isLoggedInFlow = MutableStateFlow(false)
     val isLoggedInFlow: StateFlow<Boolean> = _isLoggedInFlow.asStateFlow()

@@ -81,8 +81,8 @@ android {
         applicationId = "com.fabian.player"
         minSdk = 30
         targetSdk = 37
-        versionCode = (project.findProperty("APP_VERSION_CODE") as? String)?.toInt() ?: 13
-        versionName = (project.findProperty("APP_VERSION_NAME") as? String) ?: "0.6.7"
+        versionCode = (project.findProperty("APP_VERSION_CODE") as? String)?.toInt() ?: 14
+        versionName = (project.findProperty("APP_VERSION_NAME") as? String) ?: "0.7.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -139,7 +139,8 @@ android {
     }
 
     lint {
-        checkReleaseBuilds = false
+        checkReleaseBuilds = true
+        abortOnError = false
     }
 
     splits {

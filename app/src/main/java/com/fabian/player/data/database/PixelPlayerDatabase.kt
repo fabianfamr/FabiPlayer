@@ -1,4 +1,4 @@
-﻿package com.fabian.player.data.database
+package com.fabian.player.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -46,6 +46,39 @@ abstract class PixelPlayerDatabase : RoomDatabase() {
     abstract fun offlineTrackDao(): OfflineTrackDao
 
     companion object {
+        private val FAVORITE_SYNC_TRIGGER_NAMES = listOf(
+            "trg_favorites_insert_sync_song",
+            "trg_favorites_update_sync_song",
+            "trg_favorites_delete_sync_song"
+        )
+
+        private val SONGS_FTS_TRIGGER_NAMES = listOf(
+            "trg_songs_fts_insert",
+            "trg_songs_fts_update",
+            "trg_songs_fts_delete"
+        )
+
+        private fun hasAllRuntimeTriggers(
+            db: SupportSQLiteDatabase,
+            triggerNames: List<String>
+        ): Boolean {
+            val placeholders = triggerNames.joinToString(",") { "'$it'" }
+            db.query(
+                "SELECT COUNT(*) FROM sqlite_master WHERE type = 'trigger' AND name IN ($placeholders)"
+            ).use { cursor ->
+                return cursor.moveToFirst() && cursor.getInt(0) == triggerNames.size
+            }
+        }
+
+        private fun hasTable(db: SupportSQLiteDatabase, tableName: String): Boolean {
+            db.query(
+                "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = ?",
+                arrayOf(tableName)
+            ).use { cursor ->
+                return cursor.moveToFirst()
+            }
+        }
+
         fun installFavoriteSyncTriggers(db: SupportSQLiteDatabase) {
             db.execSQL("DROP TRIGGER IF EXISTS trg_favorites_insert_sync_song")
             db.execSQL("DROP TRIGGER IF EXISTS trg_favorites_update_sync_song")
@@ -142,6 +175,18 @@ abstract class PixelPlayerDatabase : RoomDatabase() {
                     super.onCreate(db)
                     installFavoriteSyncTriggers(db)
                     installSongsSearchSyncTriggers(db)
+                }
+
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    super.onOpen(db)
+                    if (!hasAllRuntimeTriggers(db, FAVORITE_SYNC_TRIGGER_NAMES)) {
+                        installFavoriteSyncTriggers(db)
+                    }
+                    if (!hasTable(db, "songs_fts") ||
+                        !hasAllRuntimeTriggers(db, SONGS_FTS_TRIGGER_NAMES)
+                    ) {
+                        installSongsSearchSyncTriggers(db)
+                    }
                 }
             }
         }

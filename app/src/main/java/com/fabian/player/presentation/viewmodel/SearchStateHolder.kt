@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.viewmodel
+package com.fabian.player.presentation.viewmodel
 
 import com.fabian.player.data.model.SearchFilterType
 import com.fabian.player.data.model.SearchHistoryItem
@@ -100,22 +100,23 @@ class SearchStateHolder @Inject constructor(
 
                     try {
                         musicRepository.searchAll(normalizedQuery, request.filter).collect { resultsList ->
-                            val sortedResults = resultsList.sortedWith(
-                                compareBy { result ->
-                                    when (result) {
-                                        is SearchResultItem.SongItem -> 0
-                                        is SearchResultItem.AlbumItem -> 1
-                                        is SearchResultItem.ArtistItem -> 2
-                                        is SearchResultItem.PlaylistItem -> 3
+                            val immutableResults = withContext(Dispatchers.Default) {
+                                resultsList.sortedWith(
+                                    compareBy { result ->
+                                        when (result) {
+                                            is SearchResultItem.SongItem -> 0
+                                            is SearchResultItem.AlbumItem -> 1
+                                            is SearchResultItem.ArtistItem -> 2
+                                            is SearchResultItem.PlaylistItem -> 3
+                                        }
                                     }
-                                }
-                            )
+                                ).toImmutableList()
+                            }
 
                             if (request.requestId != latestSearchRequestId.get()) {
                                 return@collect
                             }
 
-                            val immutableResults = sortedResults.toImmutableList()
                             if (_searchResults.value != immutableResults) {
                                 _searchResults.value = immutableResults
                             }

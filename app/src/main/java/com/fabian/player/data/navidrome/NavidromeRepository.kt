@@ -1,13 +1,12 @@
-﻿@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION")
 package com.fabian.player.data.navidrome
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import com.fabian.player.R
 import com.fabian.player.data.database.AlbumEntity
 import com.fabian.player.data.database.ArtistEntity
+import com.fabian.player.data.database.FavoritesDao
 import com.fabian.player.data.database.MusicDao
 import com.fabian.player.data.database.NavidromeDao
 import com.fabian.player.data.database.NavidromePlaylistEntity
@@ -25,6 +24,7 @@ import com.fabian.player.data.navidrome.model.NavidromeSong
 import com.fabian.player.data.network.navidrome.NavidromeApiService
 import com.fabian.player.data.network.navidrome.NavidromeResponseParser
 import com.fabian.player.data.preferences.PlaylistPreferencesRepository
+import com.fabian.player.data.preferences.SecurePreferencesFactory
 import com.fabian.player.data.preferences.UserPreferencesRepository
 import com.fabian.player.data.stream.BulkSyncResult
 import com.fabian.player.data.stream.CloudMusicUtils
@@ -64,6 +64,7 @@ class NavidromeRepository @Inject constructor(
     private val api: NavidromeApiService,
     private val dao: NavidromeDao,
     private val musicDao: MusicDao,
+    private val favoritesDao: FavoritesDao,
     private val playlistPreferencesRepository: PlaylistPreferencesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     @ApplicationContext private val context: Context
@@ -89,31 +90,8 @@ class NavidromeRepository @Inject constructor(
 
     private val prefs: SharedPreferences = createCredentialPrefs()
 
-    private fun createEncryptedPrefs(): SharedPreferences {
-        val masterKey = MasterKey.Builder(context)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
-        return EncryptedSharedPreferences.create(
-            context,
-            PREFS_NAME,
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    }
-
-    private fun createCredentialPrefs(): SharedPreferences = try {
-        createEncryptedPrefs()
-    } catch (e: Exception) {
-        Timber.e(e, "$TAG: EncryptedSharedPreferences unreadable, deleting and recreating")
-        context.deleteSharedPreferences(PREFS_NAME)
-        try {
-            createEncryptedPrefs()
-        } catch (e2: Exception) {
-            Timber.e(e2, "$TAG: Encrypted prefs unavailable, falling back to plain")
-            context.getSharedPreferences("${PREFS_NAME}_plain", Context.MODE_PRIVATE)
-        }
-    }
+    private fun createCredentialPrefs(): SharedPreferences =
+        SecurePreferencesFactory.open(context, PREFS_NAME, TAG)
 
     private val _isLoggedInFlow = MutableStateFlow(false)
     val isLoggedInFlow: StateFlow<Boolean> = _isLoggedInFlow.asStateFlow()
@@ -769,6 +747,7 @@ class NavidromeRepository @Inject constructor(
         val groupByAlbumArtist = userPreferencesRepository.groupByAlbumArtistFlow.first()
 
         val songs = ArrayList<SongEntity>(navidromeSongs.size)
+        val favoriteSongIds = favoritesDao.getFavoriteSongIdsOnce().toHashSet()
         val artists = LinkedHashMap<Long, ArtistEntity>()
         val albums = LinkedHashMap<Long, AlbumEntity>()
         val crossRefs = mutableListOf<SongArtistCrossRef>()
@@ -851,7 +830,7 @@ class NavidromeRepository @Inject constructor(
                     genre = navidromeSong.genre ?: NAVIDROME_GENRE,
                     filePath = navidromeSong.path,
                     parentDirectoryPath = NAVIDROME_PARENT_DIRECTORY,
-                    isFavorite = false,
+                    isFavorite = songId in favoriteSongIds,
                     lyrics = null,
                     trackNumber = navidromeSong.trackNumber,
                     discNumber = CloudMusicUtils.normalizeDiscNumber(navidromeSong.discNumber),

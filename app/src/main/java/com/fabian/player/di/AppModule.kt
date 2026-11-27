@@ -402,6 +402,16 @@ object AppModule {
                     .build()
                 chain.proceed(requestWithUserAgent)
             }
+            .addNetworkInterceptor { chain ->
+                val networkRequest = chain.request()
+                val requestUrl = networkRequest.url
+                if (!requestUrl.isHttps &&
+                    !com.fabian.player.data.stream.CloudStreamSecurity.isLocalServerHost(requestUrl.host)
+                ) {
+                    throw java.io.IOException("Cleartext HTTP redirect is only permitted for local network servers")
+                }
+                chain.proceed(networkRequest)
+            }
             .addInterceptor(loggingInterceptor)
             .build()
     }

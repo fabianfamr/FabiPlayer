@@ -1,4 +1,4 @@
-﻿package com.fabian.player.data.service.player
+package com.fabian.player.data.service.player
 
 import android.app.ActivityManager
 import android.content.Context
@@ -270,6 +270,7 @@ class DualPlayerEngine @Inject constructor(
         private const val OFFLOAD_HEALTH_PREFS = "audio_offload_health"
         private const val KEY_OFFLOAD_STALLED_BUILD = "offload_stalled_build_fingerprint"
         private const val POST_TRANSITION_OFFLOAD_GUARD_MS = 2_000L
+        private const val AUDIO_FOCUS_DUCK_VOLUME_FACTOR = 0.25f
         private const val MAX_AUXILIARY_TIMELINE_ITEMS = QueueWindowPolicy.MAX_AUXILIARY_TIMELINE_ITEMS
         private val LOCAL_MEDIA_SCHEMES = setOf("content", "file", "android.resource")
         private val REMOTE_MEDIA_SCHEMES = setOf("http", "https", "navidrome", "jellyfin")
@@ -426,18 +427,59 @@ class DualPlayerEngine @Inject constructor(
 
     /** Master volume (ReplayGain or user) captured when a crossfade starts; null otherwise. */
     private var volumeBeforeTransition: Float? = null
+    private var isFocusDucked = false
+    private var preDuckMasterVolume: Float? = null
+    private var preDuckAuxVolume: Float? = null
+
+    private fun duckMultiplier(): Float = if (isFocusDucked) AUDIO_FOCUS_DUCK_VOLUME_FACTOR else 1f
+
+    private fun applyAudioFocusDuck() {
+        if (isFocusDucked) return
+        isFocusDucked = true
+        if (::playerA.isInitialized) {
+            val currentMaster = playerA.volume.coerceIn(0f, 1f)
+            preDuckMasterVolume = currentMaster
+            playerA.volume = (currentMaster * AUDIO_FOCUS_DUCK_VOLUME_FACTOR).coerceIn(0f, 1f)
+        }
+        playerB?.let { aux ->
+            if (transitionRunning) {
+                val currentAux = aux.volume.coerceIn(0f, 1f)
+                preDuckAuxVolume = currentAux
+                aux.volume = (currentAux * AUDIO_FOCUS_DUCK_VOLUME_FACTOR).coerceIn(0f, 1f)
+            }
+        }
+    }
+
+    private fun clearAudioFocusDuck(restoreVolumes: Boolean) {
+        if (!isFocusDucked && preDuckMasterVolume == null && preDuckAuxVolume == null) return
+        if (restoreVolumes) {
+            if (::playerA.isInitialized) {
+                preDuckMasterVolume?.let { playerA.volume = it.coerceIn(0f, 1f) }
+            }
+            playerB?.let { aux ->
+                if (transitionRunning) {
+                    preDuckAuxVolume?.let { aux.volume = it.coerceIn(0f, 1f) }
+                }
+            }
+        }
+        isFocusDucked = false
+        preDuckMasterVolume = null
+        preDuckAuxVolume = null
+    }
 
     private val focusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
         when (focusChange) {
             AudioManager.AUDIOFOCUS_LOSS -> {
                 Timber.tag("TransitionDebug").d("AudioFocus LOSS. Pausing.")
                 isFocusLossPause = false
+                clearAudioFocusDuck(restoreVolumes = true)
                 playerA.playWhenReady = false
                 playerB?.playWhenReady = false
                 abandonAudioFocus()
             }
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
                 Timber.tag("TransitionDebug").d("AudioFocus LOSS_TRANSIENT. Pausing.")
+                clearAudioFocusDuck(restoreVolumes = true)
                 val auxiliaryPlayer = playerB
                 isFocusLossPause = shouldResumeAfterTransientAudioFocusLoss(
                     masterPlayWhenReady = playerA.playWhenReady,
@@ -449,8 +491,13 @@ class DualPlayerEngine @Inject constructor(
                 playerA.playWhenReady = false
                 auxiliaryPlayer?.playWhenReady = false
             }
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+                Timber.tag("TransitionDebug").d("AudioFocus LOSS_TRANSIENT_CAN_DUCK. Ducking.")
+                applyAudioFocusDuck()
+            }
             AudioManager.AUDIOFOCUS_GAIN -> {
                 Timber.tag("TransitionDebug").d("AudioFocus GAIN. Resuming if paused by loss.")
+                clearAudioFocusDuck(restoreVolumes = true)
                 if (isFocusLossPause) {
                     isFocusLossPause = false
                     playerA.playWhenReady = true
@@ -556,7 +603,6 @@ class DualPlayerEngine @Inject constructor(
         }
 
         override fun onTimelineChanged(timeline: Timeline, reason: Int) {
-            if (transitionRunning) return
             // While the master timeline is only a crossfade window over the real queue,
             // rebuilding the snapshot from it would silently truncate the queue to
             // MAX_AUXILIARY_TIMELINE_ITEMS. restoreFullMasterTimelineIfWindowed() clears
@@ -811,6 +857,7 @@ class DualPlayerEngine @Inject constructor(
     }
 
     private fun abandonAudioFocus() {
+        clearAudioFocusDuck(restoreVolumes = true)
         audioFocusRequest?.let {
             audioManager.abandonAudioFocusRequest(it)
             audioFocusRequest = null
@@ -937,7 +984,13 @@ class DualPlayerEngine @Inject constructor(
         playerA = buildPlayer()
 
         addMasterPlayerListeners(playerA)
-        playerA.volume = state.volume
+        if (isFocusDucked) {
+            preDuckMasterVolume = state.volume.coerceIn(0f, 1f)
+            preDuckAuxVolume = null
+            playerA.volume = (state.volume * AUDIO_FOCUS_DUCK_VOLUME_FACTOR).coerceIn(0f, 1f)
+        } else {
+            playerA.volume = state.volume
+        }
         playerA.pauseAtEndOfMediaItems =
             state.pauseAtEndOfMediaItems || _sleepTimerHold.value.pauseAtEndOfCurrentItem
         playerA.playbackParameters = state.playbackParameters
@@ -998,7 +1051,8 @@ class DualPlayerEngine @Inject constructor(
         val transitionWasRunning = transitionRunning
         val stableVolume = when {
             useAuxiliaryPlayer -> incomingTrackReplayGainVolume ?: 1f
-            transitionWasRunning -> volumeBeforeTransition ?: sourcePlayer.volume
+            transitionWasRunning -> volumeBeforeTransition ?: preDuckMasterVolume ?: sourcePlayer.volume
+            isFocusDucked -> preDuckMasterVolume ?: sourcePlayer.volume
             else -> sourcePlayer.volume
         }
 
@@ -1031,6 +1085,7 @@ class DualPlayerEngine @Inject constructor(
             restoreVolumeBeforeTransition()
             setPauseAtEndOfMediaItems(false)
         }
+        preDuckAuxVolume = null
         Timber.tag("TransitionDebug").d("Cancelled active transition before rebuilding players.")
     }
 
@@ -1612,13 +1667,27 @@ class DualPlayerEngine @Inject constructor(
      * edits and other cancellations.
      */
     private fun restoreVolumeBeforeTransition() {
-        volumeBeforeTransition?.let { playerA.volume = it }
+        volumeBeforeTransition?.let { targetVolume ->
+            if (isFocusDucked) {
+                preDuckMasterVolume = targetVolume.coerceIn(0f, 1f)
+                playerA.volume = (targetVolume * AUDIO_FOCUS_DUCK_VOLUME_FACTOR).coerceIn(0f, 1f)
+            } else {
+                playerA.volume = targetVolume
+            }
+        }
         volumeBeforeTransition = null
+        preDuckAuxVolume = null
     }
 
     fun performTransition(settings: TransitionSettings) {
         transitionJob?.cancel()
-        if (volumeBeforeTransition == null) volumeBeforeTransition = playerA.volume
+        if (volumeBeforeTransition == null) {
+            volumeBeforeTransition = if (isFocusDucked) {
+                preDuckMasterVolume ?: playerA.volume
+            } else {
+                playerA.volume
+            }
+        }
         val transitionRunId = transitionRunTracker.start()
         transitionRunning = true
         auxiliaryPlayerPresented = false
@@ -1662,7 +1731,7 @@ class DualPlayerEngine @Inject constructor(
             return
         }
 
-        val outgoingStartVolume = (volumeBeforeTransition ?: playerA.volume).coerceIn(0f, 1f)
+        val outgoingStartVolume = (volumeBeforeTransition ?: preDuckMasterVolume ?: playerA.volume).coerceIn(0f, 1f)
         auxiliaryPlayer.volume = 0f
         if (!playerA.isPlaying && playerA.playbackState == Player.STATE_READY) playerA.play()
         auxiliaryPlayer.playWhenReady = true
@@ -1688,15 +1757,27 @@ class DualPlayerEngine @Inject constructor(
             val volIn = envelope(progress, settings.curveIn)
             val volOut = 1f - envelope(progress, settings.curveOut)
             val incomingTarget = incomingTrackReplayGainVolume ?: 1f
-            incomingPlayer.volume = (volIn * incomingTarget).coerceIn(0f, 1f)
-            outgoingPlayer.volume = (volOut * outgoingStartVolume).coerceIn(0f, 1f)
+            val unduckedIncoming = (volIn * incomingTarget).coerceIn(0f, 1f)
+            val unduckedOutgoing = (volOut * outgoingStartVolume).coerceIn(0f, 1f)
+            val duckFactor = duckMultiplier()
+            incomingPlayer.volume = (unduckedIncoming * duckFactor).coerceIn(0f, 1f)
+            outgoingPlayer.volume = (unduckedOutgoing * duckFactor).coerceIn(0f, 1f)
+            if (isFocusDucked) {
+                preDuckMasterVolume = unduckedOutgoing
+                preDuckAuxVolume = unduckedIncoming
+            }
 
             if (elapsed >= duration) break
             delay(stepMs)
         }
 
+        val finalIncomingVolume = (incomingTrackReplayGainVolume ?: 1f).coerceIn(0f, 1f)
         outgoingPlayer.volume = 0f
-        incomingPlayer.volume = incomingTrackReplayGainVolume ?: 1f
+        incomingPlayer.volume = (finalIncomingVolume * duckMultiplier()).coerceIn(0f, 1f)
+        if (isFocusDucked) {
+            preDuckMasterVolume = finalIncomingVolume
+            preDuckAuxVolume = null
+        }
         incomingTrackReplayGainVolume = null
         volumeBeforeTransition = null
 
@@ -1850,10 +1931,15 @@ class DualPlayerEngine @Inject constructor(
         windowEnd: Int,
         snapshot: List<MediaItem>
     ): Boolean {
-        if (windowEnd <= windowStart) return false
-        val lastPlayerIndex = windowEnd - windowStart - 1
-        return playerA.getMediaItemAt(0).mediaId == snapshot[windowStart].mediaId &&
-            playerA.getMediaItemAt(lastPlayerIndex).mediaId == snapshot[windowEnd - 1].mediaId
+        if (windowStart < 0 || windowEnd <= windowStart || windowEnd > snapshot.size) return false
+        val windowSize = windowEnd - windowStart
+        if (playerA.mediaItemCount != windowSize) return false
+        for (offset in 0 until windowSize) {
+            if (playerA.getMediaItemAt(offset).mediaId != snapshot[windowStart + offset].mediaId) {
+                return false
+            }
+        }
+        return true
     }
 
     private fun resetPreparedWindowState() {

@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.components
+package com.fabian.player.presentation.components
 
 import android.widget.Toast
 import androidx.compose.animation.core.Animatable
@@ -19,8 +19,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.ui.layout.layout
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -46,6 +49,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -63,6 +68,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.fabian.player.R
 import com.fabian.player.data.model.Song
 import com.fabian.player.data.preferences.sanitizeNavBarCornerRadius
 import com.fabian.player.presentation.components.scoped.PlayerAlbumNavigationEffect
@@ -90,6 +96,7 @@ import com.fabian.player.presentation.components.scoped.rememberSheetOverlayStat
 import com.fabian.player.presentation.components.scoped.rememberSheetThemeState
 import com.fabian.player.presentation.components.scoped.rememberSheetVisualState
 import com.fabian.player.presentation.components.scoped.sheetHorizontalPaddingPx
+import com.fabian.player.presentation.viewmodel.PendingDeleteConfirmation
 import com.fabian.player.presentation.viewmodel.PlayerSheetState
 import com.fabian.player.presentation.viewmodel.PlayerViewModel
 import com.fabian.player.presentation.viewmodel.StablePlayerState
@@ -860,4 +867,47 @@ fun UnifiedPlayerSheetV2(
         pendingOverlay = pendingSaveQueueOverlay,
         onDismissOverlay = { sheetModalOverlayController.dismissSaveQueueOverlay() }
     )
+
+    val pendingDeleteConfirmation by playerViewModel.pendingDeleteConfirmation.collectAsStateWithLifecycle()
+    pendingDeleteConfirmation?.let { confirmation ->
+        val title = when (confirmation) {
+            is PendingDeleteConfirmation.SingleSong ->
+                stringResource(R.string.dialog_delete_song_title)
+            is PendingDeleteConfirmation.BatchSongs ->
+                pluralStringResource(
+                    R.plurals.delete_songs_confirmation_title,
+                    confirmation.count,
+                    confirmation.count
+                )
+        }
+        val message = when (confirmation) {
+            is PendingDeleteConfirmation.SingleSong ->
+                stringResource(
+                    R.string.dialog_delete_song_message,
+                    confirmation.song.title,
+                    confirmation.song.displayArtist
+                )
+            is PendingDeleteConfirmation.BatchSongs ->
+                stringResource(R.string.delete_songs_permanent_message)
+        }
+        AlertDialog(
+            onDismissRequest = { playerViewModel.resolveFallbackDeleteConfirmation(false) },
+            title = { Text(text = title) },
+            text = { Text(text = message) },
+            confirmButton = {
+                TextButton(
+                    onClick = { playerViewModel.resolveFallbackDeleteConfirmation(true) }
+                ) {
+                    Text(text = stringResource(R.string.delete_action))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { playerViewModel.resolveFallbackDeleteConfirmation(false) }
+                ) {
+                    Text(text = stringResource(R.string.cancel))
+                }
+            }
+        )
+    }
 }

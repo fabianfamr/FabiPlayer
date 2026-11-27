@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
+    <!-- Android XML config cannot express private LAN IP ranges or mDNS (.local/.lan) hosts
+         used by self-hosted Navidrome/Jellyfin servers. Runtime cleartext blocking for all
+         non-local hosts (including redirect hops) is enforced in AppModule's OkHttpClient. -->
     <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
     </base-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="false">127.0.0.1</domain>
-        <domain includeSubdomains="false">localhost</domain>
-    </domain-config>
 </network-security-config>

@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.viewmodel
+package com.fabian.player.presentation.viewmodel
 
 import android.content.ContentUris
 import android.content.Context
@@ -13,6 +13,8 @@ import com.fabian.player.data.media.resolveAudioFileExtension
 import com.fabian.player.data.model.Song
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
@@ -24,6 +26,8 @@ data class ExternalSongLoadResult(
     val bucketId: Long?,
     val displayName: String?
 )
+
+private const val MAX_EXTERNAL_SIBLINGS = 50
 
 class ExternalMediaStateHolder @Inject constructor(
     @ApplicationContext private val context: Context
@@ -126,7 +130,8 @@ class ExternalMediaStateHolder @Inject constructor(
         if (candidates.isEmpty()) return@withContext emptyList()
 
         val resolved = mutableListOf<Song>()
-        for ((candidateUri, _) in candidates) {
+        for ((candidateUri, _) in candidates.take(MAX_EXTERNAL_SIBLINGS)) {
+            currentCoroutineContext().ensureActive()
             val additional = buildExternalSongFromUri(candidateUri, captureFolderInfo = false)
             val song = additional?.song ?: continue
             if (song.id != reference.song.id) {

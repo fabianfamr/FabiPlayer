@@ -1,6 +1,7 @@
-﻿package com.fabian.player.data.navidrome
+package com.fabian.player.data.navidrome
 
 import com.google.common.truth.Truth.assertThat
+import com.fabian.player.data.database.FavoritesDao
 import com.fabian.player.data.database.MusicDao
 import com.fabian.player.data.database.NavidromeDao
 import com.fabian.player.data.database.NavidromeSongEntity
@@ -21,12 +22,14 @@ class NavidromeRepositoryUnifiedSyncTest {
 
     private val navidromeDao: NavidromeDao = mockk()
     private val musicDao: MusicDao = mockk()
+    private val favoritesDao: FavoritesDao = mockk()
     private val userPreferencesRepository: UserPreferencesRepository = mockk(relaxed = true)
     private val syncedSongs = slot<List<SongEntity>>()
 
-    private fun repository(): NavidromeRepository {
+    private fun repository(favoriteIds: List<Long> = emptyList()): NavidromeRepository {
         every { userPreferencesRepository.groupByAlbumArtistFlow } returns flowOf(true)
         coEvery { musicDao.getAllNavidromeSongIds() } returns emptyList()
+        coEvery { favoritesDao.getFavoriteSongIdsOnce() } returns favoriteIds
         coEvery {
             musicDao.incrementalSyncMusicData(capture(syncedSongs), any(), any(), any(), any())
         } just Runs
@@ -34,6 +37,7 @@ class NavidromeRepositoryUnifiedSyncTest {
             api = mockk(relaxed = true),
             dao = navidromeDao,
             musicDao = musicDao,
+            favoritesDao = favoritesDao,
             playlistPreferencesRepository = mockk(relaxed = true),
             userPreferencesRepository = userPreferencesRepository,
             context = mockk(relaxed = true)
@@ -97,5 +101,21 @@ class NavidromeRepositoryUnifiedSyncTest {
         repository().syncUnifiedLibrarySongsFromNavidrome()
 
         assertThat(syncedSongs.captured.single().discNumber).isNull()
+    }
+
+    @Test
+    fun `unified library sync preserves existing favorites`() = runTest {
+        val favNavSong = cachedSong("fav-1", "Favorite Track", track = 1, disc = 1)
+        val normalNavSong = cachedSong("norm-1", "Normal Track", track = 2, disc = 1)
+        coEvery { navidromeDao.getAllNavidromeSongsList() } returns listOf(favNavSong, normalNavSong)
+
+        val expectedFavId = -(9_000_000_000_000L + kotlin.math.abs("fav-1".hashCode().toLong()))
+        repository(favoriteIds = listOf(expectedFavId)).syncUnifiedLibrarySongsFromNavidrome()
+
+        val byTitle = syncedSongs.captured.associate { it.title to it.isFavorite }
+        assertThat(byTitle).containsExactly(
+            "Favorite Track", true,
+            "Normal Track", false
+        )
     }
 }

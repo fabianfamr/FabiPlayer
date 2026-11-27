@@ -1,4 +1,4 @@
-﻿package com.fabian.player.data.service.player
+package com.fabian.player.data.service.player
 
 import androidx.annotation.OptIn
 import androidx.media3.common.C
@@ -19,10 +19,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -53,6 +55,7 @@ class TransitionController @Inject constructor(
     private var transitionSchedulerJob: Job? = null
     private var currentObservedPlayer: Player? = null
     private var needsDurationReschedule = false
+    private val isPlayingFlow = MutableStateFlow(false)
 
     private val swapListener: (Player) -> Unit = { newPlayer ->
         Timber.tag("TransitionDebug").d("Controller detected player swap. Moving listener.")
@@ -60,6 +63,7 @@ class TransitionController @Inject constructor(
             currentObservedPlayer?.removeListener(listener)
             currentObservedPlayer = newPlayer
             newPlayer.addListener(listener)
+            isPlayingFlow.value = newPlayer.isPlaying
 
             if (newPlayer.isPlaying) {
                 val item = newPlayer.currentMediaItem
@@ -98,6 +102,7 @@ class TransitionController @Inject constructor(
             }
 
             override fun onIsPlayingChanged(isPlaying: Boolean) {
+                isPlayingFlow.value = isPlaying
                 val job = transitionSchedulerJob
                 if (isPlaying && (job == null || job.isCompleted || needsDurationReschedule)) {
                     needsDurationReschedule = false
@@ -144,6 +149,7 @@ class TransitionController @Inject constructor(
         }
 
         currentObservedPlayer = engine.masterPlayer
+        isPlayingFlow.value = currentObservedPlayer?.isPlaying == true
         currentObservedPlayer?.addListener(transitionListener!!)
         engine.addPlayerSwapListener(swapListener)
 
@@ -344,22 +350,15 @@ class TransitionController @Inject constructor(
                 engine.setPauseAtEndOfMediaItems(shouldPause = true)
                 Timber.tag("TransitionDebug").d("Enabled pauseAtEndOfMediaItems to prevent auto-skip.")
 
-                if (transitionPoint <= player.currentPosition) {
-                    val remaining = (duration - player.currentPosition).coerceAtLeast(0L)
-                    if (remaining > 0L) {
-                        val adjustedDuration = remaining.coerceAtMost(effectiveDuration)
-                        Timber.tag("TransitionDebug").w("Already past transition point! Triggering immediately.")
-                        engine.performTransition(effectiveSettings.copy(durationMs = adjustedDuration.toInt()))
-                    } else {
-                        Timber.tag("TransitionDebug").w("Too close to end (%d ms left). Skipping to avoid glitch.", remaining)
-                        engine.cancelNext()
-                        engine.setPauseAtEndOfMediaItems(shouldPause = false)
+                while (isActive) {
+                    if (!player.isPlaying) {
+                        isPlayingFlow.value = false
+                        isPlayingFlow.first { it }
+                        continue
                     }
-                    return@collectLatest
-                }
-
-                while (player.currentPosition < transitionPoint && isActive) {
-                    val remaining = transitionPoint - player.currentPosition
+                    val currentPosition = player.currentPosition
+                    if (currentPosition >= transitionPoint) break
+                    val remaining = transitionPoint - currentPosition
                     val sleep = when {
                         remaining > 5000 -> 1000L
                         remaining > 1000 -> 250L
@@ -371,7 +370,7 @@ class TransitionController @Inject constructor(
                     delay(sleep)
                 }
 
-                if (isActive) {
+                if (isActive && player.isPlaying) {
                     val remaining = (duration - player.currentPosition).coerceAtLeast(0L)
                     if (remaining > 0L) {
                         val adjustedDuration = remaining.coerceAtMost(effectiveDuration)

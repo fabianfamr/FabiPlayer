@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.viewmodel
+package com.fabian.player.presentation.viewmodel
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -32,7 +32,6 @@ import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionError
 import androidx.media3.session.SessionResult
 import androidx.media3.session.SessionToken
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.fabian.player.R
@@ -265,6 +264,11 @@ private data class ResolvedAlbumSelection(
     val songs: List<Song>,
     val wasTrimmed: Boolean
 )
+
+sealed interface PendingDeleteConfirmation {
+    data class SingleSong(val song: Song) : PendingDeleteConfirmation
+    data class BatchSongs(val count: Int) : PendingDeleteConfirmation
+}
 
 @androidx.annotation.OptIn(UnstableApi::class)
 @SuppressLint("LogNotTimber")
@@ -599,6 +603,10 @@ class PlayerViewModel @Inject constructor(
     )
     val deletePermissionRequest: SharedFlow<android.content.IntentSender> = _deletePermissionRequest.asSharedFlow()
 
+    private val _pendingDeleteConfirmation = MutableStateFlow<PendingDeleteConfirmation?>(null)
+    val pendingDeleteConfirmation: StateFlow<PendingDeleteConfirmation?> = _pendingDeleteConfirmation.asStateFlow()
+    private var pendingDeleteConfirmationDeferred: CompletableDeferred<Boolean>? = null
+
     private var pendingMetadataEdit: PendingMetadataEdit? = null
     private var pendingBatchMetadataEdit: PendingBatchMetadataEdit? = null
     private var pendingLyricsSave: PendingLyricsSave? = null
@@ -610,6 +618,7 @@ class PlayerViewModel @Inject constructor(
     private val answeredWriteRequests = MutableStateFlow(0)
     private var pendingDeleteSong: Song? = null
     private var pendingDeleteCallback: ((Boolean) -> Unit)? = null
+    private var consecutiveControllerErrors = 0
 
     private val _albumNavigationRequests = MutableSharedFlow<Long>(extraBufferCapacity = 1)
     val albumNavigationRequests = _albumNavigationRequests.asSharedFlow()
@@ -2705,12 +2714,25 @@ class PlayerViewModel @Inject constructor(
         mediaControllerPlaybackListener?.let(playerCtrl::removeListener)
         mediaControllerPlaybackListener = object : Player.Listener {
             override fun onPlayerError(error: PlaybackException) {
+                val canSkipToNext = playerCtrl.hasNextMediaItem() &&
+                    consecutiveControllerErrors < 5 &&
+                    playerCtrl.playbackState != Player.STATE_IDLE
+                val messageRes = if (canSkipToNext) {
+                    consecutiveControllerErrors++
+                    R.string.player_error_skipping
+                } else {
+                    consecutiveControllerErrors = 0
+                    R.string.player_error_stopped
+                }
                 viewModelScope.launch {
-                    _toastEvents.emit(context.getString(R.string.player_error_skipping))
+                    _toastEvents.emit(context.getString(messageRes))
                 }
             }
 
             override fun onIsPlayingChanged(isPlaying: Boolean) {
+                if (isPlaying) {
+                    consecutiveControllerErrors = 0
+                }
                 playbackStateHolder.updateStablePlayerState {
                     it.copy(
                         isPlaying = isPlaying,
@@ -2836,6 +2858,7 @@ class PlayerViewModel @Inject constructor(
                 }
 
                 if (playbackState == Player.STATE_READY) {
+                    consecutiveControllerErrors = 0
                     clearPreparingSongIfMatching(playerCtrl.currentMediaItem?.mediaId)
                     val readyPosition = playerCtrl.currentPosition.coerceAtLeast(0L)
                     val songDurationHint = playbackStateHolder.stablePlayerState.value.currentSong?.duration ?: 0L
@@ -3833,7 +3856,9 @@ class PlayerViewModel @Inject constructor(
                 }
             }
 
-            val confirmed = showMultiDeleteConfirmation(activity, deletableSongs.size)
+            val confirmed = requestFallbackDeleteConfirmation(
+                PendingDeleteConfirmation.BatchSongs(deletableSongs.size)
+            )
             if (!confirmed) {
                 onComplete()
                 return@launch
@@ -3879,42 +3904,29 @@ class PlayerViewModel @Inject constructor(
         }
     }
 
-    private suspend fun showMultiDeleteConfirmation(activity: Activity, count: Int): Boolean {
-        return withContext(Dispatchers.Main) {
-            try {
-                if (activity.isFinishing || activity.isDestroyed) {
-                    return@withContext false
-                }
-
-                val userChoice = CompletableDeferred<Boolean>()
-
-                val dialog = MaterialAlertDialogBuilder(activity)
-                    .setTitle(
-                        context.resources.getQuantityString(
-                            R.plurals.delete_songs_confirmation_title,
-                            count,
-                            count,
-                        ),
-                    )
-                    .setMessage(context.getString(R.string.delete_songs_permanent_message))
-                    .setPositiveButton(context.getString(R.string.delete_action)) { _, _ ->
-                        userChoice.complete(true)
-                    }
-                    .setNegativeButton(context.getString(R.string.cancel)) { _, _ ->
-                        userChoice.complete(false)
-                    }
-                    .setOnCancelListener {
-                        userChoice.complete(false)
-                    }
-                    .setCancelable(true)
-                    .create()
-
-                dialog.show()
-                userChoice.await()
-            } catch (e: Exception) {
-                false
+    private suspend fun requestFallbackDeleteConfirmation(
+        confirmation: PendingDeleteConfirmation
+    ): Boolean {
+        pendingDeleteConfirmationDeferred?.cancel()
+        val deferred = CompletableDeferred<Boolean>()
+        pendingDeleteConfirmationDeferred = deferred
+        _pendingDeleteConfirmation.value = confirmation
+        return try {
+            deferred.await()
+        } finally {
+            if (pendingDeleteConfirmationDeferred === deferred) {
+                pendingDeleteConfirmationDeferred = null
+            }
+            if (_pendingDeleteConfirmation.value == confirmation) {
+                _pendingDeleteConfirmation.value = null
             }
         }
+    }
+
+    fun resolveFallbackDeleteConfirmation(confirmed: Boolean) {
+        _pendingDeleteConfirmation.value = null
+        pendingDeleteConfirmationDeferred?.complete(confirmed)
+        pendingDeleteConfirmationDeferred = null
     }
 
     fun deleteFromDevice(activity: Activity, song: Song, onResult: (Boolean) -> Unit = {}){
@@ -3946,7 +3958,9 @@ class PlayerViewModel @Inject constructor(
                 }
             }
 
-            val userConfirmed = songRemovalStateHolder.showDeleteConfirmation(activity, song)
+            val userConfirmed = requestFallbackDeleteConfirmation(
+                PendingDeleteConfirmation.SingleSong(song)
+            )
             if (!userConfirmed) {
                 onResult(false)
                 return@launch
@@ -4020,14 +4034,17 @@ class PlayerViewModel @Inject constructor(
 
     suspend fun removeSong(song: Song) {
         toggleFavoriteSpecificSong(song, true)
-        playbackStateHolder.setCurrentPosition(0L)
+        val isRemovingCurrentSong = playbackStateHolder.stablePlayerState.value.currentSong?.id == song.id
+        if (isRemovingCurrentSong) {
+            playbackStateHolder.setCurrentPosition(0L)
+            _isSheetVisible.value = false
+        }
         _playerUiState.update { currentState ->
             currentState.copy(
                 currentPlaybackQueue = currentState.currentPlaybackQueue.removeSongById(song.id),
-                currentQueueSourceName = ""
+                currentQueueSourceName = if (isRemovingCurrentSong) "" else currentState.currentQueueSourceName
             )
         }
-        _isSheetVisible.value = false
         songRemovalStateHolder.removeSongFromLibrary(song)
     }
 

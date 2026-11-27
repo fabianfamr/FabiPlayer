@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
     <string name="app_name" translatable="false">FabiPlayer</string>
     <string name="app_name_change_title">App Name Change</string>
     <string name="app_name_change_message">This app is now FabiPlayer. Keep playing!</string>
@@ -237,6 +237,7 @@
     <string name="batch_edit_multiple_covers">(Multiple different covers)</string>
 
     <string name="player_error_skipping">Couldn\'t play this track — skipping</string>
+    <string name="player_error_stopped">Playback stopped after repeated errors</string>
     <string name="player_unsupported_format">Can\'t play %1$s: this device has no decoder for %2$s</string>
     <string name="player_unsupported_format_unknown">this format</string>
     <string name="sync_failed_toast">Library sync failed. Pull down to refresh and try again.</string>

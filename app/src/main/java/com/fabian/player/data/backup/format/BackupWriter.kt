@@ -1,4 +1,4 @@
-﻿package com.fabian.player.data.backup.format
+package com.fabian.player.data.backup.format
 
 import android.content.Context
 import android.net.Uri
@@ -9,6 +9,7 @@ import com.fabian.player.di.BackupGson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.security.MessageDigest
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
@@ -47,31 +48,48 @@ class BackupWriter @Inject constructor(
             val finalManifest = manifest.copy(modules = modulesInfo)
             val manifestJson = gson.toJson(finalManifest)
 
-            context.contentResolver.openOutputStream(uri)?.use { rawOutput ->
-                rawOutput.write(BackupFormatDetector.PXPL_MAGIC)
+            val tempFile = File.createTempFile("fabiplayer_backup_", ".tmp", context.cacheDir)
+            try {
+                tempFile.outputStream().buffered().use { rawOutput ->
+                    rawOutput.write(BackupFormatDetector.PXPL_MAGIC)
 
-                // With a passphrase, everything after the magic is the
-                // encrypted container (header + AES-GCM ciphertext of the ZIP).
-                val archiveOutput = if (passphrase != null) {
-                    BackupCrypto.encryptingStream(rawOutput, passphrase)
-                } else {
-                    rawOutput
-                }
+                    // With a passphrase, everything after the magic is the
+                    // encrypted container (header + AES-GCM ciphertext of the ZIP).
+                    val archiveOutput = if (passphrase != null) {
+                        BackupCrypto.encryptingStream(rawOutput, passphrase)
+                    } else {
+                        rawOutput
+                    }
 
-                ZipOutputStream(archiveOutput).use { zip ->
-                    zip.putNextEntry(ZipEntry(BackupManifest.MANIFEST_FILENAME))
-                    zip.write(manifestJson.toByteArray(Charsets.UTF_8))
-                    zip.closeEntry()
-                    onProgress(++currentStep, totalSteps)
-
-                    payloadBytes.forEach { (key, bytes) ->
-                        zip.putNextEntry(ZipEntry("$key.json"))
-                        zip.write(bytes)
+                    ZipOutputStream(archiveOutput).use { zip ->
+                        zip.putNextEntry(ZipEntry(BackupManifest.MANIFEST_FILENAME))
+                        zip.write(manifestJson.toByteArray(Charsets.UTF_8))
                         zip.closeEntry()
                         onProgress(++currentStep, totalSteps)
+
+                        payloadBytes.forEach { (key, bytes) ->
+                            zip.putNextEntry(ZipEntry("$key.json"))
+                            zip.write(bytes)
+                            zip.closeEntry()
+                            onProgress(++currentStep, totalSteps)
+                        }
                     }
                 }
-            } ?: throw IllegalStateException("Unable to open output stream for backup")
+
+                val destinationStream = runCatching {
+                    context.contentResolver.openOutputStream(uri, "wt")
+                }.getOrNull() ?: context.contentResolver.openOutputStream(uri)
+                    ?: throw IllegalStateException("Unable to open output stream for backup")
+
+                destinationStream.use { target ->
+                    tempFile.inputStream().buffered().use { source ->
+                        source.copyTo(target)
+                    }
+                    target.flush()
+                }
+            } finally {
+                tempFile.delete()
+            }
         }
     }
 
