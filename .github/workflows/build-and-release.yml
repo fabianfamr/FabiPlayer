@@ -7,6 +7,15 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      release_title:
+        description: 'Título personalizado del release (opcional)'
+        required: false
+        type: string
+      release_notes:
+        description: 'Descripción personalizada del release (opcional)'
+        required: false
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -22,6 +31,9 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          fetch-tags: true
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -49,6 +61,86 @@ jobs:
           echo "VERSION_NAME=$VNAME" >> $GITHUB_OUTPUT
           echo "VERSION_CODE=$VCODE" >> $GITHUB_OUTPUT
           echo "VERSION=$VNAME" >> $GITHUB_OUTPUT
+
+      - name: Resolve Release Metadata
+        id: release_meta
+        env:
+          INPUT_TITLE: ${{ inputs.release_title }}
+          INPUT_BODY: ${{ inputs.release_notes }}
+          VERSION_NAME: ${{ steps.get_version.outputs.VERSION_NAME }}
+          VERSION_CODE: ${{ steps.get_version.outputs.VERSION_CODE }}
+          REF_NAME: ${{ github.ref_name }}
+          IS_TAG: ${{ startsWith(github.ref, 'refs/tags/') }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          python3 - << 'PY'
+          import os
+          import re
+          import subprocess
+
+          def git_output(args):
+              res = subprocess.run(["git", *args], capture_output=True, text=True)
+              return res.stdout.strip() if res.returncode == 0 else ""
+
+          version_name = os.environ.get("VERSION_NAME", "").strip()
+          version_code = os.environ.get("VERSION_CODE", "").strip()
+          ref_name = os.environ.get("REF_NAME", "").strip()
+          is_tag = os.environ.get("IS_TAG", "").lower() == "true"
+          commit_sha = os.environ.get("COMMIT_SHA", "").strip()
+
+          input_title = os.environ.get("INPUT_TITLE", "").strip()
+          input_body = os.environ.get("INPUT_BODY", "").strip()
+
+          tag_subject = ""
+          tag_body = ""
+          if is_tag and ref_name:
+              obj_type = git_output(["cat-file", "-t", f"refs/tags/{ref_name}"])
+              if obj_type == "tag":
+                  tag_subject = git_output(["for-each-ref", "--format=%(contents:subject)", f"refs/tags/{ref_name}"])
+                  tag_body = git_output(["for-each-ref", "--format=%(contents:body)", f"refs/tags/{ref_name}"])
+
+          commit_subject = git_output(["log", "-1", "--pretty=%s"])
+          commit_body = git_output(["log", "-1", "--pretty=%b"])
+
+          changelog_body = ""
+          if os.path.isfile("CHANGELOG.md") and version_name:
+              with open("CHANGELOG.md", "r", encoding="utf-8") as f:
+                  changelog_text = f.read()
+              pattern = re.compile(
+                  rf"^##\s+\[?v?{re.escape(version_name)}\]?[^\n]*\n(.*?)(?=^##\s+|\Z)",
+                  re.MULTILINE | re.DOTALL,
+              )
+              match = pattern.search(changelog_text)
+              if match:
+                  changelog_body = match.group(1).strip()
+
+          release_title = (
+              input_title
+              or tag_subject
+              or commit_subject
+              or (f"v{version_name}" if version_name else "FabiPlayer Release")
+          )
+          release_title = " ".join(release_title.splitlines()).strip()
+
+          release_body = input_body or tag_body or commit_body or changelog_body
+          if not release_body:
+              lines = []
+              if commit_subject:
+                  lines.append(commit_subject)
+              if version_name:
+                  lines.append(f"Versión: {version_name}" + (f" ({version_code})" if version_code else ""))
+              if commit_sha:
+                  lines.append(f"Commit: `{commit_sha[:7]}`")
+              release_body = "\n".join(lines)
+
+          with open("release_notes.md", "w", encoding="utf-8") as f:
+              f.write(release_body + "\n")
+
+          github_output = os.environ.get("GITHUB_OUTPUT")
+          if github_output:
+              with open(github_output, "a", encoding="utf-8") as out:
+                  out.write(f"RELEASE_TITLE={release_title}\n")
+          PY
 
       - name: Configure Release Signing
         env:
@@ -116,12 +208,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('v{0}', steps.get_version.outputs.VERSION_NAME) }}
-          name: "v${{ steps.get_version.outputs.VERSION_NAME }} - FabiPlayer"
-          body: |
-            Release generada automáticamente.
-            Versión: ${{ steps.get_version.outputs.VERSION_NAME }}
-            Código de Versión: ${{ steps.get_version.outputs.VERSION_CODE }}
-            Commit: ${{ github.sha }}
+          name: ${{ steps.release_meta.outputs.RELEASE_TITLE }}
+          body_path: release_notes.md
           draft: false
           prerelease: false
           overwrite: true
