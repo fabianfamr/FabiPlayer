@@ -4,27 +4,44 @@ import android.app.Activity
 import android.app.LocaleManager
 import android.content.ComponentCallbacks
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
+import android.os.Handler
 import android.os.LocaleList
+import android.os.Looper
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import com.fabian.player.data.preferences.AppLanguage
-import kotlinx.coroutines.delay
 import java.lang.ref.WeakReference
 import java.util.Locale
 
 object AppLocaleManager {
     private const val PREFERENCES_NAME = "app_locale_preferences"
     private const val KEY_LANGUAGE_TAG = "app_language_tag"
-    private const val PENDING_ENTRY_ANIMATION_WINDOW_NS = 3_000_000_000L
+    private const val PENDING_ENTRY_ANIMATION_WINDOW_NS = 5_000_000_000L
+    private const val FALLBACK_RECREATE_DELAY_MS = 220L
 
     /** The application context whose resources [keepApplicationLocale] already watches. */
     private var keptApplicationContext = WeakReference<Context>(null)
 
     @Volatile
     private var pendingEntryAnimationAtNs: Long = 0L
+
+    @Volatile
+    var activityCreationCount: Int = 0
+        private set
+
+    fun recordActivityCreation() {
+        activityCreationCount += 1
+    }
+
+    tailrec fun findActivity(context: Context?): Activity? = when (context) {
+        is Activity -> context
+        is ContextWrapper -> findActivity(context.baseContext)
+        else -> null
+    }
 
     fun markPendingEntryAnimation() {
         pendingEntryAnimationAtNs = System.nanoTime()
@@ -37,6 +54,12 @@ object AppLocaleManager {
         if (elapsed in 0L..PENDING_ENTRY_ANIMATION_WINDOW_NS) return true
         pendingEntryAnimationAtNs = 0L
         return false
+    }
+
+    fun consumePendingEntryAnimation(): Boolean {
+        val pending = hasPendingEntryAnimation()
+        pendingEntryAnimationAtNs = 0L
+        return pending
     }
 
     fun clearPendingEntryAnimation() {
@@ -85,28 +108,55 @@ object AppLocaleManager {
         val nextAppLocales = locales.toLanguageTags()
         if (currentAppLocales != nextAppLocales) {
             AppCompatDelegate.setApplicationLocales(locales)
-            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+        }
+
+        // MainActivity extends ComponentActivity (not AppCompatActivity), so AppCompatDelegate's
+        // static delegate list is empty and cannot reach LocaleManager on Android 13+. Sync
+        // LocaleManager directly so per-app language settings and system recreation both work.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val localeManager = applicationContext.getSystemService(LocaleManager::class.java)
+            if (localeManager != null) {
+                val systemNextLocales = if (normalized.isBlank()) {
+                    LocaleList.getEmptyLocaleList()
+                } else {
+                    LocaleList.forLanguageTags(normalized)
+                }
+                if (localeManager.applicationLocales != systemNextLocales) {
+                    localeManager.applicationLocales = systemNextLocales
+                    return true
+                }
+            }
+            return currentAppLocales != nextAppLocales
         }
         return false
     }
 
     /**
      * Recreates [activity] once after the language picker sheet has unmounted, avoiding a
-     * second recreation when Android 13+ already restarts the activity via [LocaleManager].
+     * second recreation when Android 13+ already restarts the activity via [LocaleManager]
+     * and ensuring the restart still happens when the resolved system locale is unchanged.
      */
-    suspend fun restartActivityAfterLocaleChange(
+    fun restartActivityAfterLocaleChange(
         activity: Activity?,
-        localeDelegatedToSystem: Boolean
+        localeDelegatedToSystem: Boolean,
+        expectedCreationCount: Int = activityCreationCount
     ) {
         if (activity == null || activity.isDestroyed || activity.isFinishing) return
         if (!localeDelegatedToSystem || Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             activity.recreate()
             return
         }
-        delay(120L)
-        if (!activity.isDestroyed && !activity.isFinishing) {
-            activity.recreate()
-        }
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
+                if (!activity.isDestroyed &&
+                    !activity.isFinishing &&
+                    activityCreationCount == expectedCreationCount
+                ) {
+                    activity.recreate()
+                }
+            },
+            FALLBACK_RECREATE_DELAY_MS
+        )
     }
 
     fun wrapContext(base: Context): Context {

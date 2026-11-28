@@ -1,7 +1,9 @@
 package com.fabian.player.utils
 
+import android.app.Activity
 import android.content.ComponentCallbacks
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -21,6 +23,8 @@ import java.util.Locale
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -146,5 +150,24 @@ class AppLocaleManagerTest {
         AppLocaleManager.applyLanguage(applicationContext, "es")
 
         assertFalse(AppLocaleManager.hasPendingEntryAnimation())
+    }
+
+    @Test
+    fun `consumePendingEntryAnimation returns true once and clears state`() {
+        AppLocaleManager.clearPendingEntryAnimation()
+        AppLocaleManager.applyLanguage(applicationContext, "en")
+
+        assertTrue(AppLocaleManager.consumePendingEntryAnimation())
+        assertFalse(AppLocaleManager.consumePendingEntryAnimation())
+        assertFalse(AppLocaleManager.hasPendingEntryAnimation())
+    }
+
+    @Test
+    fun `findActivity unwraps ContextWrapper and returns null for non-activity contexts`() {
+        val activity = mockk<Activity>()
+        val wrapped = ContextWrapper(ContextWrapper(activity))
+
+        assertSame(activity, AppLocaleManager.findActivity(wrapped))
+        assertNull(AppLocaleManager.findActivity(applicationContext))
     }
 }

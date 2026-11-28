@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="device_capabilities_advanced_diagnostics_description">Desactivado por defecto. Registra una breve línea de tiempo de retrasos para depuración beta.</string>
     <string name="device_capabilities_advanced_diagnostics_expires">Activo hasta %1$s</string>
@@ -498,5 +498,20 @@ La barra invertida (\) se puede usar para escapar los delimitadores de caractere
         <item>Reproducción en la nube más fiable: las solicitudes canceladas de Navidrome/Jellyfin ya no se notifican por error como errores de red al saltar pistas rápidamente.</item>
         <item>Los eventos de copia de seguridad, restauración y configuración ya no se pueden perder al girar la pantalla.</item>
         <item>Limpieza general: se eliminó el código muerto, se migraron las API obsoletas y se actualizaron las dependencias.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>Se eliminó el menú lateral innecesario de Inicio para lograr una barra superior más limpia.</item>
+        <item>Se actualizó la etiqueta del inicio de configuración de Beta a Estable.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>Se corrigió el cambio de idioma para reiniciar la app correctamente y reproducir la animación de entrada.</item>
+        <item>Se actualizó el registro de cambios dentro de la app con las novedades y correcciones recientes.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>Las letras traducidas y los ajustes de traducción con IA ahora se conservan de forma fiable entre reinicios y cambios de canción.</item>
+        <item>Las hojas de selección múltiple ahora muestran el singular y plural correctos en los 15 idiomas compatibles.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>Se completó la localización de textos, diálogos y mensajes de error en toda la app.</item>
     </string-array>
 </resources>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="presentation_batch_g_stats_range_today">Today</string>
     <string name="presentation_batch_g_stats_range_week_to_date">Week to Date</string>
@@ -502,5 +502,20 @@ Backslash (\) can be used to escape character delimiters.</string>
         <item>More reliable cloud playback: cancelled Navidrome/Jellyfin requests are no longer misreported as network errors when skipping tracks quickly.</item>
         <item>Backup, restore, and setup events can no longer be lost during screen rotation.</item>
         <item>Spring cleaning: dead code removed, deprecated APIs migrated, and dependencies updated.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>Removed the redundant side menu from Home for a cleaner, more focused top bar.</item>
+        <item>Updated the initial setup welcome badge from Beta to Stable.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>Fixed app language switching so changing language reliably restarts the screen and replays the entry animation.</item>
+        <item>Updated the in-app changelog with recent releases and fixes.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>Translated lyrics and AI translation preferences now persist reliably across app restarts and track changes.</item>
+        <item>Multi-selection bottom sheets now use proper singular and plural grammar across all 15 supported languages.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>Completed string localization across screens, dialogs, and error messages.</item>
     </string-array>
 </resources>

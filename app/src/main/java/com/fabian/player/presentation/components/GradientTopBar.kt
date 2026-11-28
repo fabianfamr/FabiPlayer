@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.components
+package com.fabian.player.presentation.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -6,9 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -17,9 +14,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.rounded.Cloud
-import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LargeTopAppBar
@@ -104,7 +99,6 @@ fun HomeGradientTopBar(
     onMoreOptionsClick: () -> Unit,
     onBetaClick: () -> Unit,
     onStreamingClick: () -> Unit,
-    onMenuClick: () -> Unit,
     isScrolled: Boolean = false,
 ) {
     val surfaceContainerHigh = MaterialTheme.colorScheme.surfaceContainerHighest
@@ -121,43 +115,25 @@ fun HomeGradientTopBar(
         modifier = Modifier.background(surfaceContainerHigh.copy(alpha = animatedAlpha)),
         title = { },
         navigationIcon = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.padding(start = 12.dp)
+            FilledTonalButton(
+                modifier = Modifier.padding(start = 12.dp),
+                shape = CircleShape,
+                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
+                colors = ButtonDefaults.filledTonalButtonColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                ),
+                onClick = onBetaClick
             ) {
-                // Opens the app sidebar (shortcuts such as Listening Stats and Equalizer).
-                FilledIconButton(
-                    colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    onClick = onMenuClick
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Menu,
-                        contentDescription = stringResource(R.string.sidebar_open)
-                    )
-                }
-                FilledTonalButton(
-                    shape = CircleShape,
-                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
-                    colors = ButtonDefaults.filledTonalButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    onClick = onBetaClick
-                ) {
-                    Text(
-                        text = when (BuildConfig.BUILD_TYPE) {
-                            "release" -> stringResource(R.string.presentation_batch_g_topbar_build_stable)
-                            "debug" -> stringResource(R.string.presentation_batch_g_topbar_build_debug)
-                            else -> BuildConfig.BUILD_TYPE.replaceFirstChar { it.uppercase() }
-                        },
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
+                Text(
+                    text = when (BuildConfig.BUILD_TYPE) {
+                        "release" -> stringResource(R.string.presentation_batch_g_topbar_build_stable)
+                        "debug" -> stringResource(R.string.presentation_batch_g_topbar_build_debug)
+                        else -> BuildConfig.BUILD_TYPE.replaceFirstChar { it.uppercase() }
+                    },
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold
+                )
             }
         },
         actions = {

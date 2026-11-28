@@ -28,8 +28,6 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -57,7 +55,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularWavyProgressIndicator
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarDefaults
@@ -65,7 +62,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -76,7 +72,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.setValue
@@ -111,7 +106,6 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.fabian.player.data.preferences.AppThemeMode
 import com.fabian.player.data.preferences.NavBarStyle
 import com.fabian.player.data.preferences.sanitizeNavBarCornerRadius
-import com.fabian.player.data.preferences.SidebarShortcutKeys
 import com.fabian.player.data.preferences.ThemePreferencesRepository
 import com.fabian.player.data.preferences.ThemePreset
 import com.fabian.player.data.preferences.InterfaceAppearance
@@ -120,10 +114,8 @@ import com.fabian.player.data.service.MusicService
 import com.fabian.player.data.worker.SyncManager
 import com.fabian.player.data.worker.SyncProgress
 import com.fabian.player.presentation.components.AllFilesAccessDialog
-import com.fabian.player.presentation.components.AppSidebarDrawer
 import com.fabian.player.presentation.components.CrashReportDialog
 import com.fabian.player.presentation.components.DismissUndoBar
-import com.fabian.player.presentation.components.DrawerDestination
 import com.fabian.player.presentation.components.MiniPlayerBottomSpacer
 import com.fabian.player.presentation.components.MiniPlayerHeight
 import com.fabian.player.presentation.components.PlayerInternalNavigationBar
@@ -260,11 +252,13 @@ class MainActivity : ComponentActivity() {
 
         splashScreen.setKeepOnScreenCondition { false }
 
+        AppLocaleManager.recordActivityCreation()
+
         val isBenchmarkMode = intent.getBooleanExtra("is_benchmark", false)
 
         // The animated splash plays on fresh launches and after an in-app language change,
         // and never when the user has turned animations off or a benchmark is timing startup.
-        val isLanguageChangeRestart = AppLocaleManager.hasPendingEntryAnimation()
+        val isLanguageChangeRestart = AppLocaleManager.consumePendingEntryAnimation()
         val animationsEnabled =
             Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) > 0f
         val playAnimatedSplash = (savedInstanceState == null || isLanguageChangeRestart) &&
@@ -434,13 +428,6 @@ class MainActivity : ComponentActivity() {
                 }
 
                 var showAnimatedSplash by remember { mutableStateOf(playAnimatedSplash) }
-
-                LaunchedEffect(showAnimatedSplash) {
-                    if (showAnimatedSplash && isLanguageChangeRestart) {
-                        delay(150L)
-                        AppLocaleManager.clearPendingEntryAnimation()
-                    }
-                }
 
                 Box(modifier = Modifier.fillMaxSize()) {
                     Surface(
@@ -868,9 +855,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-        val scope = rememberCoroutineScope()
-
         LaunchedEffect(userPreferencesRepository) {
             userPreferencesRepository.clearDeprecatedPlayerSheetPreference()
         }
@@ -881,36 +865,6 @@ class MainActivity : ComponentActivity() {
             LocalAppHapticsConfig provides appHapticsConfig,
             LocalHapticFeedback provides scopedHapticFeedback,
             LocalShowScrollbar provides showScrollbar
-        ) {
-            val sidebarShortcuts by userPreferencesRepository.sidebarShortcutsFlow
-                .collectAsStateWithLifecycle(initialValue = SidebarShortcutKeys.DEFAULT)
-            AppSidebarDrawer(
-                drawerState = drawerState,
-                selectedRoute = currentRoute ?: Screen.Home.route,
-                enabledShortcuts = sidebarShortcuts,
-                onShortcutsChanged = { shortcuts ->
-                    scope.launch { userPreferencesRepository.setSidebarShortcuts(shortcuts) }
-                },
-                onDestinationSelected = { destination ->
-                    scope.launch {
-                        drawerState.animateTo(
-                            targetValue = DrawerValue.Closed,
-                            anim = spring(
-                                dampingRatio = Spring.DampingRatioNoBouncy,
-                                stiffness = Spring.StiffnessMediumLow
-                            )
-                        )
-                    }
-                    when (destination) {
-                        DrawerDestination.Home -> navController.navigateSafely(Screen.Home.route) {
-                            popUpTo(Screen.Home.route) { inclusive = true }
-                        }
-                        DrawerDestination.Stats -> navController.navigateSafely(Screen.Stats.route)
-                        DrawerDestination.Equalizer -> navController.navigateSafely(Screen.Equalizer.route)
-                        DrawerDestination.Bookmarks -> navController.navigateSafely(Screen.AudioBookmarks.route)
-                        DrawerDestination.Settings -> navController.navigateSafely(Screen.Settings.route)
-                    }
-                }
         ) {
             val railVisible = useNavigationRail && !shouldHideNavigationBar
             val animatedRailContentCornerRadius by animateDpAsState(
@@ -1023,18 +977,7 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             paddingValues = innerPadding,
                             userPreferencesRepository = userPreferencesRepository,
-                            onSearchBarActiveChange = { isSearchBarActive = it },
-                            onOpenSidebar = {
-                                scope.launch {
-                                    drawerState.animateTo(
-                                        targetValue = DrawerValue.Open,
-                                        anim = spring(
-                                            dampingRatio = Spring.DampingRatioNoBouncy,
-                                            stiffness = Spring.StiffnessMediumLow
-                                        )
-                                    )
-                                }
-                            }
+                            onSearchBarActiveChange = { isSearchBarActive = it }
                         )
 
                         val dismissUndoBarSlice by remember {
@@ -1248,7 +1191,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-        }
         }
     }
 

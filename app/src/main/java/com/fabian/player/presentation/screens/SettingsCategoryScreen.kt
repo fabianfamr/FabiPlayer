@@ -725,12 +725,14 @@ fun SettingsCategoryScreen(
                                 }
                                 withFrameNanos { }
                                 withFrameNanos { }
-                                pendingLanguageTag = null
+                                val creationCountBefore = AppLocaleManager.activityCreationCount
                                 val delegated = settingsViewModel.setAppLanguage(normalized)
                                 AppLocaleManager.restartActivityAfterLocaleChange(
-                                    activity = context as? Activity,
-                                    localeDelegatedToSystem = delegated
+                                    activity = AppLocaleManager.findActivity(context),
+                                    localeDelegatedToSystem = delegated,
+                                    expectedCreationCount = creationCountBefore
                                 )
+                                pendingLanguageTag = null
                             }
 
                             SettingsSubsection(title = stringResource(R.string.setcat_global_theme)) {

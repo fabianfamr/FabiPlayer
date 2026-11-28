@@ -80,6 +80,7 @@ import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.Shuffle
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
@@ -729,13 +730,14 @@ fun WelcomePage() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Text(
-                        text = stringResource(R.string.setup_beta_symbol),
-                        style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.Black
+                    Icon(
+                        imageVector = Icons.Rounded.CheckCircle,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(16.dp)
                     )
                     Text(
-                        text = stringResource(R.string.setup_beta_label),
+                        text = stringResource(R.string.presentation_batch_g_topbar_build_stable),
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -828,12 +830,14 @@ private fun SetupLanguagePill() {
         }
         withFrameNanos { }
         withFrameNanos { }
-        pendingLanguageTag = null
+        val creationCountBefore = AppLocaleManager.activityCreationCount
         val delegated = AppLocaleManager.applyLanguage(context, normalized)
         AppLocaleManager.restartActivityAfterLocaleChange(
-            activity = context as? Activity,
-            localeDelegatedToSystem = delegated
+            activity = AppLocaleManager.findActivity(context),
+            localeDelegatedToSystem = delegated,
+            expectedCreationCount = creationCountBefore
         )
+        pendingLanguageTag = null
     }
 
     val currentLanguage = remember(currentLanguageTag) {

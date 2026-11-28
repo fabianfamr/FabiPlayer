@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.screens
+package com.fabian.player.presentation.screens
 
 import com.fabian.player.ui.theme.withInterfaceFont
 
@@ -52,7 +52,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -92,7 +91,6 @@ import com.fabian.player.presentation.components.BetaInfoBottomSheet
 import com.fabian.player.presentation.components.ChangelogBottomSheet
 import com.fabian.player.presentation.components.DailyMixSection
 import com.fabian.player.presentation.components.HomeGradientTopBar
-import com.fabian.player.presentation.components.HomeOptionsBottomSheet
 import com.fabian.player.presentation.components.MiniPlayerHeight
 import com.fabian.player.presentation.components.RecentlyAddedSection
 import com.fabian.player.presentation.components.RecentlyPlayedSection
@@ -150,8 +148,7 @@ fun HomeScreen(
     paddingValuesParent: PaddingValues,
     playerViewModel: PlayerViewModel = sharedPlayerViewModel(),
     settingsViewModel: SettingsViewModel = hiltViewModel(),
-    streamingLoginViewModel: StreamingProviderLoginViewModel = hiltViewModel(),
-    onOpenSidebar: () -> Unit
+    streamingLoginViewModel: StreamingProviderLoginViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val isBenchmarkMode = remember {
@@ -274,15 +271,12 @@ fun HomeScreen(
     val useNavigationRail = windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)
     val bottomGradientHeight = resolveMainScreenBottomGradientHeight(navBarCompactMode, useNavigationRail)
 
-    var showOptionsBottomSheet by remember { mutableStateOf(false) }
     var showChangelogBottomSheet by remember { mutableStateOf(false) }
     var showBetaInfoBottomSheet by remember { mutableStateOf(false) }
     var showStreamingProviderSheet by remember { mutableStateOf(false) }
     var songForOptions by remember { mutableStateOf<HomeSongOptions?>(null) }
     val sheetState = rememberModalSheetState()
     val betaSheetState = rememberModalSheetState()
-    val scope = rememberCoroutineScope()
-    LocalContext.current
 
     val homeStatsOverviewState by statsViewModel.homeOverviewState.collectAsStateWithLifecycle()
     val recapHomeCard by recapEntryViewModel.homeCard.collectAsStateWithLifecycle()
@@ -374,7 +368,6 @@ fun HomeScreen(
                     onStreamingClick = {
                           showStreamingProviderSheet = true
                     },
-                    onMenuClick = onOpenSidebar,
                     isScrolled = isScrolledPastThreshold.value
                 )
             }
@@ -769,25 +762,6 @@ fun HomeScreen(
                             )
                         )
                     )
-            )
-        }
-    }
-    if (showOptionsBottomSheet) {
-        ModalBottomSheet(
-            onDismissRequest = { showOptionsBottomSheet = false },
-            sheetState = sheetState
-        ) {
-            HomeOptionsBottomSheet(
-                onNavigateToMashup = {
-                    scope.launch {
-                        sheetState.hide()
-                    }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showOptionsBottomSheet = false
-                            navController.navigateSafely(Screen.DJSpace.route)
-                        }
-                    }
-                }
             )
         }
     }

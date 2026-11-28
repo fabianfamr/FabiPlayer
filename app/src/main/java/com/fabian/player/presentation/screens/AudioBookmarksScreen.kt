@@ -178,7 +178,6 @@ import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 fun AudioBookmarksScreen(
     navController: NavController,
     playerViewModel: PlayerViewModel,
-    onOpenSidebar: () -> Unit,
     bookmarksViewModel: AudioBookmarksViewModel = hiltViewModel()
 ) {
     val bookmarks by bookmarksViewModel.allBookmarks.collectAsStateWithLifecycle()
@@ -350,7 +349,7 @@ fun AudioBookmarksScreen(
                     surfaceFraction = topBarSurfaceFraction,
                     onNavigationClick = {
                         if (!navController.popBackStack()) {
-                            onOpenSidebar()
+                            navController.navigateSafely(Screen.Home.route)
                         }
                     },
                     onClearQuery = { query = "" },
