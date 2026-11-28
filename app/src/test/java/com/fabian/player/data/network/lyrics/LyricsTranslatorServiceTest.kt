@@ -170,4 +170,27 @@ class LyricsTranslatorServiceTest {
         assertThat(LyricsTranslatorService.geminiEndpointForModel("gemini-2.5-flash/../../evil"))
             .isEqualTo("https://generativelanguage.googleapis.com/v1beta/models/${LyricsTranslatorService.DEFAULT_GEMINI_MODEL}:generateContent")
     }
+
+    @Test
+    fun `applyTranslationsToLyrics also populates plainTranslations when synced and plain both exist`() {
+        val lyrics = Lyrics(
+            synced = listOf(
+                SyncedLine(time = 1000, line = "Hello world"),
+                SyncedLine(time = 2000, line = "Goodbye")
+            ),
+            plain = listOf("Hello world", "", "Goodbye")
+        )
+        val updated = LyricsTranslatorService.applyTranslationsToLyrics(
+            lyrics = lyrics,
+            translated = mapOf(
+                0 to TranslatedLyricLine(index = 0, romanization = null, translation = "Hola mundo"),
+                1 to TranslatedLyricLine(index = 1, romanization = null, translation = "Adiós")
+            ),
+            entireLyricsHasKana = false,
+            targetLanguageCode = "es"
+        )
+
+        assertThat(updated.synced?.map { it.translation }).containsExactly("Hola mundo", "Adiós").inOrder()
+        assertThat(updated.plainTranslations).containsExactly("Hola mundo", null, "Adiós").inOrder()
+    }
 }

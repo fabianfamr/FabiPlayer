@@ -328,7 +328,7 @@ class LyricsTranslatorService @Inject constructor(
                 geminiModel = resolvedModel
             )
         )
-        readCachedLyrics(primaryFile)?.let { return@withContext it }
+        readCachedLyrics(primaryFile)?.let { return@withContext backfillPlainFromSynced(it) }
 
         // 2. Direct match with alternative mode (free vs gemini)
         val altFile = cacheFileFor(
@@ -340,21 +340,21 @@ class LyricsTranslatorService @Inject constructor(
                 geminiModel = resolvedModel
             )
         )
-        readCachedLyrics(altFile)?.let { return@withContext it }
+        readCachedLyrics(altFile)?.let { return@withContext backfillPlainFromSynced(it) }
 
         // 3. Any cached file for this song and targetLang ending with content hash
         val songPrefix = "${safeFilePart(songId)}_${safeFilePart(normalizedLang)}_"
         val candidate = cacheDir.listFiles { file ->
             file.name.startsWith(songPrefix) && file.name.endsWith(".json")
         }?.firstNotNullOfOrNull { readCachedLyrics(it) }
-        if (candidate != null) return@withContext candidate
+        if (candidate != null) return@withContext backfillPlainFromSynced(candidate)
 
         // 4. Any cached file for the exact targetLang where contentHash matches (e.g. MediaStore songId change)
         val hashSuffix = "_${hash}.json"
         val fallbackCandidate = cacheDir.listFiles { file ->
             file.name.contains("_${safeFilePart(normalizedLang)}_") && file.name.endsWith(hashSuffix)
         }?.firstNotNullOfOrNull { readCachedLyrics(it) }
-        if (fallbackCandidate != null) return@withContext fallbackCandidate
+        if (fallbackCandidate != null) return@withContext backfillPlainFromSynced(fallbackCandidate)
 
         null
     }
@@ -551,7 +551,7 @@ class LyricsTranslatorService @Inject constructor(
                         translation = entry?.translation ?: line.translation
                     )
                 }
-                return lyrics.copy(synced = updatedSynced)
+                return backfillPlainFromSynced(lyrics.copy(synced = updatedSynced))
             }
 
             val plain = lyrics.plain
@@ -580,6 +580,44 @@ class LyricsTranslatorService @Inject constructor(
             }
 
             return lyrics
+        }
+
+        internal fun backfillPlainFromSynced(lyrics: Lyrics): Lyrics {
+            val synced = lyrics.synced
+            val plain = lyrics.plain
+            if (synced.isNullOrEmpty() || plain.isNullOrEmpty()) return lyrics
+
+            val queues = HashMap<String, ArrayDeque<SyncedLine>>(synced.size)
+            val fallbackByText = HashMap<String, SyncedLine>(synced.size)
+            synced.forEach { line ->
+                val key = line.line.trim()
+                if (key.isNotEmpty()) {
+                    queues.getOrPut(key) { ArrayDeque() }.addLast(line)
+                    fallbackByText.putIfAbsent(key, line)
+                }
+            }
+
+            val existingTranslations = lyrics.plainTranslations
+            val existingRomanizations = lyrics.plainRomanizations
+            val translationsList = ArrayList<String?>(plain.size)
+            val romanizationsList = ArrayList<String?>(plain.size)
+
+            plain.forEachIndexed { index, raw ->
+                val primary = raw.lineSequence().firstOrNull()?.trim().orEmpty()
+                if (primary.isEmpty()) {
+                    translationsList.add(null)
+                    romanizationsList.add(null)
+                } else {
+                    val matched = queues[primary]?.removeFirstOrNull() ?: fallbackByText[primary]
+                    translationsList.add(matched?.translation ?: existingTranslations?.getOrNull(index))
+                    romanizationsList.add(matched?.romanization ?: existingRomanizations?.getOrNull(index))
+                }
+            }
+
+            return lyrics.copy(
+                plainTranslations = translationsList,
+                plainRomanizations = romanizationsList
+            )
         }
 
         private fun extractGeminiErrorMessage(body: String): String? = runCatching {
