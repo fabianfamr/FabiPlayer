@@ -289,4 +289,33 @@
     <string name="dash_jellyfin_sync_favorites_failed">Không thể đồng bộ mục yêu thích với Jellyfin</string>
     <string name="home_recently_added_title">Mới thêm gần đây</string>
     <string name="home_recently_added_play_cd">Phát các bài hát mới thêm gần đây</string>
+    <string name="audio_bookmarks_cd_close_actions">Đóng các tác vụ dấu trang</string>
+    <string name="audio_bookmarks_cd_open_actions">Mở các tác vụ dấu trang</string>
+    <string name="audio_bookmarks_cd_sort_az">Sắp xếp dấu trang theo bảng chữ cái</string>
+    <string name="audio_bookmarks_cd_sort_most_moments">Sắp xếp dấu trang theo nhiều khoảnh khắc nhất</string>
+    <string name="audio_bookmarks_cd_sort_recent">Sắp xếp dấu trang theo khoảnh khắc gần đây</string>
+    <string name="audio_bookmarks_clear_search">Xóa tìm kiếm dấu trang</string>
+    <string name="audio_bookmarks_copy_cue">Sao chép điểm đánh dấu</string>
+    <string name="audio_bookmarks_cue_copied">Đã sao chép điểm đánh dấu</string>
+    <string name="audio_bookmarks_cue_format">Điểm %1$s</string>
+    <string name="audio_bookmarks_cue_label">Điểm đánh dấu</string>
+    <string name="audio_bookmarks_delete_bookmark">Xóa dấu trang</string>
+    <string name="audio_bookmarks_empty_search_subtitle">Thử tìm theo bài hát, nghệ sĩ, album, điểm đánh dấu hoặc thẻ.</string>
+    <string name="audio_bookmarks_empty_search_title">Không tìm thấy thư mục dấu trang nào</string>
+    <string name="audio_bookmarks_empty_subtitle">Các khoảnh khắc đã lưu sẽ hiển thị tại đây theo từng bài hát.</string>
+    <string name="audio_bookmarks_empty_title">Chưa có dấu trang âm thanh nào</string>
+    <string name="audio_bookmarks_file_not_found">Không tìm thấy tệp âm thanh</string>
+    <string name="audio_bookmarks_folder_empty_subtitle">Các dấu trang cho bài hát này có thể đã bị xóa.</string>
+    <string name="audio_bookmarks_folder_empty_title">Không có khoảnh khắc nào trong thư mục này</string>
+    <string name="audio_bookmarks_rename_subtitle">Cập nhật nhãn cho điểm đánh dấu đã lưu này.</string>
+    <string name="audio_bookmarks_rename_title">Đổi tên dấu trang</string>
+    <string name="audio_bookmarks_saved_moments">Khoảnh khắc đã lưu</string>
+    <string name="audio_bookmarks_search_hint">Tìm dấu trang</string>
+    <string name="audio_bookmarks_sort_az">A-Z</string>
+    <string name="audio_bookmarks_sort_most_moments">Nhiều khoảnh khắc nhất</string>
+    <string name="audio_bookmarks_sort_recent">Gần đây</string>
+    <string name="audio_bookmarks_unknown_audio">Âm thanh không xác định</string>
+    <plurals name="audio_bookmarks_moments_count">
+        <item quantity="other">%1$d khoảnh khắc</item>
+    </plurals>
 </resources>

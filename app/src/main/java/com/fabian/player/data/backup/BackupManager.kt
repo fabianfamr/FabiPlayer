@@ -1,8 +1,10 @@
-﻿package com.fabian.player.data.backup
+package com.fabian.player.data.backup
 
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import androidx.annotation.StringRes
+import com.fabian.player.R
 import com.fabian.player.data.backup.format.BackupCrypto
 import com.fabian.player.data.backup.format.BackupEncryptedException
 import com.fabian.player.data.backup.format.BackupFormatDetector
@@ -72,13 +74,21 @@ class BackupManager @Inject constructor(
             val totalSteps = selectedSections.size + 3
             var step = 0
 
-            reportProgress(onProgress, BackupOperationType.EXPORT, ++step, totalSteps,
-                "Preparing backup", "Building your selected backup sections.")
+            reportProgress(
+                onProgress, BackupOperationType.EXPORT, ++step, totalSteps,
+                "Preparing backup", "Building your selected backup sections.",
+                titleRes = R.string.backup_progress_preparing_backup,
+                detailRes = R.string.backup_progress_building_sections
+            )
 
             val modulePayloads = mutableMapOf<String, String>()
             selectedSections.forEach { section ->
-                reportProgress(onProgress, BackupOperationType.EXPORT, ++step, totalSteps,
-                    "Collecting ${section.label}", section.description, section)
+                reportProgress(
+                    onProgress, BackupOperationType.EXPORT, ++step, totalSteps,
+                    "Collecting ${section.label}", section.description, section,
+                    titleRes = R.string.backup_progress_collecting_section,
+                    detailRes = section.descriptionRes
+                )
                 val handler = handlers[section]
                     ?: throw IllegalStateException("No handler for module ${section.key}")
                 modulePayloads[section.key] = handler.export()
@@ -105,13 +115,21 @@ class BackupManager @Inject constructor(
                 )
             )
 
-            reportProgress(onProgress, BackupOperationType.EXPORT, ++step, totalSteps,
-                "Packaging backup", "Creating .pxpl archive.")
+            reportProgress(
+                onProgress, BackupOperationType.EXPORT, ++step, totalSteps,
+                "Packaging backup", "Creating .pxpl archive.",
+                titleRes = R.string.backup_progress_packaging_backup,
+                detailRes = R.string.backup_progress_creating_archive
+            )
 
             backupWriter.write(uri, manifest, modulePayloads, passphrase = passphrase).getOrThrow()
 
-            reportProgress(onProgress, BackupOperationType.EXPORT, ++step, totalSteps,
-                "Backup complete", "Your FabiPlayer backup was created successfully.")
+            reportProgress(
+                onProgress, BackupOperationType.EXPORT, ++step, totalSteps,
+                "Backup complete", "Your FabiPlayer backup was created successfully.",
+                titleRes = R.string.backup_progress_backup_complete,
+                detailRes = R.string.backup_progress_backup_created
+            )
         }
     }
 
@@ -340,7 +358,9 @@ class BackupManager @Inject constructor(
         totalSteps: Int,
         title: String,
         detail: String,
-        section: BackupSection? = null
+        section: BackupSection? = null,
+        @StringRes titleRes: Int? = null,
+        @StringRes detailRes: Int? = null
     ) {
         onProgress(
             BackupTransferProgressUpdate(
@@ -349,7 +369,9 @@ class BackupManager @Inject constructor(
                 totalSteps = totalSteps,
                 title = title,
                 detail = detail,
-                section = section
+                section = section,
+                titleRes = titleRes,
+                detailRes = detailRes
             )
         )
     }

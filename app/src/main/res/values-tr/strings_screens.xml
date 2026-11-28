@@ -292,4 +292,34 @@
     <string name="dash_jellyfin_sync_favorites_failed">Favoriler Jellyfin ile eşitlenemedi</string>
     <string name="home_recently_added_title">Son eklenenler</string>
     <string name="home_recently_added_play_cd">Son eklenen şarkıları çal</string>
+    <string name="audio_bookmarks_cd_close_actions">Yer işareti işlemlerini kapat</string>
+    <string name="audio_bookmarks_cd_open_actions">Yer işareti işlemlerini aç</string>
+    <string name="audio_bookmarks_cd_sort_az">Yer işaretlerini alfabetik sırala</string>
+    <string name="audio_bookmarks_cd_sort_most_moments">Yer işaretlerini en çok ana göre sırala</string>
+    <string name="audio_bookmarks_cd_sort_recent">Yer işaretlerini son anlara göre sırala</string>
+    <string name="audio_bookmarks_clear_search">Yer işareti aramasını temizle</string>
+    <string name="audio_bookmarks_copy_cue">İşareti kopyala</string>
+    <string name="audio_bookmarks_cue_copied">İşaret kopyalandı</string>
+    <string name="audio_bookmarks_cue_format">İşaret %1$s</string>
+    <string name="audio_bookmarks_cue_label">Yer işareti noktası</string>
+    <string name="audio_bookmarks_delete_bookmark">Yer işaretini sil</string>
+    <string name="audio_bookmarks_empty_search_subtitle">Şarkı, sanatçı, albüm, işaret veya yer işareti etiketine göre aramayı deneyin.</string>
+    <string name="audio_bookmarks_empty_search_title">Yer işareti klasörü bulunamadı</string>
+    <string name="audio_bookmarks_empty_subtitle">Kaydedilen anlar burada parçaya göre gruplanmış olarak görünecektir.</string>
+    <string name="audio_bookmarks_empty_title">Henüz ses yer işareti yok</string>
+    <string name="audio_bookmarks_file_not_found">Ses dosyası bulunamadı</string>
+    <string name="audio_bookmarks_folder_empty_subtitle">Bu parçanın yer işaretleri silinmiş olabilir.</string>
+    <string name="audio_bookmarks_folder_empty_title">Bu klasörde an yok</string>
+    <string name="audio_bookmarks_rename_subtitle">Bu kayıtlı işaretin etiketini güncelleyin.</string>
+    <string name="audio_bookmarks_rename_title">Yer işaretini yeniden adlandır</string>
+    <string name="audio_bookmarks_saved_moments">Kaydedilen anlar</string>
+    <string name="audio_bookmarks_search_hint">Yer işaretlerinde ara</string>
+    <string name="audio_bookmarks_sort_az">A-Z</string>
+    <string name="audio_bookmarks_sort_most_moments">En çok an</string>
+    <string name="audio_bookmarks_sort_recent">Son</string>
+    <string name="audio_bookmarks_unknown_audio">Bilinmeyen ses</string>
+    <plurals name="audio_bookmarks_moments_count">
+        <item quantity="one">1 an</item>
+        <item quantity="other">%1$d an</item>
+    </plurals>
 </resources>

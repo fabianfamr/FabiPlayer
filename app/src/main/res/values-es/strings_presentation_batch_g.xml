@@ -514,4 +514,5 @@ La barra invertida (\) se puede usar para escapar los delimitadores de caractere
     <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
         <item>Se completó la localización de textos, diálogos y mensajes de error en toda la app.</item>
     </string-array>
+    <string name="selection_select_between">Seleccionar todo entre pistas seleccionadas</string>
 </resources>

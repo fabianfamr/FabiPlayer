@@ -499,4 +499,20 @@ Karakter sınırlayıcıları etkisiz hale getirmek için ters eğik çizgi (\) 
         <item>Yedekleme, geri yükleme ve kurulum olayları artık ekran döndürme sırasında kaybolamıyor.</item>
         <item>Bahar temizliği: ölü kod kaldırıldı, kullanımdan kaldırılmış API\'ler taşındı ve bağımlılıklar güncellendi.</item>
     </string-array>
+    <string name="selection_select_between">Seçilen parçalar arasındakilerin tümünü seç</string>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>Çevrilmiş şarkı sözleri ve yapay zeka çeviri tercihleri artık uygulama yeniden başlatıldığında ve parça değiştiğinde güvenilir şekilde korunuyor.</item>
+        <item>Çoklu seçim alt sayfaları artık desteklenen 15 dilin tamamında doğru tekil ve çoğul dilbilgisi kullanıyor.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>Ekranlar, iletişim kutuları ve hata mesajları genelinde dize yerelleştirmesi tamamlandı.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>Uygulama dili değiştirme düzeltildi; böylece dil değiştirildiğinde ekran güvenilir şekilde yeniden başlatılıyor ve giriş animasyonu oynatılıyor.</item>
+        <item>Uygulama içi değişiklik günlüğü son sürümler ve düzeltmelerle güncellendi.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>Daha sade ve odaklı bir üst çubuk için Ana Sayfadaki gereksiz yan menü kaldırıldı.</item>
+        <item>İlk kurulum karşılama rozeti Beta\'dan Kararlı olarak güncellendi.</item>
+    </string-array>
 </resources>

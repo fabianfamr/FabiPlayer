@@ -352,4 +352,20 @@
     <string name="presentation_batch_g_changelog_sec_whats_new">Novinky</string>
     <string name="presentation_batch_g_changelog_sec_improvements">Vylepšení</string>
     <string name="presentation_batch_g_changelog_sec_under_the_hood">Technické změny</string>
+    <string name="device_capabilities_unknown_short">--</string>
+    <string name="presentation_batch_g_artist_ex_2_in">\"Drake feat. Rihanna\"</string>
+    <string name="presentation_batch_g_artist_ex_2_out">Drake, Rihanna</string>
+    <string name="presentation_batch_g_artist_ex_3_in">\"Marshmello x Bastille\"</string>
+    <string name="presentation_batch_g_artist_ex_3_out">Marshmello, Bastille</string>
+    <string name="presentation_batch_g_artist_ex_4_out">A, B</string>
+    <string name="presentation_batch_g_artist_ex_5_in">\"AC\\DC\"</string>
+    <string name="presentation_batch_g_artist_example_arrow"> → </string>
+    <string name="presentation_batch_g_device_key_hardware">Hardware</string>
+    <string name="presentation_batch_g_device_key_model">Model</string>
+    <string name="presentation_batch_g_device_value_hz">%1$d Hz</string>
+    <string name="presentation_batch_g_genre_sort_album">Album</string>
+    <string name="presentation_batch_g_list_song_artist_album">%1$s • %2$s</string>
+    <string name="presentation_batch_g_selection_overflow_count">+%1$d</string>
+    <string name="presentation_batch_g_stats_avatar_placeholder">\?</string>
+    <string name="presentation_batch_g_stats_em_dash">—</string>
 </resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sort_method_default_order">Ordem padrão</string>
+    <string name="sort_method_title">Título</string>
+    <string name="sort_method_filename">Nome do arquivo</string>
+    <string name="sort_method_artist">Artista</string>
+    <string name="sort_method_album">Álbum</string>
+    <string name="sort_method_date_added">Data de adição</string>
+    <string name="sort_method_date_modified">Data de modificação</string>
+    <string name="sort_method_duration">Duração</string>
+    <string name="sort_method_release_year">Ano de lançamento</string>
+    <string name="sort_method_song_count">Contagem de músicas</string>
+    <string name="sort_method_name">Nome</string>
+    <string name="sort_method_num_songs">Número de músicas</string>
+    <string name="sort_method_date_created">Data de criação</string>
+    <string name="sort_method_date_liked">Data em que curtiu</string>
+    <string name="sort_method_subfolder_count">Contagem de subpastas</string>
+    <string name="sort_advanced_sorting">Ordenação avançada</string>
+    <string name="sort_primary">Primária</string>
+    <string name="sort_secondary">Secundária</string>
+</resources>

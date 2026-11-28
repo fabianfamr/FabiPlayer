@@ -39,4 +39,22 @@
         <item quantity="one">%1$d passende sang · %2$d min</item>
         <item quantity="other">%1$d passende sanger · %2$d min</item>
     </plurals>
+    <string name="mix_moment_chill_evening">Rolig kveld</string>
+    <string name="mix_moment_feel_good">Godfølelse</string>
+    <string name="mix_moment_late_night">Rolig sen kveld</string>
+    <string name="mix_moment_morning">Kvikk morgen</string>
+    <string name="mix_moment_party">Fest</string>
+    <string name="mix_moment_study">Musikk til studier</string>
+    <string name="mix_moment_workout">Trening</string>
+    <string name="mix_suggest_decade_genre">%1$s %2$s</string>
+    <string-array name="mix_decades">
+        <item>50-tallet</item>
+        <item>60-tallet</item>
+        <item>70-tallet</item>
+        <item>80-tallet</item>
+        <item>90-tallet</item>
+        <item>2000-tallet</item>
+        <item>2010-tallet</item>
+        <item>2020-tallet</item>
+    </string-array>
 </resources>

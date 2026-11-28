@@ -189,4 +189,12 @@
     <string name="widget_wavy_progress_bar_desc">İlerleme çubuğu, yüzde %1$d</string>
     <string name="song_info_tone_picker_body">FabiPlayer\'in bu sesi nereye yüklemesi gerektiğini seçin.</string>
     <string name="song_info_ringtone_permission_prompt">Sistem ayarlarını değiştirme iznini etkinleştirin, ardından işlemi otomatik olarak tamamlamak için FabiPlayer\'e dönün.</string>
+    <plurals name="multi_selection_selected_feminine">
+        <item quantity="one">seçili</item>
+        <item quantity="other">seçili</item>
+    </plurals>
+    <plurals name="multi_selection_selected_masculine">
+        <item quantity="one">seçili</item>
+        <item quantity="other">seçili</item>
+    </plurals>
 </resources>

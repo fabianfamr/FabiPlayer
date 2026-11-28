@@ -15,4 +15,8 @@
     <string name="sort_method_date_created">생성된 날짜</string>
     <string name="sort_method_date_liked">좋아요 표시한 날짜</string>
     <string name="sort_method_subfolder_count">하위 폴더 수</string>
+    <string name="sort_advanced_sorting">고급 정렬</string>
+    <string name="sort_method_filename">파일 이름</string>
+    <string name="sort_primary">기본</string>
+    <string name="sort_secondary">보조</string>
 </resources>

@@ -186,4 +186,12 @@
     <string name="edit_song_remove_custom_field">Hapus kolom</string>
     <string name="edit_song_custom_metadata_formats">Rating dan kolom kustom dapat ditulis ke file MP3, WAV, AIFF, FLAC, OGG, Opus, M4A, M4B, dan MP4.</string>
     <string name="edit_song_custom_metadata_invalid">Periksa kolom metadata opsional.</string>
+    <plurals name="multi_selection_selected_feminine">
+        <item quantity="one">dipilih</item>
+        <item quantity="other">dipilih</item>
+    </plurals>
+    <plurals name="multi_selection_selected_masculine">
+        <item quantity="one">dipilih</item>
+        <item quantity="other">dipilih</item>
+    </plurals>
 </resources>

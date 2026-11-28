@@ -42,4 +42,22 @@
         <item quantity="many">%1$d zodpovedajúcej skladby · %2$d min</item>
         <item quantity="other">%1$d zodpovedajúcich skladieb · %2$d min</item>
     </plurals>
+    <string name="mix_moment_chill_evening">Pokojný večer</string>
+    <string name="mix_moment_feel_good">Dobrá nálada</string>
+    <string name="mix_moment_late_night">Jemná noc</string>
+    <string name="mix_moment_morning">Svieže ráno</string>
+    <string name="mix_moment_party">Párty</string>
+    <string name="mix_moment_study">Hudba na štúdium</string>
+    <string name="mix_moment_workout">Tréning</string>
+    <string name="mix_suggest_decade_genre">%1$s %2$s</string>
+    <string-array name="mix_decades">
+        <item>50. roky</item>
+        <item>60. roky</item>
+        <item>70. roky</item>
+        <item>80. roky</item>
+        <item>90. roky</item>
+        <item>2000s</item>
+        <item>2010s</item>
+        <item>2020s</item>
+    </string-array>
 </resources>

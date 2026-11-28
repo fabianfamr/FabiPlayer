@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setcat_previous_button_title">Botão anterior</string>
+    <string name="setcat_previous_button_description">Escolha se o botão anterior reinicia a música atual ou volta direto para a anterior.</string>
+    <string name="setcat_previous_button_restart_track">Reiniciar faixa</string>
+    <string name="setcat_previous_button_restart_track_description">Após os primeiros segundos, o botão anterior reinicia a música. Pressione novamente para voltar.</string>
+    <string name="setcat_previous_button_previous_track">Faixa anterior</string>
+    <string name="setcat_previous_button_previous_track_description">O botão anterior sempre volta uma música, em qualquer ponto da faixa atual.</string>
+</resources>

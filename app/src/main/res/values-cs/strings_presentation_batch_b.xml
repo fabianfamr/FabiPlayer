@@ -54,4 +54,5 @@
     <string name="presentation_batch_b_navbar_adjust_subtitle">Přizpůsobte zaoblení navigační lišty rohům zařízení, aby vzhled působil jednotně.</string>
     <string name="presentation_batch_b_corner_radius_label">Zaoblení rohů</string>
     <string name="presentation_batch_b_genre_shuffle_label">Náhodně – %1$s</string>
+    <string name="presentation_batch_b_corner_dp_format">%1$d dp</string>
 </resources>

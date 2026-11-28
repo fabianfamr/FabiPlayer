@@ -1,4 +1,7 @@
-﻿package com.fabian.player.data.backup.model
+package com.fabian.player.data.backup.model
+
+import android.content.Context
+import androidx.annotation.StringRes
 
 enum class BackupOperationType {
     EXPORT,
@@ -11,10 +14,26 @@ data class BackupTransferProgressUpdate(
     val totalSteps: Int,
     val title: String,
     val detail: String,
-    val section: BackupSection? = null
+    val section: BackupSection? = null,
+    @StringRes val titleRes: Int? = null,
+    @StringRes val detailRes: Int? = null
 ) {
     val progress: Float
         get() = if (totalSteps > 0) (step.toFloat() / totalSteps).coerceIn(0f, 1f) else 0f
+
+    fun resolveTitle(context: Context): String {
+        val resId = titleRes ?: return title
+        return if (section != null) {
+            context.getString(resId, context.getString(section.labelRes))
+        } else {
+            context.getString(resId)
+        }
+    }
+
+    fun resolveDetail(context: Context): String {
+        val resId = detailRes ?: return detail
+        return context.getString(resId)
+    }
 }
 
 data class PlaybackHistoryBackupEntry(

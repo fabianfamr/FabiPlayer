@@ -147,4 +147,19 @@
         <item>Při otočení obrazovky se už neztrácejí události zálohování, obnovení ani úvodního nastavení.</item>
         <item>Úklid kódu: odstranili jsme nepoužívaný kód, nahradili zastaralá rozhraní a aktualizovali závislosti.</item>
     </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>Přeložené texty skladeb a předvolby AI překladu se nyní spolehlivě uchovávají i po restartu aplikace a změně skladby.</item>
+        <item>Spodní panely pro hromadný výběr nyní používají správné jednotné i množné tvary ve všech 15 podporovaných jazycích.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>Dokončena kompletní jazyková lokalizace obrazovek, dialogů a chybových hlášení.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>Opraveno přepínání jazyka aplikace, takže změna jazyka spolehlivě restartuje obrazovku a přehraje vstupní animaci.</item>
+        <item>Aktualizován přehled změn v aplikaci o nedávná vydání a opravy.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>Odebrána nadbytečná boční nabídka z Domova pro čistší a přehlednější horní lištu.</item>
+        <item>Úvodní štítek v průvodci nastavením změněn z Beta na Stabilní.</item>
+    </string-array>
 </resources>

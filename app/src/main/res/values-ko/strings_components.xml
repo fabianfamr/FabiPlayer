@@ -186,4 +186,10 @@
     <string name="edit_song_remove_custom_field">필드 제거</string>
     <string name="edit_song_custom_metadata_formats">평점과 사용자 지정 필드는 MP3, WAV, AIFF, FLAC, OGG, Opus, M4A, M4B, MP4 파일에 기록할 수 있습니다.</string>
     <string name="edit_song_custom_metadata_invalid">선택 메타데이터 필드를 확인하세요.</string>
+    <plurals name="multi_selection_selected_feminine">
+        <item quantity="other">선택됨</item>
+    </plurals>
+    <plurals name="multi_selection_selected_masculine">
+        <item quantity="other">선택됨</item>
+    </plurals>
 </resources>

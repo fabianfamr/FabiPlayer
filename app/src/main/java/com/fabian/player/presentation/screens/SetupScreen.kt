@@ -183,7 +183,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collectLatest
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 import java.io.File
-import java.text.SimpleDateFormat
+import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
 import androidx.compose.ui.window.Dialog
@@ -2089,7 +2089,7 @@ private fun SetupRestoreDialog(
 ) {
     val context = LocalContext.current
     val dateText = remember(plan.manifest.createdAt) {
-        SimpleDateFormat("MMM d, yyyy 'at' h:mm a", Locale.getDefault())
+        DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault())
             .format(Date(plan.manifest.createdAt))
     }
     val availableModules = remember(plan.availableModules) {
@@ -2209,12 +2209,12 @@ private fun SetupRestoreDialog(
                             if (progress != null) {
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = progress.title,
+                                    text = progress.resolveTitle(context),
                                     style = MaterialTheme.typography.bodyMedium,
                                     fontWeight = FontWeight.SemiBold
                                 )
                                 Text(
-                                    text = progress.detail,
+                                    text = progress.resolveDetail(context),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )

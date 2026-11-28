@@ -127,7 +127,7 @@ class MetadataEditStateHolder @Inject constructor(
             return@withContext MetadataEditResult(
                 success = false,
                 error = MetadataEditError.INVALID_INPUT,
-                errorMessage = "This song source does not support metadata editing."
+                errorMessage = context.getString(com.fabian.player.R.string.metadata_error_source_not_editable)
             )
         }
 

@@ -39,4 +39,22 @@
         <item quantity="one">%1$d lagu cocok · %2$d mnt</item>
         <item quantity="other">%1$d lagu cocok · %2$d mnt</item>
     </plurals>
+    <string name="mix_moment_chill_evening">Sore santai</string>
+    <string name="mix_moment_feel_good">Suasana ceria</string>
+    <string name="mix_moment_late_night">Larut malam tenang</string>
+    <string name="mix_moment_morning">Pagi bersemangat</string>
+    <string name="mix_moment_party">Pesta</string>
+    <string name="mix_moment_study">Musik belajar</string>
+    <string name="mix_moment_workout">Olahraga</string>
+    <string name="mix_suggest_decade_genre">%1$s %2$s</string>
+    <string-array name="mix_decades">
+        <item>50-an</item>
+        <item>60-an</item>
+        <item>70-an</item>
+        <item>80-an</item>
+        <item>90-an</item>
+        <item>2000-an</item>
+        <item>2010-an</item>
+        <item>2020-an</item>
+    </string-array>
 </resources>

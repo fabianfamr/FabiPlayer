@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="cloud_download_selected_started">
+        <item quantity="one">Preparando %1$d faixa na nuvem para reprodução offline</item>
+        <item quantity="other">Preparando %1$d faixas na nuvem para reprodução offline</item>
+    </plurals>
+</resources>

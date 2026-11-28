@@ -38,4 +38,22 @@
     <plurals name="mix_matching_songs">
         <item quantity="other">%1$d 首匹配歌曲 · %2$d 分钟</item>
     </plurals>
+    <string name="mix_moment_chill_evening">悠闲傍晚</string>
+    <string name="mix_moment_feel_good">心情愉悦</string>
+    <string name="mix_moment_late_night">舒缓深夜</string>
+    <string name="mix_moment_morning">活力清晨</string>
+    <string name="mix_moment_party">派对</string>
+    <string name="mix_moment_study">学习音乐</string>
+    <string name="mix_moment_workout">健身运动</string>
+    <string name="mix_suggest_decade_genre">%1$s %2$s</string>
+    <string-array name="mix_decades">
+        <item>50年代</item>
+        <item>60年代</item>
+        <item>70年代</item>
+        <item>80年代</item>
+        <item>90年代</item>
+        <item>2000年代</item>
+        <item>2010年代</item>
+        <item>2020年代</item>
+    </string-array>
 </resources>

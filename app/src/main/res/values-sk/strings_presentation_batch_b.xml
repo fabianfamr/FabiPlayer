@@ -61,4 +61,5 @@
         <item quantity="many">%1$d skladby • %2$s</item>
         <item quantity="other">%1$d skladieb • %2$s</item>
     </plurals>
+    <string name="presentation_batch_b_corner_dp_format">%1$d dp</string>
 </resources>

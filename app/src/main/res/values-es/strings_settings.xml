@@ -381,4 +381,10 @@
     <string name="playback_speed_custom_supporting">De %1$s× a %2$s×, hasta dos decimales</string>
     <string name="playback_speed_custom_error">Introduce una velocidad de %1$s× a %2$s×</string>
     <string name="playback_speed_multiplier_suffix">×</string>
+    <string name="setcat_interface_scale_percent">%1$d%%</string>
+    <string name="setcat_interface_scale_subtitle">Cambia el tamaño de la interfaz de la app sin modificar los ajustes de pantalla de Android.</string>
+    <string name="setcat_interface_scale_title">Tamaño de la interfaz</string>
+    <string name="setcat_min_tracks_per_artist">Mínimo de pistas por artista</string>
+    <string name="setcat_system_font_subtitle">Usa la tipografía predeterminada de Android en lugar de la fuente redondeada de FabiPlayer.</string>
+    <string name="setcat_system_font_title">Usar fuente del sistema</string>
 </resources>

@@ -43,4 +43,22 @@
         <item quantity="many">%1$d أغنية مطابقة · %2$d د</item>
         <item quantity="other">%1$d أغنية مطابقة · %2$d د</item>
     </plurals>
+    <string name="mix_moment_chill_evening">أمسية هادئة</string>
+    <string name="mix_moment_feel_good">مزاج رائق</string>
+    <string name="mix_moment_late_night">سكون منتصف الليل</string>
+    <string name="mix_moment_morning">صباح نشيط</string>
+    <string name="mix_moment_party">حفلة</string>
+    <string name="mix_moment_study">موسيقى للدراسة</string>
+    <string name="mix_moment_workout">تمرين</string>
+    <string name="mix_suggest_decade_genre">%1$s %2$s</string>
+    <string-array name="mix_decades">
+        <item>الخمسينيات</item>
+        <item>الستينيات</item>
+        <item>السبعينيات</item>
+        <item>الثمانينيات</item>
+        <item>التسعينيات</item>
+        <item>الألفينيات</item>
+        <item>2010s</item>
+        <item>2020s</item>
+    </string-array>
 </resources>

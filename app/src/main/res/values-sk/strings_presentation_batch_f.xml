@@ -131,4 +131,8 @@
     <string name="presentation_batch_f_album_art_quality_original_line">Pôvodné – najvyššia kvalita</string>
     <string name="presentation_batch_f_percent">%1$d %%</string>
     <string name="presentation_batch_f_done">Hotovo</string>
+    <string name="presentation_batch_f_dot_space_suffix"> · %1$s</string>
+    <string name="presentation_batch_f_status_bullet_step">%1$s • %2$s</string>
+    <string name="presentation_batch_f_sync_progress_indeterminate">%1$s…</string>
+    <string name="presentation_batch_f_unknown_short">\?</string>
 </resources>

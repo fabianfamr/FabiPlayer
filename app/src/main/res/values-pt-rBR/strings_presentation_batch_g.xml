@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="presentation_batch_g_stats_range_today">Hoje</string>
+    <string name="presentation_batch_g_stats_range_week_to_date">Esta semana</string>
+    <string name="presentation_batch_g_stats_week_label">Semana %1$d</string>
+    <string name="presentation_batch_g_stats_range_month_to_date">Este mês</string>
+    <string name="presentation_batch_g_stats_range_year_to_date">Este ano</string>
+    <string name="presentation_batch_g_stats_range_all_time">Todo o período</string>
+    <string name="presentation_batch_g_stats_title">Estatísticas de audição</string>
+    <string name="presentation_batch_g_stats_cd_refresh">Atualizar estatísticas de audição</string>
+    <string name="presentation_batch_g_stats_hero_listening">Audição</string>
+    <string name="presentation_batch_g_stats_hero_plays">Reproduções</string>
+    <string name="presentation_batch_g_stats_em_dash">—</string>
+    <string name="presentation_batch_g_stats_section_listening_habits">Hábitos de audição</string>
+    <string name="presentation_batch_g_stats_habit_avg_session">Sessão média</string>
+    <string name="presentation_batch_g_stats_habit_longest_session">Sessão mais longa</string>
+    <string name="presentation_batch_g_stats_habit_sessions_per_day">Sessões/dia</string>
+    <string name="presentation_batch_g_stats_habit_most_active_day">Dia mais ativo</string>
+    <string name="presentation_batch_g_stats_habit_no_playback_yet">Nenhuma reprodução ainda</string>
+    <string name="presentation_batch_g_stats_timeline_metric_listening_time">Tempo ouvindo</string>
+    <string name="presentation_batch_g_stats_timeline_metric_listening_time_desc">Total ouvido no período selecionado.</string>
+    <string name="presentation_batch_g_stats_timeline_metric_play_count">Contagem de reproduções</string>
+    <string name="presentation_batch_g_stats_timeline_metric_play_count_desc">Quantas sessões você concluiu por segmento.</string>
+    <string name="presentation_batch_g_stats_timeline_metric_avg_session">Sessão média</string>
+    <string name="presentation_batch_g_stats_timeline_metric_avg_session_desc">Duração média de audição em cada segmento.</string>
+    <string name="presentation_batch_g_stats_n_plays">%1$d reproduções</string>
+    <string name="presentation_batch_g_stats_section_listening_timeline">Linha do tempo de audição</string>
+    <string name="presentation_batch_g_stats_empty_no_timeline_title">Nenhum dado de audição ainda</string>
+    <string name="presentation_batch_g_stats_empty_no_timeline_subtitle">Aperte play para começar a montar sua linha do tempo de audição</string>
+    <string name="presentation_batch_g_stats_rhythm_daily">Ritmo diário</string>
+    <string name="presentation_batch_g_stats_rhythm_weekly">Ritmo semanal</string>
+    <string name="presentation_batch_g_stats_rhythm_monthly">Ritmo mensal</string>
+    <string name="presentation_batch_g_stats_rhythm_year">Resumo do ano</string>
+    <string name="presentation_batch_g_stats_rhythm_all_time">Progressão total</string>
+    <string name="presentation_batch_g_stats_grouped_4h">Agrupado em segmentos de 4 horas</string>
+    <string name="presentation_batch_g_stats_grouped_dow">Agrupado por dia da semana</string>
+    <string name="presentation_batch_g_stats_grouped_week_of_month">Agrupado por semana do mês</string>
+    <string name="presentation_batch_g_stats_grouped_by_month">Agrupado por mês</string>
+    <string name="presentation_batch_g_stats_grouped_by_year">Agrupado por ano</string>
+    <string name="presentation_batch_g_stats_peak_segment">Pico de atividade</string>
+    <string name="presentation_batch_g_stats_timeline_support_day">Dividido em janelas de 4 horas para revelar seu ritmo diário.</string>
+    <string name="presentation_batch_g_stats_timeline_support_week">Barras diárias facilitam comparar seus hábitos semana a semana.</string>
+    <string name="presentation_batch_g_stats_timeline_support_month">Barras semanais mostram a tendência ao longo do mês.</string>
+    <string name="presentation_batch_g_stats_timeline_support_year">Barras mensais mostram a sazonalidade durante o ano.</string>
+    <string name="presentation_batch_g_stats_timeline_support_all">Barras anuais resumem todo o seu histórico.</string>
+    <string name="presentation_batch_g_stats_empty_no_category_title">Nenhum dado de categoria ainda</string>
+    <string name="presentation_batch_g_stats_empty_no_category_subtitle">Aperte play para exibir seus destaques de audição</string>
+    <string name="presentation_batch_g_stats_empty_no_artists_title">Sem principais artistas</string>
+    <string name="presentation_batch_g_stats_empty_no_artists_subtitle">Continue ouvindo e seus artistas favoritos aparecerão aqui.</string>
+    <string name="presentation_batch_g_stats_empty_no_albums_title">Sem principais álbuns</string>
+    <string name="presentation_batch_g_stats_empty_no_albums_subtitle">Álbuns que você ouve com frequência aparecerão aqui.</string>
+    <string name="presentation_batch_g_stats_empty_no_tracks_title">Sem principais faixas</string>
+    <string name="presentation_batch_g_stats_empty_no_tracks_subtitle">Ouça suas favoritas para vê-las em destaque aqui.</string>
+    <string name="presentation_batch_g_stats_track_concentration_subtitle">Como seu tempo de audição se distribui entre suas faixas mais ouvidas.</string>
+    <string name="presentation_batch_g_stats_empty_no_concentration_title">Sem dados de concentração ainda</string>
+    <string name="presentation_batch_g_stats_empty_no_concentration_subtitle">Ouça mais faixas para ver o quanto sua audição é concentrada.</string>
+    <string name="presentation_batch_g_stats_slice_top_1">Top 1</string>
+    <string name="presentation_batch_g_stats_slice_top_2_3">Top 2-3</string>
+    <string name="presentation_batch_g_stats_slice_others">Outros</string>
+    <string name="presentation_batch_g_stats_percent">%1$d%%</string>
+    <string name="presentation_batch_g_stats_avg_plays_per_track">Média de repr./faixa</string>
+    <string name="presentation_batch_g_stats_top_three_share_label">Parcela do Top 3</string>
+    <string name="presentation_batch_g_stats_avatar_placeholder">\?</string>
+    <string name="presentation_batch_g_stats_hero_per_day">%1$s / dia</string>
+    <string name="presentation_batch_g_stats_section_heavy_rotation">Em alta rotação</string>
+    <string name="presentation_batch_g_stats_heavy_rotation_subtitle">O que você mais voltou a ouvir neste período.</string>
+    <string name="presentation_batch_g_stats_tab_tracks">Faixas</string>
+    <string name="presentation_batch_g_stats_tab_artists">Artistas</string>
+    <string name="presentation_batch_g_stats_tab_albums">Álbuns</string>
+    <string name="presentation_batch_g_stats_tab_genres">Gêneros</string>
+    <string name="presentation_batch_g_stats_top_pick">Mais ouvido</string>
+    <string name="presentation_batch_g_stats_section_listening_variety">Variedade de audição</string>
+    <string name="presentation_batch_g_stats_habit_longest_streak">Maior sequência</string>
+    <string name="presentation_batch_g_device_info_title">Info do dispositivo</string>
+    <string name="presentation_batch_g_device_section_exoplayer">Motor ExoPlayer</string>
+    <string name="presentation_batch_g_device_label_sample_rate">Taxa de amostragem</string>
+    <string name="presentation_batch_g_device_label_low_latency">Suporte a baixa latência</string>
+    <string name="presentation_batch_g_device_label_pro_audio">Suporte a áudio profissional</string>
+    <string name="presentation_batch_g_device_value_hz">%1$d Hz</string>
+    <string name="presentation_batch_g_yes">Sim</string>
+    <string name="presentation_batch_g_no">Não</string>
+    <string name="presentation_batch_g_device_key_manufacturer">Fabricante</string>
+    <string name="presentation_batch_g_device_key_model">Modelo</string>
+    <string name="presentation_batch_g_device_key_brand">Marca</string>
+    <string name="presentation_batch_g_device_key_device">Dispositivo</string>
+    <string name="presentation_batch_g_device_key_android_version">Versão do Android</string>
+    <string name="presentation_batch_g_device_key_sdk_version">Versão do SDK</string>
+    <string name="presentation_batch_g_device_key_hardware">Hardware</string>
+    <string name="device_capabilities_unknown_short">--</string>
+    <string name="device_capabilities_ready_title">Pronto para reprodução</string>
+    <string name="device_capabilities_review_title">A reprodução precisa de revisão</string>
+    <string name="device_capabilities_metric_formats">Formatos</string>
+    <string name="device_capabilities_metric_hw_decoders">Decodificadores HW</string>
+    <string name="device_capabilities_metric_local_music">Músicas locais</string>
+    <string name="device_capabilities_storage_title">Armazenamento de músicas locais</string>
+    <string name="device_capabilities_storage_music_size">Tamanho das músicas</string>
+    <string name="device_capabilities_storage_music_count">%1$d músicas locais</string>
+    <string name="device_capabilities_storage_available">Disponível</string>
+    <string name="device_capabilities_storage_total">%1$s no total</string>
+    <string name="device_capabilities_storage_music_footprint">Espaço das músicas</string>
+    <string name="device_capabilities_storage_device_used">Usado no dispositivo</string>
+    <string name="device_capabilities_storage_percent">%1$d%%</string>
+    <string name="device_capabilities_storage_less_than_one_percent">&lt;1%</string>
+    <string name="device_capabilities_storage_cloud_count">%1$d músicas na nuvem</string>
+    <string name="device_capabilities_storage_unavailable_count">%1$d arquivos ilegíveis</string>
+    <string name="device_capabilities_playback_path_title">Caminho de reprodução</string>
+    <string name="device_capabilities_buffer_frames">%1$d quadros por buffer</string>
+    <string name="device_capabilities_hifi_pcm_float">Hi-Fi PCM Float</string>
+    <string name="device_capabilities_hifi_pcm_float_supporting">Caminho de saída flutuante de 32 bits</string>
+    <string name="device_capabilities_memory_title">Memória</string>
+    <string name="device_capabilities_memory_available_of">disponível de %1$s</string>
+    <string name="device_capabilities_offload_title">Formatos prontos para offload</string>
+    <string name="device_capabilities_offload_empty">Nenhum formato comprimido relatou suporte a offload por hardware.</string>
+    <string name="device_capabilities_outputs_title">Saídas detectadas</string>
+    <string name="device_capabilities_outputs_empty">Nenhuma rota de saída foi informada pelo Android.</string>
+    <string name="device_capabilities_renderers_count">%1$s renderizadores</string>
+    <string name="device_capabilities_formats_title">Compatibilidade de formatos</string>
+    <string name="device_capabilities_formats_supported_count">%1$d faixas compatíveis</string>
+    <string name="device_capabilities_formats_unknown_count">%1$d formato desconhecido</string>
+    <string name="device_capabilities_format_unsupported">Nenhum decodificador informado</string>
+    <string name="device_capabilities_format_hardware">Decodificador por hardware</string>
+    <string name="device_capabilities_format_software">Decodificador por software</string>
+    <string name="device_capabilities_format_offload">Offload</string>
+    <string name="device_capabilities_format_library_count">%1$d na biblioteca</string>
+    <string name="device_capabilities_findings_title">Resultados de compatibilidade</string>
+    <string name="device_capabilities_finding_clear_title">Sem grandes incompatibilidades</string>
+    <string name="device_capabilities_finding_clear_body">Suas faixas indexadas correspondem aos decodificadores que o Android informa neste dispositivo.</string>
+    <string name="device_capabilities_finding_unsupported_title">%1$d faixas podem não decodificar nativamente</string>
+    <string name="device_capabilities_finding_unsupported_body">Formatos para revisar: %1$s.</string>
+    <string name="device_capabilities_finding_resample_title">%1$d faixas locais podem ser reamostradas</string>
+    <string name="device_capabilities_finding_resample_body">A biblioteca chega a %1$d Hz, acima da taxa de amostragem de saída atual.</string>
+    <string name="device_capabilities_finding_unknown_title">%1$d faixas têm metadados desconhecidos</string>
+    <string name="device_capabilities_finding_unknown_body">Um reescaneamento completo da biblioteca pode preencher os dados ausentes de MIME, taxa de bits e taxa de amostragem.</string>
+    <string name="device_capabilities_more_count">+%1$d mais</string>
+    <string name="device_capabilities_output_builtin">Saída integrada</string>
+    <string name="device_capabilities_output_bluetooth">Áudio Bluetooth</string>
+    <string name="device_capabilities_output_usb">Áudio USB</string>
+    <string name="device_capabilities_output_wired">Áudio com fio</string>
+    <string name="device_capabilities_output_digital">Saída digital</string>
+    <string name="device_capabilities_output_other">Outra saída</string>
+    <string name="device_capabilities_report_title">Relatório de desempenho</string>
+    <string name="device_capabilities_report_description">Gere um relatório de diagnóstico compartilhável para nos ajudar a classificar travamentos na reprodução ou no escaneamento. Ele contém apenas dados do dispositivo, da biblioteca e de tempo — sem caminhos de arquivo, títulos ou artistas.</string>
+    <string name="device_capabilities_report_generate">Gerar relatório</string>
+    <string name="device_capabilities_report_regenerate">Regenerar</string>
+    <string name="device_capabilities_report_copy">Copiar</string>
+    <string name="device_capabilities_report_share">Compartilhar</string>
+    <string name="device_capabilities_report_copied">Relatório copiado para a área de transferência</string>
+    <string name="device_capabilities_report_share_title">Relatório de desempenho do FabiPlayer</string>
+    <string name="device_capabilities_advanced_diagnostics_title">Diagnóstico avançado de desempenho</string>
+    <string name="device_capabilities_advanced_diagnostics_description">Desativado por padrão. Registra uma breve linha do tempo de lentidão para depuração beta.</string>
+    <string name="device_capabilities_advanced_diagnostics_expires">Ativo até %1$s</string>
+    <string name="device_capabilities_advanced_diagnostics_mark_lag">Marcar lentidão agora</string>
+    <string name="device_capabilities_advanced_diagnostics_marked">Momento de lentidão marcado</string>
+    <string name="presentation_batch_g_artist_section_multi_parsing">Separação de múltiplos artistas</string>
+    <string name="presentation_batch_g_artist_item_char_delimiters">Delimitadores de caractere</string>
+    <string name="presentation_batch_g_artist_item_char_delimiters_current">Atual: %1$s</string>
+    <string name="presentation_batch_g_artist_item_word_delimiters">Delimitadores de palavra</string>
+    <string name="presentation_batch_g_artist_word_none">Nenhum</string>
+    <string name="presentation_batch_g_artist_word_current_prefix">Atual: %1$s</string>
+    <string name="presentation_batch_g_artist_cd_configure">Configurar</string>
+    <string name="presentation_batch_g_artist_extract_from_title">Extrair artistas do título</string>
+    <string name="presentation_batch_g_artist_extract_from_title_sub">Detectar feat., ft., with nos títulos das músicas</string>
+    <string name="presentation_batch_g_artist_section_library_org">Organização da biblioteca</string>
+    <string name="presentation_batch_g_artist_group_by_album_artist">Agrupar por artista do álbum</string>
+    <string name="presentation_batch_g_artist_group_by_album_artist_sub">Agrupar a aba Artistas e os álbuns pelo artista do álbum, para que participações e coletâneas não poluam a lista</string>
+    <string name="presentation_batch_g_artist_info_title">Sobre a separação de múltiplos artistas</string>
+    <string name="presentation_batch_g_artist_info_body">O FabiPlayer separa tags de artistas usando delimitadores de caractere (/, ;, &amp;) e delimitadores de palavra (feat., ft., vs., x). Os delimitadores de palavra não diferenciam maiúsculas de minúsculas.
+
+\"Extrair artistas do título\" detecta padrões como (feat. Artista) nos títulos das músicas.
+
+A barra invertida (\) pode ser usada para escapar delimitadores de caractere.</string>
+    <string name="presentation_batch_g_artist_example_arrow"> → </string>
+    <string name="presentation_batch_g_artist_examples_title">Exemplos</string>
+    <string name="presentation_batch_g_artist_ex_1_in">\"Artista1/Artista2\"</string>
+    <string name="presentation_batch_g_artist_ex_1_out">Artista1, Artista2</string>
+    <string name="presentation_batch_g_artist_ex_2_in">\"Drake feat. Rihanna\"</string>
+    <string name="presentation_batch_g_artist_ex_2_out">Drake, Rihanna</string>
+    <string name="presentation_batch_g_artist_ex_3_in">\"Marshmello x Bastille\"</string>
+    <string name="presentation_batch_g_artist_ex_3_out">Marshmello, Bastille</string>
+    <string name="presentation_batch_g_artist_ex_4_in">\"Música (ft. B)\" por A</string>
+    <string name="presentation_batch_g_artist_ex_4_out">A, B</string>
+    <string name="presentation_batch_g_artist_ex_5_in">\"AC\DC\"</string>
+    <string name="presentation_batch_g_artist_ex_5_out">AC/DC (escapado)</string>
+    <string name="presentation_batch_g_artist_rescan_banner_title">Reescaneamento necessário</string>
+    <string name="presentation_batch_g_artist_rescan_banner_body">As configurações de artista foram alteradas. Reescaneie sua biblioteca para aplicar.</string>
+    <string name="presentation_batch_g_artist_rescan_scanning">Escaneando…</string>
+    <string name="presentation_batch_g_artist_rescan">Reescanear</string>
+    <string name="presentation_batch_g_topbar_build_stable">Estável</string>
+    <string name="presentation_batch_g_topbar_build_debug">Depuração</string>
+    <string name="presentation_batch_g_topbar_cd_changelog">Registro de alterações</string>
+    <string name="presentation_batch_g_lyrics_mode_synced">Sincronizada</string>
+    <string name="presentation_batch_g_lyrics_mode_static">Estática</string>
+    <string name="presentation_batch_g_lyrics_cd_options">Opções de letra</string>
+    <string name="presentation_batch_g_streaming_title">Streaming na nuvem</string>
+    <string name="presentation_batch_g_streaming_subtitle">Reproduza músicas das suas contas na nuvem</string>
+    <string name="presentation_batch_g_sort_source">Origem</string>
+    <string name="presentation_batch_g_sort_order">Ordem</string>
+    <string name="presentation_batch_g_sort_descending">Decrescente</string>
+    <string name="presentation_batch_g_sort_ascending">Crescente</string>
+    <string name="presentation_batch_g_sort_original_order">Ordem original</string>
+    <string name="presentation_batch_g_cd_switch_on">Chave ligada</string>
+    <string name="presentation_batch_g_file_explorer_cd_close">Fechar</string>
+    <string name="presentation_batch_g_file_explorer_cd_refresh">Atualizar</string>
+    <string name="presentation_batch_g_file_explorer_cd_done">Concluído</string>
+    <string name="presentation_batch_g_file_explorer_done">Concluído</string>
+    <string name="presentation_batch_g_file_explorer_hint">Tudo está incluído por padrão. Exclua uma pasta para ignorá-la ou abra uma pasta excluída e inclua uma subpasta como exceção.</string>
+    <string name="presentation_batch_g_file_explorer_empty_folders">Nenhuma subpasta aqui</string>
+    <string name="presentation_batch_g_file_explorer_cd_navigate_up">Subir um nível</string>
+    <string name="presentation_batch_g_file_explorer_cd_go_root">Ir para a raiz</string>
+    <string name="presentation_batch_g_file_explorer_mode_folders">Pastas</string>
+    <string name="presentation_batch_g_file_explorer_mode_all_subfolders">Todas as subpastas</string>
+    <string name="presentation_batch_g_file_explorer_loading_all_subfolders">Coletando todas as pastas de música…</string>
+    <string name="presentation_batch_g_daily_mix_queue_name">Daily Mix</string>
+    <string name="presentation_batch_g_daily_mix_heading">DAILY MIX</string>
+    <string name="presentation_batch_g_daily_mix_based_on_history">Baseado no histórico</string>
+    <string name="presentation_batch_g_daily_mix_see_all">Ver todo o Daily Mix</string>
+    <string name="presentation_batch_g_selection_one_song">música selecionada</string>
+    <string name="presentation_batch_g_selection_n_songs">músicas selecionadas</string>
+    <string name="presentation_batch_g_selection_cd_share">Compartilhar selecionadas</string>
+    <string name="presentation_batch_g_selection_cd_like">Curtir selecionadas</string>
+    <string name="presentation_batch_g_selection_play">Reproduzir</string>
+    <string name="presentation_batch_g_selection_all">Tudo</string>
+    <string name="selection_select_between">Selecionar tudo entre as faixas selecionadas</string>
+    <string name="presentation_batch_g_selection_deselect">Desmarcar</string>
+    <string name="presentation_batch_g_selection_cd_more">Mais opções</string>
+    <string name="presentation_batch_g_selection_overflow_count">+%1$d</string>
+    <string name="presentation_batch_g_list_song_artist_album">%1$s • %2$s</string>
+    <string name="presentation_batch_g_list_cd_selected">Selecionado</string>
+    <string name="presentation_batch_g_list_cd_more_for_title">Mais opções para %1$s</string>
+    <string name="presentation_batch_g_list_cd_album_art_for">Capa do álbum de %1$s</string>
+    <string name="presentation_batch_g_list_cd_playing">Reproduzindo</string>
+    <string name="presentation_batch_g_sync_percent">%1$d%%</string>
+    <string name="presentation_batch_g_stats_overview_title">Estatísticas de audição</string>
+    <string name="presentation_batch_g_stats_overview_total_plays">Total de reproduções</string>
+    <string name="presentation_batch_g_stats_overview_avg_per_day">Média por dia</string>
+    <string name="presentation_batch_g_stats_overview_top_track">Faixa principal</string>
+    <string name="presentation_batch_g_stats_overview_top_track_line">%1$s • %2$d reproduções</string>
+    <string name="presentation_batch_g_recently_played_title">Reproduzidas recentemente</string>
+    <string name="presentation_batch_g_lyrics_offset_minus_half">−.5</string>
+    <string name="presentation_batch_g_lyrics_offset_minus_point_one">−.1</string>
+    <string name="presentation_batch_g_lyrics_offset_plus_point_one">+.1</string>
+    <string name="presentation_batch_g_lyrics_offset_plus_half">+.5</string>
+    <string name="presentation_batch_g_lyrics_offset_zero">0s</string>
+    <string name="presentation_batch_g_lyrics_offset_seconds_fmt">%1$+.1fs</string>
+    <string name="presentation_batch_g_genre_sort_title">Ordenar e reproduzir</string>
+    <string name="presentation_batch_g_genre_sort_shuffle">Aleatório</string>
+    <string name="presentation_batch_g_genre_sort_by">Ordenar por</string>
+    <string name="presentation_batch_g_genre_sort_artist">Artista</string>
+    <string name="presentation_batch_g_genre_sort_album">Álbum</string>
+    <string name="presentation_batch_g_genre_sort_title_opt">Título</string>
+    <string name="presentation_batch_g_cd_selected">Selecionado</string>
+    <string name="presentation_batch_g_changelog_title">Registro de alterações</string>
+    <string name="presentation_batch_g_changelog_view_github">Ver no GitHub</string>
+    <string name="presentation_batch_g_presets_saved_title">Predefinições salvas</string>
+    <string name="presentation_batch_g_presets_empty">Nenhuma predefinição personalizada salva ainda.</string>
+    <string name="presentation_batch_g_presets_cd_unpin">Desafixar</string>
+    <string name="presentation_batch_g_presets_cd_pin">Fixar</string>
+    <string name="presentation_batch_g_presets_cd_rename">Renomear</string>
+    <string name="presentation_batch_g_presets_cd_delete">Excluir</string>
+    <string name="presentation_batch_g_beta_sheet_welcome_title">Bem-vindo ao FabiPlayer %1$s</string>
+    <string name="presentation_batch_g_beta_sheet_welcome_body">Você está usando uma compilação beta que pode conter erros, falhas ou recursos experimentais. Ajude-nos a melhorar relatando problemas.</string>
+    <string name="presentation_batch_g_beta_sheet_welcome_body_stable">Você está usando a versão estável de lançamento. Confira o registro de alterações para ver as novidades e relate qualquer problema.</string>
+    <string name="presentation_batch_g_beta_sheet_expect_title">O que esperar</string>
+    <string name="presentation_batch_g_beta_sheet_expect_1">Erros, falhas ou recursos incompletos podem ocorrer inesperadamente.</string>
+    <string name="presentation_batch_g_beta_sheet_expect_2">Alguns recursos podem mudar ou ser removidos sem aviso prévio.</string>
+    <string name="presentation_batch_g_beta_sheet_expect_3">Compilações beta podem ser mais instáveis do que as versões de lançamento.</string>
+    <string name="presentation_batch_g_beta_sheet_expect_4">Sempre verifique se há atualizações antes de relatar um problema conhecido.</string>
+    <string name="presentation_batch_g_beta_sheet_expect_summary">O que compilações beta podem mudar, quebrar ou melhorar durante os testes.</string>
+    <string name="presentation_batch_g_beta_sheet_github_title">Atalho para issues no GitHub</string>
+    <string name="presentation_batch_g_beta_sheet_github_body">Pesquise primeiro e depois abra um relato objetivo para bugs, falhas, solicitações ou dúvidas.</string>
+    <string name="presentation_batch_g_beta_sheet_open_issues">Abrir issues existentes</string>
+    <string name="presentation_batch_g_beta_sheet_report_bug">Relatar problema ou falha</string>
+    <string name="presentation_batch_g_beta_sheet_report_title">Como relatar</string>
+    <string name="presentation_batch_g_beta_sheet_report_summary">Uma lista rápida antes de abrir uma nova issue.</string>
+    <string name="presentation_batch_g_beta_sheet_before_title">Antes de abrir uma issue</string>
+    <string name="presentation_batch_g_beta_sheet_before_1">Pesquise issues abertas e fechadas existentes para evitar duplicatas.</string>
+    <string name="presentation_batch_g_beta_sheet_before_2">Atualize para a versão mais recente do FabiPlayer e confirme se o problema ainda ocorre.</string>
+    <string name="presentation_batch_g_beta_sheet_before_3">Reinicie o aplicativo e confirme se o problema persiste.</string>
+    <string name="presentation_batch_g_beta_sheet_before_4">Tente reproduzir o problema e anote os passos exatos.</string>
+    <string name="presentation_batch_g_beta_sheet_issue_type_title">Qual é o tipo de issue?</string>
+    <string name="presentation_batch_g_beta_sheet_issue_type_bug">Relato de bug: algo se comporta de forma incorreta.</string>
+    <string name="presentation_batch_g_beta_sheet_issue_type_feature">Solicitação de recurso: adicionar um novo recurso ou melhoria.</string>
+    <string name="presentation_batch_g_beta_sheet_issue_type_question">Dúvida: use Discussions se estiver ativo, ou abra uma issue com o rótulo de dúvida.</string>
+    <string name="presentation_batch_g_beta_sheet_bug_title">Relato de bug</string>
+    <string name="presentation_batch_g_beta_sheet_bug_summary_text">Copie estes campos quando algo se comportar incorretamente ou fechar sozinho.</string>
+    <string name="presentation_batch_g_beta_sheet_bug_template_title">Relato de bug</string>
+    <string name="presentation_batch_g_beta_sheet_bug_summary">Resumo curto:</string>
+    <string name="presentation_batch_g_beta_sheet_bug_expected">Comportamento esperado:</string>
+    <string name="presentation_batch_g_beta_sheet_bug_actual">Comportamento atual:</string>
+    <string name="presentation_batch_g_beta_sheet_bug_steps">Passos para reproduzir: 1. 2. 3.</string>
+    <string name="presentation_batch_g_beta_sheet_bug_frequency">Com que frequência acontece? Sempre / Às vezes / Raramente.</string>
+    <string name="presentation_batch_g_beta_sheet_bug_screenshot">Captura de tela / vídeo: se disponível.</string>
+    <string name="presentation_batch_g_beta_sheet_bug_logs">Logs / stack trace: se disponível.</string>
+    <string name="presentation_batch_g_beta_sheet_env_title">Ambiente</string>
+    <string name="presentation_batch_g_beta_sheet_env_version">Versão do FabiPlayer:</string>
+    <string name="presentation_batch_g_beta_sheet_env_source">Origem da instalação: GitHub Release, compilação debug, compilação nightly, etc.</string>
+    <string name="presentation_batch_g_beta_sheet_env_android">Versão do Android:</string>
+    <string name="presentation_batch_g_beta_sheet_env_device">Modelo do dispositivo:</string>
+    <string name="presentation_batch_g_beta_sheet_env_extra">Contexto extra: uso de cartão SD, configurações especiais, permissões, etc.</string>
+    <string name="presentation_batch_g_beta_sheet_feature_title">Solicitação de recurso</string>
+    <string name="presentation_batch_g_beta_sheet_feature_summary">Copie estes campos quando quiser um novo recurso ou melhoria.</string>
+    <string name="presentation_batch_g_beta_sheet_feature_problem">Descrição do problema: qual problema você quer resolver?</string>
+    <string name="presentation_batch_g_beta_sheet_feature_solution">Solução proposta: como deveria funcionar?</string>
+    <string name="presentation_batch_g_beta_sheet_feature_alternatives">Alternativas consideradas: há outras abordagens?</string>
+    <string name="presentation_batch_g_beta_sheet_feature_scope">Escopo: quais telas ou fluxos são afetados?</string>
+    <string name="presentation_batch_g_beta_sheet_feature_mockup">Protótipo ou imagem de referência, se disponível.</string>
+    <string name="presentation_batch_g_beta_sheet_quality_title">Títulos, privacidade e escopo</string>
+    <string name="presentation_batch_g_beta_sheet_quality_summary">Facilite a triagem e mantenha o relato seguro para compartilhar.</string>
+    <string name="presentation_batch_g_beta_sheet_title_examples_title">Bons títulos de issue</string>
+    <string name="presentation_batch_g_beta_sheet_title_example_1">Equalizador: indicador se desloca ao alternar abas de predefinição</string>
+    <string name="presentation_batch_g_beta_sheet_title_example_2">Pesquisa: lista de histórico não aparece com busca vazia</string>
+    <string name="presentation_batch_g_beta_sheet_title_example_3">Recurso: adicionar opção de ordenação \"Adicionadas recentemente\" na playlist</string>
+    <string name="presentation_batch_g_beta_sheet_avoid_title">Por favor, evite</string>
+    <string name="presentation_batch_g_beta_sheet_avoid_1">Relatos genéricos como \"Não funciona\".</string>
+    <string name="presentation_batch_g_beta_sheet_avoid_2">Vários problemas não relacionados em uma única issue.</string>
+    <string name="presentation_batch_g_beta_sheet_avoid_3">Logs ou capturas de tela sem ocultar dados privados.</string>
+    <string name="presentation_batch_g_beta_sheet_privacy_title">Nota de privacidade</string>
+    <string name="presentation_batch_g_beta_sheet_privacy_body">Antes de publicar logs, capturas de tela ou vídeos, remova informações pessoais ou privadas.</string>
+    <string name="presentation_batch_g_beta_sheet_nightly_title">Compilações nightly</string>
+    <string name="presentation_batch_g_beta_sheet_nightly_summary">Como as nightly diferem dos lançamentos e o que incluir quando falharem.</string>
+    <string name="presentation_batch_g_beta_sheet_nightly_body">As compilações nightly são geradas a partir do commit mais recente e podem conter alterações inacabadas, bugs temporários ou regressões. São mais experimentais do que os lançamentos oficiais.</string>
+    <string name="presentation_batch_g_beta_sheet_nightly_access">Acesse-as pelos artefatos de fluxo do GitHub Actions do repositório, se disponíveis.</string>
+    <string name="presentation_batch_g_beta_sheet_nightly_report_title">Relatando problemas em nightly</string>
+    <string name="presentation_batch_g_beta_sheet_nightly_report_body">Ao relatar um problema em uma compilação nightly, sempre mencione que ocorreu em uma nightly, não no lançamento oficial. Inclua a data da compilação, o nome ou número da execução do workflow ou o SHA do commit, se possível. Verifique também se o mesmo problema acontece no lançamento oficial mais recente.</string>
+    <string name="presentation_batch_g_album_sel_count">%1$d ÁLBUNS</string>
+    <string name="presentation_batch_g_album_sel_selected">selecionados</string>
+    <string name="presentation_batch_g_album_sel_queue_hint">Enfileirar + tocar respeita a ordem da sua seleção.</string>
+    <string name="presentation_batch_g_album_sel_limit">Limite: %1$d álbuns por seleção.</string>
+    <string name="presentation_batch_g_app_tagline">Player de música</string>
+    <string name="sidebar_edit_shortcuts">Editar atalhos</string>
+    <string name="sidebar_shortcuts_dialog_title">Atalhos da barra lateral</string>
+    <string name="sidebar_open">Abrir menu</string>
+    <string name="presentation_batch_g_brick_high">RECORDE %1$d</string>
+    <string name="presentation_batch_g_brick_cd_close">Fechar</string>
+    <string name="presentation_batch_g_brick_stat_score">PONTOS</string>
+    <string name="presentation_batch_g_brick_stat_lvl">NÍVEL %1$d</string>
+    <string name="presentation_batch_g_brick_stat_lives">VIDAS</string>
+    <string name="presentation_batch_g_brick_level_complete">NÍVEL CONCLUÍDO!</string>
+    <string name="presentation_batch_g_brick_game_over">FIM DE JOGO</string>
+    <string name="presentation_batch_g_brick_score_line">Pontuação: %1$d</string>
+    <string name="presentation_batch_g_brick_try_again">Tentar novamente?</string>
+    <string name="presentation_batch_g_brick_next_level">Próximo nível</string>
+    <string name="presentation_batch_g_brick_restart">Reiniciar jogo</string>
+    <string name="presentation_batch_g_brick_tap_relaunch">TOQUE PARA REINICIAR</string>
+    <string name="presentation_batch_g_brick_play_random">Tocar música aleatória</string>
+    <string name="presentation_batch_g_brick_title">Brick Breaker</string>
+    <string name="presentation_batch_g_brick_high_score">RECORDE  %1$d</string>
+    <string name="presentation_batch_g_brick_play">Jogar</string>
+    <string name="presentation_batch_g_brick_drag_paddle">Arraste para mover a barra</string>
+    <string name="presentation_batch_g_backup_restore_modules">Restaurar módulos</string>
+    <string name="presentation_batch_g_backup_restoring">Restaurando</string>
+    <string name="presentation_batch_g_backup_restore_selected">Restaurar selecionados</string>
+    <string name="presentation_batch_g_backup_details">Detalhes do backup</string>
+    <string name="presentation_batch_g_backup_created">Criado em</string>
+    <string name="presentation_batch_g_backup_app_version">Versão do app</string>
+    <string name="presentation_batch_g_backup_schema">Esquema</string>
+    <string name="presentation_batch_g_backup_device">Dispositivo</string>
+    <string name="presentation_batch_g_backup_unknown">Desconhecido</string>
+    <string name="presentation_batch_g_backup_modules_selected">%1$d de %2$d módulos selecionados</string>
+    <string name="presentation_batch_g_backup_transfer_progress">Transferência em andamento…</string>
+    <string name="presentation_batch_g_backup_cd_select_all">Selecionar tudo</string>
+    <string name="presentation_batch_g_backup_cd_clear_selection">Limpar seleção</string>
+    <string name="presentation_batch_g_backup_entries_will_replace">%1$d entradas · Substituirá os dados atuais</string>
+    <string name="presentation_batch_g_player_cd_cloud_stream">Stream na nuvem</string>
+    <string name="presentation_batch_g_player_cd_collapse">Recolher player</string>
+    <string name="presentation_batch_g_player_cd_queue">Fila</string>
+    <string name="presentation_batch_g_player_cd_lyrics">Letras</string>
+    <string name="presentation_batch_g_changelog_sec_initial_release">Lançamento inicial</string>
+    <string name="presentation_batch_g_changelog_sec_removed_for_foss">Removido para FOSS</string>
+    <string name="presentation_batch_g_changelog_sec_release_readiness">Preparação do lançamento</string>
+    <string name="presentation_batch_g_changelog_sec_security_privacy">Segurança e privacidade</string>
+    <string name="presentation_batch_g_changelog_sec_whats_new">Novidades</string>
+    <string name="presentation_batch_g_changelog_sec_improvements">Melhorias</string>
+    <string name="presentation_batch_g_changelog_sec_under_the_hood">Nos bastidores</string>
+    <string-array name="presentation_batch_g_changelog_060_whats_new">
+        <item>Reproduzidas recentemente e restauração persistente da fila mantêm sua sessão pronta.</item>
+        <item>Backup e restauração v3 e ferramentas de gerenciamento de contas foram incluídos.</item>
+        <item>As letras ficaram mais inteligentes com busca manual alternativa e melhorias no armazenamento.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_060_improvements">
+        <item>Grande otimização de desempenho na inicialização, biblioteca, fila e interações do player.</item>
+        <item>Fluxos de navegação e pesquisa estão mais confiáveis, com tratamento de rotas mais seguro.</item>
+        <item>Compatibilidade de reprodução de áudio melhorada para mais dispositivos e formatos.</item>
+        <item>Fluxos de seleção múltipla expandidos para músicas, álbuns e playlists.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_060_fixes">
+        <item>O comportamento da fila e do modo aleatório agora é mais estável e previsível.</item>
+        <item>Corrigidos problemas com o Temporizador, navegação na aba Arquivos e falhas em artista do álbum.</item>
+        <item>Carregamento de widgets e estabilidade do serviço aprimorados para reduzir aquecimento e uso de memória.</item>
+        <item>Correções gerais de bugs e polimento de interface em todo o aplicativo.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_050_highlights">
+        <item>Atualização de interface Material 3 Expressive</item>
+        <item>Equalizador de 10 bandas e efeitos</item>
+        <item>Novo fluxo de sincronização da biblioteca</item>
+        <item>Importação e exportação de playlists M3U</item>
+        <item>Integração de artes de artistas da Deezer</item>
+        <item>Capas personalizadas para playlists</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_050_improvements">
+        <item>Refatoração da arquitetura de Configurações</item>
+        <item>Animações da fila e do player</item>
+        <item>Baseline Profiles e desempenho</item>
+        <item>Sistema de letras melhorado com ajuste de sincronização</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_050_fixes">
+        <item>Estabilidade da folha do player</item>
+        <item>Correções gerais de bugs e limpeza</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_040_highlights">
+        <item>Grande reformulação da navegação</item>
+        <item>Novo explorador de arquivos para escolher diretórios de origem</item>
+        <item>Continuidade fluida entre dispositivos remotos</item>
+        <item>Transição sem pausas (gapless) entre músicas</item>
+        <item>Controle de crossfade</item>
+        <item>Novo recurso de Transições personalizadas (somente para playlists)</item>
+        <item>Continuar tocando após fechar o aplicativo</item>
+        <item>Otimizações de interface</item>
+        <item>Recurso de estatísticas aprimorado</item>
+        <item>Controle de fila redesenhado com mais recursos</item>
+        <item>Suporte aprimorado a diferentes tipos de arquivo para reprodução e edição de metadados</item>
+        <item>Controlador de permissões aprimorado</item>
+        <item>Correções de pequenos bugs</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_030_whats_new">
+        <item>Introduzida uma central de estatísticas de audição mais completa e detalhada.</item>
+        <item>Lançado um player rápido flutuante para abrir e ouvir arquivos locais instantaneamente.</item>
+        <item>Adicionada a aba Pastas com navegador em árvore e visualização pronta para playlists.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_030_improvements">
+        <item>Interface Material 3 refinada para uma experiência mais limpa e coesa.</item>
+        <item>A edição de metadados agora permite alterar a arte da capa.</item>
+        <item>Animações e transições suavizadas em todo o aplicativo para uma navegação mais fluida.</item>
+        <item>Layout da tela do artista aprimorado com mais detalhes e acabamento.</item>
+        <item>Geração do DailyMix e Seu Mix atualizada com seleções mais inteligentes e variadas.</item>
+        <item>Relevância e apresentação da pesquisa melhoradas para descoberta mais rápida.</item>
+        <item>Suporte ampliado a uma variedade maior de formatos de arquivo de áudio.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_030_fixes">
+        <item>Corrigidas inconsistências de metadados para manter os detalhes das músicas corretos em todo o app.</item>
+        <item>Atalhos da notificação restaurados para retomar a reprodução de forma confiável.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_020_added">
+        <item>Registro de alterações no app para manter você atualizado sobre os novos recursos.</item>
+        <item>Suporte a arquivos .LRC, tanto incorporados quanto externos.</item>
+        <item>Suporte a letras offline.</item>
+        <item>Letras sincronizadas (em sincronia com a música).</item>
+        <item>Nova tela para visualizar a fila completa.</item>
+        <item>Reordenar e remover músicas da fila.</item>
+        <item>Gestos do miniplayer (deslizar para baixo para fechar).</item>
+        <item>Mais animações Material adicionadas.</item>
+        <item>Novas configurações para personalizar a aparência.</item>
+        <item>Novas configurações para limpar o cache.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_020_changed">
+        <item>Reformulação completa da interface do usuário.</item>
+        <item>Reformulação completa do player.</item>
+        <item>Melhorias de desempenho na biblioteca.</item>
+        <item>Velocidade de inicialização do aplicativo aprimorada.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_020_fixed">
+        <item>Vários bugs corrigidos no editor de tags.</item>
+        <item>Corrigido um bug em que a notificação de reprodução não era removida.</item>
+        <item>Corrigidos vários bugs que faziam o aplicativo fechar inesperadamente.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_070_whats_new">
+        <item>Primeiro lançamento público FOSS do FabiPlayer.</item>
+        <item>Inclui reprodução local, playlists, favoritas, letras, estatísticas de audição, tema dinâmico Material 3, widgets e backup/restauração.</item>
+        <item>Mantém suporte auto-hospedado a Navidrome/Subsonic e Jellyfin, além de busca opcional de letras no LRCLIB e artes de artistas na Deezer.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_070_improvements">
+        <item>Removidas dependências em tempo de execução de Telegram, NetEase, QQ Music, Google Drive, Gemini, Cast, Wear OS, cobrança da Play Store, Firebase, Crashlytics e Google Play Services.</item>
+        <item>Removido o scrobbling público do Last.fm e ListenBrainz; o envio para Navidrome/Subsonic continua restrito ao servidor do próprio usuário.</item>
+        <item>Traduções embutidas e seletor de idioma no app removidos para este primeiro lançamento FOSS; recursos em inglês vêm primeiro.</item>
+        <item>Removidos caminhos de lançamento que dependiam de artefatos locais/privados de assinatura, valores fictícios ou premissas exclusivas de loja.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_070_fixes">
+        <item>Adicionados metadados do F-Droid, metadados do Fastlane, notas de privacidade, notas de segurança, documentação de dependências/licenças e guia para colaboradores.</item>
+        <item>Compilações de lançamento permanecem sem assinatura quando não há chaves locais de assinatura.</item>
+        <item>Adicionado pixelplayer.disableReleaseSigning=true para compilações de verificação determinísticas sem assinatura.</item>
+        <item>Rastros de licenças de recursos e dependências documentados, incluindo artefatos Maven nativos/binários e dependências do JitPack.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_070_added">
+        <item>O streaming em nuvem em loopback agora exige um token por sessão.</item>
+        <item>A restauração de backup ignora chaves de preferências controladas por manipuladores dedicados de módulo.</item>
+        <item>Os logs de lançamento foram reforçados para que cabeçalhos HTTP e logs brutos do Android não burlem o filtro do Timber.</item>
+        <item>Também inclui persistência de playlists inteligentes, verificação de faixas duplicadas, controle de velocidade de reprodução, mensagens de erro de reprodução/sincronização mais claras e acessibilidade aprimorada.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v020_whats_new">
+        <item>Passagem de design Material 3 Expressive: novo esquema de movimento, indicadores de progresso ondulados e animações de transformação de formas em todo o app.</item>
+        <item>Servidores Jellyfin em HTTP simples agora são permitidos para hosts de VPN e rede local.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v020_improvements">
+        <item>Aplicativo menor: regras mais enxutas de redução de código diminuem cerca de 1,5 MB no tamanho de instalação.</item>
+        <item>Inicialização mais rápida e fluida: Baseline Profiles foram regenerados do zero para combinar com a nova interface e fluxos de código.</item>
+        <item>Listas, folhas e equalizador mais ágeis graças a uma ampla otimização de desempenho no Compose.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v020_under_the_hood">
+        <item>Reprodução na nuvem mais confiável: requisições canceladas do Navidrome/Jellyfin não são mais relatadas por engano como erros de rede ao pular faixas rapidamente.</item>
+        <item>Eventos de backup, restauração e configuração inicial não podem mais se perder durante a rotação de tela.</item>
+        <item>Limpeza geral: código morto removido, APIs obsoletas migradas e dependências atualizadas.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>Removido o menu lateral redundante da tela Início para uma barra superior mais limpa e objetiva.</item>
+        <item>Atualizado o selo de boas-vindas da configuração inicial de Beta para Estável.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>Corrigida a troca de idioma do aplicativo para que mudar o idioma reinicie a tela de forma confiável e reproduza a animação de entrada.</item>
+        <item>Atualizado o registro de alterações no app com os lançamentos e correções recentes.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>Preferências de letras traduzidas e tradução por IA agora persistem de forma confiável entre reinicializações do app e trocas de faixa.</item>
+        <item>Folhas inferiores de seleção múltipla agora usam concordância correta de singular e plural em todos os 15 idiomas compatíveis.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>Localização de textos concluída em telas, diálogos e mensagens de erro.</item>
+    </string-array>
+</resources>

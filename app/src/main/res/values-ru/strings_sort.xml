@@ -15,4 +15,8 @@
     <string name="sort_method_date_created">Дата создания</string>
     <string name="sort_method_date_liked">Дата добавления в избранное</string>
     <string name="sort_method_subfolder_count">Количество подпапок</string>
+    <string name="sort_advanced_sorting">Расширенная сортировка</string>
+    <string name="sort_method_filename">Имя файла</string>
+    <string name="sort_primary">Основная</string>
+    <string name="sort_secondary">Вторичная</string>
 </resources>

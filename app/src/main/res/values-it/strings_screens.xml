@@ -292,4 +292,34 @@
     <string name="dash_jellyfin_sync_favorites_failed">Impossibile sincronizzare i preferiti con Jellyfin</string>
     <string name="home_recently_added_title">Aggiunti di recente</string>
     <string name="home_recently_added_play_cd">Riproduci brani aggiunti di recente</string>
+    <string name="audio_bookmarks_cd_close_actions">Chiudi azioni segnalibro</string>
+    <string name="audio_bookmarks_cd_open_actions">Apri azioni segnalibro</string>
+    <string name="audio_bookmarks_cd_sort_az">Ordina segnalibri alfabeticamente</string>
+    <string name="audio_bookmarks_cd_sort_most_moments">Ordina segnalibri per più momenti</string>
+    <string name="audio_bookmarks_cd_sort_recent">Ordina segnalibri per momenti recenti</string>
+    <string name="audio_bookmarks_clear_search">Cancella ricerca segnalibri</string>
+    <string name="audio_bookmarks_copy_cue">Copia cue</string>
+    <string name="audio_bookmarks_cue_copied">Cue copiato</string>
+    <string name="audio_bookmarks_cue_format">Cue %1$s</string>
+    <string name="audio_bookmarks_cue_label">Cue del segnalibro</string>
+    <string name="audio_bookmarks_delete_bookmark">Elimina segnalibro</string>
+    <string name="audio_bookmarks_empty_search_subtitle">Prova a cercare per brano, artista, album, cue o etichetta.</string>
+    <string name="audio_bookmarks_empty_search_title">Nessuna cartella segnalibri trovata</string>
+    <string name="audio_bookmarks_empty_subtitle">I momenti salvati appariranno qui raggruppati per brano.</string>
+    <string name="audio_bookmarks_empty_title">Nessun segnalibro audio</string>
+    <string name="audio_bookmarks_file_not_found">File audio non trovato</string>
+    <string name="audio_bookmarks_folder_empty_subtitle">I segnalibri di questo brano potrebbero essere stati eliminati.</string>
+    <string name="audio_bookmarks_folder_empty_title">Nessun momento in questa cartella</string>
+    <string name="audio_bookmarks_rename_subtitle">Aggiorna l\'etichetta per questo cue salvato.</string>
+    <string name="audio_bookmarks_rename_title">Rinomina segnalibro</string>
+    <string name="audio_bookmarks_saved_moments">Momenti salvati</string>
+    <string name="audio_bookmarks_search_hint">Cerca nei segnalibri</string>
+    <string name="audio_bookmarks_sort_az">A–Z</string>
+    <string name="audio_bookmarks_sort_most_moments">Più momenti</string>
+    <string name="audio_bookmarks_sort_recent">Recenti</string>
+    <string name="audio_bookmarks_unknown_audio">Audio sconosciuto</string>
+    <plurals name="audio_bookmarks_moments_count">
+        <item quantity="one">1 momento</item>
+        <item quantity="other">%1$d momenti</item>
+    </plurals>
 </resources>

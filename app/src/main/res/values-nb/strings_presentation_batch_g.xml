@@ -499,4 +499,20 @@ Skråstrek bakover (\) kan brukes til å escape tegndelimitere.</string>
         <item>Hendelser for sikkerhetskopiering, gjenoppretting og oppsett kan ikke lenger gå tapt ved skjermrotasjon.</item>
         <item>Vårrengjøring: ubrukt kode fjernet, utdaterte API-er migrert og avhengigheter oppdatert.</item>
     </string-array>
+    <string name="selection_select_between">Velg alt mellom valgte spor</string>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>Oversatte sangtekster og innstillinger for AI-oversettelse beholdes nå pålitelig på tvers av omstarter og sporskifter.</item>
+        <item>Flervalgspaneler bruker nå riktig entall og flertall på alle de 15 støttede språkene.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>Fullførte språklokalisering på tvers av skjermer, dialoger og feilmeldinger.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>Rettet bytte av appspråk slik at språkbytte starter skjermen på nytt pålitelig og spiller av inngangsanimasjonen.</item>
+        <item>Oppdaterte endringsloggen i appen med nyere utgivelser og feilrettinger.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>Fjernet den overflødige sidemenyen fra Hjem for en renere og mer fokusert topplinje.</item>
+        <item>Oppdaterte velkomstmerket i førstegangsoppsettet fra Beta til Stabil.</item>
+    </string-array>
 </resources>

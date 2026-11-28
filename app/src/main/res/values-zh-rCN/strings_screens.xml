@@ -302,4 +302,33 @@
     <string name="dash_jellyfin_sync_favorites_failed">无法与 Jellyfin 同步收藏</string>
     <string name="home_recently_added_title">最近添加</string>
     <string name="home_recently_added_play_cd">播放最近添加的歌曲</string>
+    <string name="audio_bookmarks_cd_close_actions">关闭书签操作</string>
+    <string name="audio_bookmarks_cd_open_actions">打开书签操作</string>
+    <string name="audio_bookmarks_cd_sort_az">按字母顺序排序书签</string>
+    <string name="audio_bookmarks_cd_sort_most_moments">按最多时刻排序书签</string>
+    <string name="audio_bookmarks_cd_sort_recent">按最近时刻排序书签</string>
+    <string name="audio_bookmarks_clear_search">清除书签搜索</string>
+    <string name="audio_bookmarks_copy_cue">复制标记</string>
+    <string name="audio_bookmarks_cue_copied">已复制标记</string>
+    <string name="audio_bookmarks_cue_format">标记 %1$s</string>
+    <string name="audio_bookmarks_cue_label">书签标记</string>
+    <string name="audio_bookmarks_delete_bookmark">删除书签</string>
+    <string name="audio_bookmarks_empty_search_subtitle">请尝试按歌曲、歌手、专辑、标记或书签标签搜索。</string>
+    <string name="audio_bookmarks_empty_search_title">未找到书签文件夹</string>
+    <string name="audio_bookmarks_empty_subtitle">保存的时刻将按曲目分组显示在这里。</string>
+    <string name="audio_bookmarks_empty_title">暂无音频书签</string>
+    <string name="audio_bookmarks_file_not_found">未找到音频文件</string>
+    <string name="audio_bookmarks_folder_empty_subtitle">此曲目的书签可能已被删除。</string>
+    <string name="audio_bookmarks_folder_empty_title">此文件夹中没有时刻</string>
+    <string name="audio_bookmarks_rename_subtitle">更新此已保存标记的名称。</string>
+    <string name="audio_bookmarks_rename_title">重命名书签</string>
+    <string name="audio_bookmarks_saved_moments">已保存的时刻</string>
+    <string name="audio_bookmarks_search_hint">搜索书签</string>
+    <string name="audio_bookmarks_sort_az">A-Z</string>
+    <string name="audio_bookmarks_sort_most_moments">时刻最多</string>
+    <string name="audio_bookmarks_sort_recent">最近</string>
+    <string name="audio_bookmarks_unknown_audio">未知音频</string>
+    <plurals name="audio_bookmarks_moments_count">
+        <item quantity="other">%1$d 个时刻</item>
+    </plurals>
 </resources>

@@ -499,4 +499,20 @@
         <item>لم يعد من الممكن فقدان أحداث النسخ الاحتياطي والاستعادة والإعداد أثناء تدوير الشاشة.</item>
         <item>تنظيف شامل: إزالة الكود الميت، وترحيل الواجهات البرمجية المهجورة، وتحديث التبعيات.</item>
     </string-array>
+    <string name="selection_select_between">تحديد الكل بين المقاطع المحددة</string>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>أصبحت كلمات الأغاني المترجمة وتفضيلات الترجمة بالذكاء الاصطناعي تُحفظ بشكل موثوق عبر إعادة تشغيل التطبيق وتغيير المقاطع.</item>
+        <item>تستخدم اللوحات السفلية للتحديد المتعدد الآن صيغ المفرد والجمع الصحيحة عبر جميع اللغات الـ 15 المدعومة.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>اكتمل تعريب النصوص عبر الشاشات ومربعات الحوار ورسائل الخطأ.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>تم إصلاح تبديل لغة التطبيق بحيث يؤدي تغيير اللغة إلى إعادة تشغيل الشاشة وتشغيل حركة الدخول بشكل موثوق.</item>
+        <item>تم تحديث سجل التغييرات داخل التطبيق بأحدث الإصدارات والإصلاحات.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>تمت إزالة القائمة الجانبية الزائدة من الشاشة الرئيسية للحصول على شريط علوي أنظف وأكثر تركيزًا.</item>
+        <item>تم تحديث شارة الترحيب في الإعداد الأولي من تجريبي إلى مستقر.</item>
+    </string-array>
 </resources>

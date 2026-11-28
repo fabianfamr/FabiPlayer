@@ -67,4 +67,5 @@
     <string name="recap_play_top_songs">Přehrát nejhranější skladby</string>
     <string name="recap_top_songs_queue_name">Nejhranější skladby roku %1$d</string>
     <string name="recap_replay">Přehrát znovu</string>
+    <string name="recap_cd_chart_entry">%1$s: %2$s</string>
 </resources>

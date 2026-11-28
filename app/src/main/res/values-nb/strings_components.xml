@@ -189,4 +189,12 @@
     <string name="edit_song_remove_custom_field">Fjern felt</string>
     <string name="edit_song_custom_metadata_formats">Vurdering og egendefinerte felt kan skrives til MP3-, WAV-, AIFF-, FLAC-, OGG-, Opus-, M4A-, M4B- og MP4-filer.</string>
     <string name="edit_song_custom_metadata_invalid">Sjekk de valgfrie metadatafeltene.</string>
+    <plurals name="multi_selection_selected_feminine">
+        <item quantity="one">valgt</item>
+        <item quantity="other">valgt</item>
+    </plurals>
+    <plurals name="multi_selection_selected_masculine">
+        <item quantity="one">valgt</item>
+        <item quantity="other">valgt</item>
+    </plurals>
 </resources>

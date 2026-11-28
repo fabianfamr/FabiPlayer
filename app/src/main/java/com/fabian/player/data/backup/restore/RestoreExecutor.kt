@@ -1,6 +1,8 @@
-﻿package com.fabian.player.data.backup.restore
+package com.fabian.player.data.backup.restore
 
 import android.net.Uri
+import androidx.annotation.StringRes
+import com.fabian.player.R
 import com.fabian.player.data.backup.format.BackupReader
 import com.fabian.player.data.backup.model.BackupOperationType
 import com.fabian.player.data.backup.model.BackupSection
@@ -35,7 +37,12 @@ class RestoreExecutor @Inject constructor(
         val totalSteps = selectedModules.size * 2 + 3
         var step = 0
 
-        reportProgress(onProgress, ++step, totalSteps, "Creating safety snapshots", "Capturing current state for rollback.")
+        reportProgress(
+            onProgress, ++step, totalSteps,
+            "Creating safety snapshots", "Capturing current state for rollback.",
+            titleRes = R.string.backup_progress_creating_snapshots,
+            detailRes = R.string.backup_progress_capturing_rollback
+        )
 
         val snapshots = mutableMapOf<BackupSection, String>()
         try {
@@ -50,7 +57,12 @@ class RestoreExecutor @Inject constructor(
             return@withContext RestoreResult.TotalFailure("Failed to capture current state: ${e.message}")
         }
 
-        reportProgress(onProgress, ++step, totalSteps, "Preparing restore", "Selected modules will be processed one at a time.")
+        reportProgress(
+            onProgress, ++step, totalSteps,
+            "Preparing restore", "Selected modules will be processed one at a time.",
+            titleRes = R.string.backup_progress_preparing_restore,
+            detailRes = R.string.backup_progress_processing_one_by_one
+        )
 
         val restoredModules = mutableListOf<BackupSection>()
         var currentSection: BackupSection? = null
@@ -82,14 +94,18 @@ class RestoreExecutor @Inject constructor(
                     onProgress, ++step, totalSteps,
                     "Validated ${section.label}",
                     section.description,
-                    section
+                    section,
+                    titleRes = R.string.backup_progress_validated_section,
+                    detailRes = section.descriptionRes
                 )
 
                 reportProgress(
                     onProgress, ++step, totalSteps,
                     "Restoring ${section.label}",
                     section.description,
-                    section
+                    section,
+                    titleRes = R.string.backup_progress_restoring_section,
+                    detailRes = section.descriptionRes
                 )
 
                 val handler = handlers[section]
@@ -130,7 +146,12 @@ class RestoreExecutor @Inject constructor(
             )
         }
 
-        reportProgress(onProgress, ++step, totalSteps, "Restore complete", "All selected modules were restored successfully.")
+        reportProgress(
+            onProgress, ++step, totalSteps,
+            "Restore complete", "All selected modules were restored successfully.",
+            titleRes = R.string.backup_progress_restore_complete,
+            detailRes = R.string.backup_progress_restore_all_restored
+        )
 
         RestoreResult.Success
     }
@@ -141,7 +162,9 @@ class RestoreExecutor @Inject constructor(
         totalSteps: Int,
         title: String,
         detail: String,
-        section: BackupSection? = null
+        section: BackupSection? = null,
+        @StringRes titleRes: Int? = null,
+        @StringRes detailRes: Int? = null
     ) {
         onProgress(
             BackupTransferProgressUpdate(
@@ -150,7 +173,9 @@ class RestoreExecutor @Inject constructor(
                 totalSteps = totalSteps,
                 title = title,
                 detail = detail,
-                section = section
+                section = section,
+                titleRes = titleRes,
+                detailRes = detailRes
             )
         )
     }

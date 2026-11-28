@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mix_title">Smart Mix</string>
+    <string name="mix_tune_today">Ajustar o mix de hoje</string>
+    <string name="mix_daily_subtitle">Pré-visualize uma mudança antes de usá-la hoje</string>
+    <string name="mix_library_subtitle">Crie um mix a partir da sua biblioteca de músicas</string>
+    <string name="mix_close">Fechar mix</string>
+    <string name="mix_request_label">O que você quer ouvir?</string>
+    <string name="mix_request_placeholder">Um artista, gênero, clima ou atividade</string>
+    <string name="mix_moment_morning">Manhã animada</string>
+    <string name="mix_moment_study">Música para estudar</string>
+    <string name="mix_moment_workout">Treino</string>
+    <string name="mix_moment_feel_good">Alto astral</string>
+    <string name="mix_moment_chill_evening">Noite tranquila</string>
+    <string name="mix_moment_late_night">Madrugada relaxante</string>
+    <string name="mix_moment_party">Festa</string>
+    <string name="mix_suggest_decade_genre">%2$s dos %1$s</string>
+    <string name="mix_suggest_recent">Pedido recente: %1$s</string>
+    <string name="mix_suggest_rediscover">Redescobrir %1$s</string>
+    <string name="mix_back">Voltar ao seu pedido</string>
+    <string name="mix_done">Concluído</string>
+    <string name="mix_thinking">Pensando…</string>
+    <string name="mix_refine">Refinar seu mix</string>
+    <string name="mix_length">Tamanho da playlist</string>
+    <string name="mix_auto">Automático</string>
+    <string name="mix_up_to">Até %1$d</string>
+    <string name="mix_energy">Energia</string>
+    <string name="mix_energy_calm">Calma</string>
+    <string name="mix_energy_steady">Estável</string>
+    <string name="mix_energy_energetic">Energética</string>
+    <string name="mix_refine_hint">O modo Automático segue seu pedido. Selecionar energia adiciona um requisito; menos músicas podem corresponder.</string>
+    <string name="mix_selection_summary">Tamanho: %1$s · Energia: %2$s</string>
+    <string name="mix_edit_request">Editar pedido</string>
+    <string name="mix_playlist_name">Nome da playlist</string>
+    <string name="mix_short_result">Sua biblioteca tem menos músicas compatíveis do que o solicitado. Mantivemos seus critérios.</string>
+    <string name="mix_preview_action">Pré-visualizar mix</string>
+    <string name="mix_play">Reproduzir</string>
+    <string name="mix_use_today">Usar hoje</string>
+    <string name="mix_save">Salvar playlist</string>
+    <string name="mix_saved_action">Salva</string>
+    <string name="mix_saved">Salva como %1$s</string>
+    <string name="mix_save_failed">Não foi possível salvar esta playlist. Sua prévia ainda está aqui; tente salvar novamente.</string>
+    <string name="mix_no_matches">Nenhuma música compatível encontrada. Edite seu pedido ou defina a energia como Automático.</string>
+    <string name="mix_daily_updated">Mix diário atualizado</string>
+    <string name="mix_undo">Desfazer</string>
+    <plurals name="mix_matching_songs">
+        <item quantity="one">%1$d música compatível · %2$d min</item>
+        <item quantity="other">%1$d músicas compatíveis · %2$d min</item>
+    </plurals>
+    <string-array name="mix_decades">
+        <item>Anos 50</item>
+        <item>Anos 60</item>
+        <item>Anos 70</item>
+        <item>Anos 80</item>
+        <item>Anos 90</item>
+        <item>Anos 2000</item>
+        <item>Anos 2010</item>
+        <item>Anos 2020</item>
+    </string-array>
+</resources>

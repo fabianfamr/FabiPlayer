@@ -499,4 +499,20 @@ La barre oblique inverse (\) permet d\'échapper les délimiteurs de caractères
         <item>Les événements de sauvegarde, de restauration et de configuration ne peuvent plus être perdus lors de la rotation de l\'écran.</item>
         <item>Grand ménage de printemps : code mort supprimé, API obsolètes migrées et dépendances mises à jour.</item>
     </string-array>
+    <string name="selection_select_between">Tout sélectionner entre les pistes choisies</string>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>Les paroles traduites et les préférences de traduction IA restent désormais conservées de manière fiable après un redémarrage de l\'application ou un changement de piste.</item>
+        <item>Les panneaux de sélection multiple utilisent désormais la grammaire correcte au singulier et au pluriel dans les 15 langues prises en charge.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>Localisation complète des textes sur tous les écrans, boîtes de dialogue et messages d\'erreur.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>Correction du changement de langue afin que le changement redémarre l\'écran de manière fiable et rejoue l\'animation d\'entrée.</item>
+        <item>Journal des modifications intégré mis à jour avec les dernières versions et corrections.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>Suppression du menu latéral redondant sur l\'Accueil pour une barre supérieure plus épurée.</item>
+        <item>Mise à jour du badge d\'accueil de la configuration initiale de Bêta à Stable.</item>
+    </string-array>
 </resources>

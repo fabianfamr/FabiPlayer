@@ -25,4 +25,6 @@
     <string name="add_bookmark_saved_point">Point de lecture enregistré</string>
     <string name="add_bookmark_use_lyric_line">Utiliser la ligne de paroles</string>
     <string name="add_bookmark_default_name">Marque-page @ %1$s</string>
+    <string name="song_info_open_source">Ouvrir la source</string>
+    <string name="song_info_open_source_failed">Aucune application n\'a pu ouvrir ce lien</string>
 </resources>

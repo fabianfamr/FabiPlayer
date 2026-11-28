@@ -41,4 +41,22 @@
         <item quantity="many">%1$d подходящих треков · %2$d мин</item>
         <item quantity="other">%1$d подходящего трека · %2$d мин</item>
     </plurals>
+    <string name="mix_moment_chill_evening">Спокойный вечер</string>
+    <string name="mix_moment_feel_good">Хорошее настроение</string>
+    <string name="mix_moment_late_night">Тихая ночь</string>
+    <string name="mix_moment_morning">Бодрое утро</string>
+    <string name="mix_moment_party">Вечеринка</string>
+    <string name="mix_moment_study">Музыка для учёбы</string>
+    <string name="mix_moment_workout">Тренировка</string>
+    <string name="mix_suggest_decade_genre">%1$s %2$s</string>
+    <string-array name="mix_decades">
+        <item>50-е</item>
+        <item>60-е</item>
+        <item>70-е</item>
+        <item>80-е</item>
+        <item>90-е</item>
+        <item>2000-е</item>
+        <item>2010-е</item>
+        <item>2020-е</item>
+    </string-array>
 </resources>

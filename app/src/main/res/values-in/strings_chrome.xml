@@ -25,4 +25,6 @@
     <string name="add_bookmark_saved_point">Titik pemutaran tersimpan</string>
     <string name="add_bookmark_use_lyric_line">Gunakan baris lirik</string>
     <string name="add_bookmark_default_name">Bookmark @ %1$s</string>
+    <string name="song_info_open_source">Buka sumber</string>
+    <string name="song_info_open_source_failed">Tidak ada aplikasi yang dapat membuka tautan ini</string>
 </resources>

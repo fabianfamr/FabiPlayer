@@ -15,4 +15,8 @@
     <string name="sort_method_date_created">Fecha de creación</string>
     <string name="sort_method_date_liked">Fecha de \"Me gusta\"</string>
     <string name="sort_method_subfolder_count">Cantidad de subcarpetas</string>
+    <string name="sort_advanced_sorting">Ordenación avanzada</string>
+    <string name="sort_method_filename">Nombre de archivo</string>
+    <string name="sort_primary">Principal</string>
+    <string name="sort_secondary">Secundario</string>
 </resources>

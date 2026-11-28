@@ -110,4 +110,5 @@
         <item quantity="many">Prehrali ste %d skladby</item>
         <item quantity="other">Prehrali ste %d rôznych skladieb</item>
     </plurals>
+    <string name="recap_cd_chart_entry">%1$s: %2$s</string>
 </resources>

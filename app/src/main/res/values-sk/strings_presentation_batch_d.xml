@@ -96,4 +96,6 @@
     <string name="presentation_batch_d_cd_shuffle_play_artist">Prehrať skladby interpreta náhodne</string>
     <string name="presentation_batch_d_cd_artist">Interpret</string>
     <string name="presentation_batch_d_cd_open_album_title">Otvoriť album %1$s</string>
+    <string name="presentation_batch_d_eq_unit_hz">Hz</string>
+    <string name="presentation_batch_d_mashup_artist_placeholder">…</string>
 </resources>

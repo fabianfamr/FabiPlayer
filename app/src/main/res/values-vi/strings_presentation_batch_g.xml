@@ -371,4 +371,148 @@ Dấu gạch chéo ngược (\) có thể dùng để thoát ký tự phân tác
     <string name="presentation_batch_g_changelog_sec_whats_new">Có gì mới</string>
     <string name="presentation_batch_g_changelog_sec_improvements">Cải tiến &amp; Tối ưu</string>
     <string name="presentation_batch_g_changelog_sec_under_the_hood">Nâng cấp hệ thống bên dưới</string>
+    <string name="selection_select_between">Chọn tất cả giữa các bài hát đã chọn</string>
+    <string-array name="presentation_batch_g_changelog_020_added">
+        <item>Nhật ký thay đổi ngay trong ứng dụng giúp bạn cập nhật các tính năng mới nhất.</item>
+        <item>Hỗ trợ tệp .LRC cả nhúng sẵn lẫn bên ngoài.</item>
+        <item>Hỗ trợ lời bài hát ngoại tuyến.</item>
+        <item>Lời bài hát đồng bộ theo nhịp bài hát.</item>
+        <item>Màn hình mới để xem toàn bộ hàng chờ phát.</item>
+        <item>Sắp xếp lại và xóa bài hát khỏi hàng chờ.</item>
+        <item>Cử chỉ trình phát thu gọn (vuốt xuống để đóng).</item>
+        <item>Bổ sung thêm nhiều hiệu ứng chuyển động Material.</item>
+        <item>Cài đặt mới để tùy chỉnh giao diện và trải nghiệm.</item>
+        <item>Cài đặt mới để xóa bộ nhớ đệm.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_020_changed">
+        <item>Thiết kế lại hoàn toàn giao diện người dùng.</item>
+        <item>Thiết kế lại hoàn toàn trình phát nhạc.</item>
+        <item>Cải thiện hiệu năng trong thư viện.</item>
+        <item>Cải thiện tốc độ khởi động ứng dụng.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_020_fixed">
+        <item>Sửa nhiều lỗi trong trình chỉnh sửa thẻ.</item>
+        <item>Sửa lỗi thông báo phát nhạc không biến mất.</item>
+        <item>Sửa một số lỗi gây sập ứng dụng.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_030_fixes">
+        <item>Khắc phục các lỗi siêu dữ liệu để thông tin bài hát luôn chính xác ở mọi nơi.</item>
+        <item>Khôi phục lối tắt trên thông báo để quay lại trình phát một cách tin cậy.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_030_improvements">
+        <item>Tinh chỉnh giao diện Material 3 tổng thể cho trải nghiệm gọn gàng và đồng nhất hơn.</item>
+        <item>Chỉnh sửa siêu dữ liệu nay hỗ trợ thay đổi ảnh bìa.</item>
+        <item>Làm mượt hoạt ảnh và chuyển cảnh trong toàn ứng dụng để điều hướng trôi chảy hơn.</item>
+        <item>Nâng cấp bố cục màn hình nghệ sĩ với chi tiết phong phú và trau chuốt hơn.</item>
+        <item>Nâng cấp tạo DailyMix và YourMix với lựa chọn thông minh và đa dạng hơn.</item>
+        <item>Cải thiện mức độ liên quan và trình bày tìm kiếm để khám phá nhanh hơn.</item>
+        <item>Mở rộng hỗ trợ thêm nhiều định dạng tệp âm thanh.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_030_whats_new">
+        <item>Giới thiệu trung tâm thống kê nghe nhạc phong phú hơn với cái nhìn sâu hơn về các phiên nghe.</item>
+        <item>Ra mắt trình phát nhanh nổi để mở và nghe thử tệp cục bộ ngay lập tức.</item>
+        <item>Thêm tab thư mục với trình điều hướng dạng cây và chế độ xem sẵn sàng cho danh sách phát.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_040_highlights">
+        <item>Thiết kế lại điều hướng toàn diện</item>
+        <item>Trình duyệt tệp mới để chọn thư mục nguồn</item>
+        <item>Tiếp tục phát liền mạch giữa các thiết bị từ xa</item>
+        <item>Chuyển bài không khoảng lặng (Gapless)</item>
+        <item>Điều khiển chuyển tiếp mượt (Crossfade)</item>
+        <item>Tính năng Chuyển tiếp tùy chỉnh mới (chỉ cho danh sách phát)</item>
+        <item>Tiếp tục phát sau khi đóng ứng dụng</item>
+        <item>Tối ưu hóa giao diện người dùng</item>
+        <item>Cải thiện tính năng thống kê</item>
+        <item>Thiết kế lại điều khiển Hàng chờ với nhiều tính năng hơn</item>
+        <item>Cải thiện hỗ trợ nhiều loại tệp khi phát và chỉnh sửa siêu dữ liệu</item>
+        <item>Cải thiện trình quản lý quyền</item>
+        <item>Sửa các lỗi nhỏ</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_050_fixes">
+        <item>Ổn định trang trình phát</item>
+        <item>Sửa lỗi chung và dọn dẹp mã</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_050_highlights">
+        <item>Cập nhật giao diện Material 3 Expressive</item>
+        <item>Bộ cân bằng 10 băng tần &amp; hiệu ứng</item>
+        <item>Luồng đồng bộ thư viện mới</item>
+        <item>Nhập/xuất danh sách phát M3U</item>
+        <item>Tích hợp ảnh nghệ sĩ Deezer</item>
+        <item>Ảnh bìa danh sách phát tùy chỉnh</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_050_improvements">
+        <item>Tái cấu trúc kiến trúc cài đặt</item>
+        <item>Hoạt ảnh hàng chờ &amp; trình phát</item>
+        <item>Baseline Profile &amp; hiệu năng</item>
+        <item>Hệ thống lời bài hát tốt hơn với bù lệch đồng bộ</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_060_fixes">
+        <item>Hành vi hàng chờ và phát ngẫu nhiên nay ổn định và dễ đoán hơn.</item>
+        <item>Đã sửa lỗi Hẹn giờ ngủ, điều hướng tab Tệp và sự cố sập theo nghệ sĩ album.</item>
+        <item>Đã cải thiện tải widget và độ ổn định dịch vụ để giảm quá nhiệt/tốn bộ nhớ.</item>
+        <item>Sửa lỗi chung và trau chuốt giao diện trên toàn ứng dụng.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_060_improvements">
+        <item>Đợt tối ưu hiệu năng lớn trên khởi động, thư viện, hàng chờ và tương tác trình phát.</item>
+        <item>Luồng điều hướng và tìm kiếm đáng tin cậy hơn với xử lý tuyến an toàn hơn.</item>
+        <item>Cải thiện khả năng tương thích phát âm thanh cho nhiều thiết bị và định dạng hơn.</item>
+        <item>Mở rộng thao tác chọn nhiều mục trên bài hát, album và danh sách phát.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_060_whats_new">
+        <item>Mục Đã phát gần đây và khôi phục hàng chờ giúp phiên nghe của bạn luôn sẵn sàng.</item>
+        <item>Đã bao gồm Sao lưu &amp; Khôi phục v3 và các công cụ quản lý tài khoản.</item>
+        <item>Lời bài hát thông minh hơn với tìm kiếm thủ công dự phòng và cải tiến lưu trữ.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_070_added">
+        <item>Phát trực tuyến đám mây nội bộ nay yêu cầu mã thông báo theo từng phiên.</item>
+        <item>Khôi phục bản sao lưu bỏ qua các khóa tùy chọn do mô-đun riêng quản lý.</item>
+        <item>Ghi nhật ký bản phát hành được siết chặt để tiêu đề HTTP và log Android thô không vượt qua bộ lọc Timber.</item>
+        <item>Cũng bao gồm lưu danh sách phát thông minh, quét bài trùng lặp, điều chỉnh tốc độ phát, thông báo lỗi phát/đồng bộ rõ hơn và cải thiện trợ năng.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_070_fixes">
+        <item>Đã thêm siêu dữ liệu F-Droid, siêu dữ liệu cửa hàng Fastlane, ghi chú quyền riêng tư, bảo mật, tài liệu giấy phép phụ thuộc và hướng dẫn đóng góp.</item>
+        <item>Bản dựng phát hành giữ nguyên chưa ký khi không có khóa ký cục bộ.</item>
+        <item>Đã thêm pixelplayer.disableReleaseSigning=true cho các bản dựng xác minh không ký có thể tái tạo.</item>
+        <item>Đã lập tài liệu chuỗi giấy phép tài nguyên và phụ thuộc, bao gồm các gói Maven gốc/nhị phân và JitPack.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_070_improvements">
+        <item>Đã gỡ bỏ các phụ thuộc thời gian chạy cho Telegram, NetEase, QQ Music, Google Drive, Gemini, Cast, Wear OS, thanh toán Play Store, Firebase, Crashlytics và Google Play Services.</item>
+        <item>Đã gỡ bỏ scrobble công khai Last.fm và ListenBrainz; báo cáo Navidrome/Subsonic tự lưu trữ vẫn giới hạn trong máy chủ riêng của người dùng.</item>
+        <item>Đã gỡ bỏ các bản dịch đi kèm và trình chọn ngôn ngữ trong ứng dụng cho bản phát hành FOSS đầu tiên; ưu tiên tài nguyên tiếng Anh.</item>
+        <item>Đã gỡ bỏ các luồng phát hành phụ thuộc vào tệp ký riêng tư/cục bộ, giá trị ký giả hoặc giả định riêng của kho ứng dụng.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_070_whats_new">
+        <item>Bản phát hành FOSS công khai đầu tiên của FabiPlayer.</item>
+        <item>Bao gồm phát nhạc cục bộ, danh sách phát, mục yêu thích, lời bài hát, thống kê nghe, chủ đề Material 3 động, widget và sao lưu/khôi phục.</item>
+        <item>Vẫn giữ hỗ trợ Navidrome/Subsonic và Jellyfin tự lưu trữ, cùng tìm kiếm lời bài hát LRCLIB và ảnh nghệ sĩ Deezer tùy chọn.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v020_improvements">
+        <item>Ứng dụng gọn nhẹ hơn: quy tắc thu gọn mã tinh giản hơn giúp giảm khoảng 1,5 MB dung lượng cài đặt.</item>
+        <item>Khởi động nhanh và mượt hơn: Baseline Profile được tạo lại từ đầu cho khớp với giao diện và luồng mã mới.</item>
+        <item>Danh sách, trang trượt và bộ cân bằng phản hồi nhanh hơn nhờ đợt tối ưu hiệu năng Compose diện rộng.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v020_under_the_hood">
+        <item>Phát nhạc đám mây tin cậy hơn: các yêu cầu Navidrome/Jellyfin bị hủy không còn bị báo nhầm là lỗi mạng khi chuyển bài nhanh.</item>
+        <item>Sự kiện sao lưu, khôi phục và thiết lập không còn bị mất khi xoay màn hình.</item>
+        <item>Dọn dẹp đầu xuân: loại bỏ mã thừa, chuyển đổi API lỗi thời và cập nhật các thư viện phụ thuộc.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v020_whats_new">
+        <item>Cải tiến thiết kế Material 3 Expressive: hệ thống chuyển động mới, thanh tiến trình gợn sóng và hoạt ảnh biến đổi hình dạng xuyên suốt ứng dụng.</item>
+        <item>Máy chủ Jellyfin qua HTTP thuần nay được cho phép đối với máy chủ VPN và mạng cục bộ.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>Lời bài hát đã dịch và tùy chọn dịch bằng AI giờ đây được lưu giữ ổn định khi khởi động lại ứng dụng hoặc chuyển bài.</item>
+        <item>Bảng chọn nhiều mục ở cạnh dưới nay dùng đúng ngữ pháp số ít và số nhiều trên cả 15 ngôn ngữ được hỗ trợ.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>Hoàn tất bản địa hóa chuỗi văn bản trên các màn hình, hộp thoại và thông báo lỗi.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>Đã sửa lỗi chuyển đổi ngôn ngữ ứng dụng để khi đổi ngôn ngữ, màn hình khởi động lại ổn định và phát lại hoạt ảnh vào trang.</item>
+        <item>Đã cập nhật nhật ký thay đổi trong ứng dụng với các bản phát hành và bản sửa lỗi gần đây.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>Đã gỡ bỏ trình đơn bên dư thừa khỏi Trang chủ để thanh trên cùng gọn gàng và tập trung hơn.</item>
+        <item>Đã cập nhật huy hiệu chào mừng khi thiết lập ban đầu từ Beta sang Ổn định.</item>
+    </string-array>
 </resources>

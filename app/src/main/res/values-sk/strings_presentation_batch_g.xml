@@ -485,4 +485,31 @@
         <item>Pri otočení obrazovky sa už nestrácajú udalosti zálohovania, obnovy ani úvodného nastavenia.</item>
         <item>Odstránil sa nepoužívaný kód, zastarané rozhrania sa nahradili a závislosti sa aktualizovali.</item>
     </string-array>
+    <string name="device_capabilities_unknown_short">--</string>
+    <string name="presentation_batch_g_artist_ex_2_out">Drake, Rihanna</string>
+    <string name="presentation_batch_g_artist_ex_3_out">Marshmello, Bastille</string>
+    <string name="presentation_batch_g_artist_ex_4_out">A, B</string>
+    <string name="presentation_batch_g_artist_example_arrow"> → </string>
+    <string name="presentation_batch_g_device_key_model">Model</string>
+    <string name="presentation_batch_g_device_value_hz">%1$d Hz</string>
+    <string name="presentation_batch_g_genre_sort_album">Album</string>
+    <string name="presentation_batch_g_list_song_artist_album">%1$s • %2$s</string>
+    <string name="presentation_batch_g_selection_overflow_count">+%1$d</string>
+    <string name="presentation_batch_g_stats_avatar_placeholder">\?</string>
+    <string name="presentation_batch_g_stats_em_dash">—</string>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>Preložené texty skladieb a predvoľby AI prekladu sa teraz spoľahlivo zachovávajú aj po reštarte aplikácie a zmene skladby.</item>
+        <item>Spodné panely pre hromadný výber teraz používajú správnu gramatiku jednotného a množného čísla vo všetkých 15 podporovaných jazykoch.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>Dokončená kompletná jazyková lokalizácia obrazoviek, dialógov a chybových hlásení.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>Opravené prepínanie jazyka aplikácie, takže zmena jazyka spoľahlivo reštartuje obrazovku a prehrá vstupnú animáciu.</item>
+        <item>Aktualizovaný prehľad zmien v aplikácii o nedávne vydania a opravy.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>Odstránená nadbytočná bočná ponuka z Domova pre čistejšiu a prehľadnejšiu hornú lištu.</item>
+        <item>Úvodný štítok v sprievodcovi nastavením zmenený z Beta na Stabilná.</item>
+    </string-array>
 </resources>

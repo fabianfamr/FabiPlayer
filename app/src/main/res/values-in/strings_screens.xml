@@ -292,4 +292,34 @@
     <string name="dash_jellyfin_sync_favorites_failed">Gagal menyinkronkan favorit dengan Jellyfin</string>
     <string name="home_recently_added_title">Baru ditambahkan</string>
     <string name="home_recently_added_play_cd">Putar lagu yang baru ditambahkan</string>
+    <string name="audio_bookmarks_cd_close_actions">Tutup tindakan penanda</string>
+    <string name="audio_bookmarks_cd_open_actions">Buka tindakan penanda</string>
+    <string name="audio_bookmarks_cd_sort_az">Urutkan penanda secara alfabetis</string>
+    <string name="audio_bookmarks_cd_sort_most_moments">Urutkan penanda berdasarkan momen terbanyak</string>
+    <string name="audio_bookmarks_cd_sort_recent">Urutkan penanda berdasarkan momen terbaru</string>
+    <string name="audio_bookmarks_clear_search">Hapus pencarian penanda</string>
+    <string name="audio_bookmarks_copy_cue">Salin penanda</string>
+    <string name="audio_bookmarks_cue_copied">Penanda disalin</string>
+    <string name="audio_bookmarks_cue_format">Penanda %1$s</string>
+    <string name="audio_bookmarks_cue_label">Label penanda</string>
+    <string name="audio_bookmarks_delete_bookmark">Hapus penanda</string>
+    <string name="audio_bookmarks_empty_search_subtitle">Coba cari menurut lagu, artis, album, penanda, atau tag.</string>
+    <string name="audio_bookmarks_empty_search_title">Folder penanda tidak ditemukan</string>
+    <string name="audio_bookmarks_empty_subtitle">Momen yang disimpan akan muncul di sini, dikelompokkan berdasarkan lagu.</string>
+    <string name="audio_bookmarks_empty_title">Belum ada penanda audio</string>
+    <string name="audio_bookmarks_file_not_found">File audio tidak ditemukan</string>
+    <string name="audio_bookmarks_folder_empty_subtitle">Penanda untuk lagu ini mungkin telah dihapus.</string>
+    <string name="audio_bookmarks_folder_empty_title">Tidak ada momen di folder ini</string>
+    <string name="audio_bookmarks_rename_subtitle">Perbarui label untuk penanda tersimpan ini.</string>
+    <string name="audio_bookmarks_rename_title">Ganti nama penanda</string>
+    <string name="audio_bookmarks_saved_moments">Momen tersimpan</string>
+    <string name="audio_bookmarks_search_hint">Cari penanda</string>
+    <string name="audio_bookmarks_sort_az">A-Z</string>
+    <string name="audio_bookmarks_sort_most_moments">Momen terbanyak</string>
+    <string name="audio_bookmarks_sort_recent">Terbaru</string>
+    <string name="audio_bookmarks_unknown_audio">Audio tidak dikenal</string>
+    <plurals name="audio_bookmarks_moments_count">
+        <item quantity="one">1 momen</item>
+        <item quantity="other">%1$d momen</item>
+    </plurals>
 </resources>

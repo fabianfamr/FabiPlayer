@@ -298,4 +298,36 @@
     <string name="dash_jellyfin_sync_favorites_failed">Не удалось синхронизировать избранное с Jellyfin</string>
     <string name="home_recently_added_title">Недавно добавленные</string>
     <string name="home_recently_added_play_cd">Воспроизвести недавно добавленные треки</string>
+    <string name="audio_bookmarks_cd_close_actions">Закрыть действия с закладками</string>
+    <string name="audio_bookmarks_cd_open_actions">Открыть действия с закладками</string>
+    <string name="audio_bookmarks_cd_sort_az">Сортировать закладки по алфавиту</string>
+    <string name="audio_bookmarks_cd_sort_most_moments">Сортировать закладки по количеству моментов</string>
+    <string name="audio_bookmarks_cd_sort_recent">Сортировать закладки по недавним моментам</string>
+    <string name="audio_bookmarks_clear_search">Очистить поиск закладок</string>
+    <string name="audio_bookmarks_copy_cue">Копировать метку</string>
+    <string name="audio_bookmarks_cue_copied">Метка скопирована</string>
+    <string name="audio_bookmarks_cue_format">Метка %1$s</string>
+    <string name="audio_bookmarks_cue_label">Метка закладки</string>
+    <string name="audio_bookmarks_delete_bookmark">Удалить закладку</string>
+    <string name="audio_bookmarks_empty_search_subtitle">Попробуйте искать по названию трека, исполнителю, альбому, метке или тегу.</string>
+    <string name="audio_bookmarks_empty_search_title">Папки закладок не найдены</string>
+    <string name="audio_bookmarks_empty_subtitle">Сохранённые моменты появятся здесь, сгруппированные по трекам.</string>
+    <string name="audio_bookmarks_empty_title">Аудиозакладок пока нет</string>
+    <string name="audio_bookmarks_file_not_found">Аудиофайл не найден</string>
+    <string name="audio_bookmarks_folder_empty_subtitle">Закладки для этого трека могли быть удалены.</string>
+    <string name="audio_bookmarks_folder_empty_title">В этой папке нет моментов</string>
+    <string name="audio_bookmarks_rename_subtitle">Обновите название этой сохранённой метки.</string>
+    <string name="audio_bookmarks_rename_title">Переименовать закладку</string>
+    <string name="audio_bookmarks_saved_moments">Сохранённые моменты</string>
+    <string name="audio_bookmarks_search_hint">Поиск в закладках</string>
+    <string name="audio_bookmarks_sort_az">А–Я</string>
+    <string name="audio_bookmarks_sort_most_moments">Больше всего моментов</string>
+    <string name="audio_bookmarks_sort_recent">Недавние</string>
+    <string name="audio_bookmarks_unknown_audio">Неизвестное аудио</string>
+    <plurals name="audio_bookmarks_moments_count">
+        <item quantity="one">%1$d момент</item>
+        <item quantity="few">%1$d момента</item>
+        <item quantity="many">%1$d моментов</item>
+        <item quantity="other">%1$d моментов</item>
+    </plurals>
 </resources>

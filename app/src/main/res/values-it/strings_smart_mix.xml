@@ -39,4 +39,22 @@
         <item quantity="one">%1$d brano corrispondente · %2$d min</item>
         <item quantity="other">%1$d brani corrispondenti · %2$d min</item>
     </plurals>
+    <string name="mix_moment_chill_evening">Serata relax</string>
+    <string name="mix_moment_feel_good">Buon umore</string>
+    <string name="mix_moment_late_night">Notte tranquilla</string>
+    <string name="mix_moment_morning">Mattina energica</string>
+    <string name="mix_moment_party">Festa</string>
+    <string name="mix_moment_study">Musica per studiare</string>
+    <string name="mix_moment_workout">Allenamento</string>
+    <string name="mix_suggest_decade_genre">%1$s %2$s</string>
+    <string-array name="mix_decades">
+        <item>Anni \'50</item>
+        <item>Anni \'60</item>
+        <item>Anni \'70</item>
+        <item>Anni \'80</item>
+        <item>Anni \'90</item>
+        <item>Anni 2000</item>
+        <item>Anni 2010</item>
+        <item>Anni 2020</item>
+    </string-array>
 </resources>

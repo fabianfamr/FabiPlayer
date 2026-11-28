@@ -189,4 +189,20 @@
     <string name="edit_song_remove_custom_field">إزالة الحقل</string>
     <string name="edit_song_custom_metadata_formats">يمكن كتابة التقييم والحقول المخصصة في ملفات MP3 وWAV وAIFF وFLAC وOGG وOpus وM4A وM4B وMP4.</string>
     <string name="edit_song_custom_metadata_invalid">تحقق من حقول البيانات الوصفية الاختيارية.</string>
+    <plurals name="multi_selection_selected_feminine">
+        <item quantity="zero">محددة</item>
+        <item quantity="one">محددة</item>
+        <item quantity="two">محددتان</item>
+        <item quantity="few">محددة</item>
+        <item quantity="many">محددة</item>
+        <item quantity="other">محددة</item>
+    </plurals>
+    <plurals name="multi_selection_selected_masculine">
+        <item quantity="zero">محدد</item>
+        <item quantity="one">محدد</item>
+        <item quantity="two">محددان</item>
+        <item quantity="few">محددة</item>
+        <item quantity="many">محددًا</item>
+        <item quantity="other">محدد</item>
+    </plurals>
 </resources>

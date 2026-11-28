@@ -196,4 +196,10 @@
     <string name="edit_song_remove_custom_field">移除字段</string>
     <string name="edit_song_custom_metadata_formats">评分和自定义字段可写入 MP3、WAV、AIFF、FLAC、OGG、Opus、M4A、M4B 和 MP4 文件。</string>
     <string name="edit_song_custom_metadata_invalid">请检查可选元数据字段。</string>
+    <plurals name="multi_selection_selected_feminine">
+        <item quantity="other">已选</item>
+    </plurals>
+    <plurals name="multi_selection_selected_masculine">
+        <item quantity="other">已选</item>
+    </plurals>
 </resources>

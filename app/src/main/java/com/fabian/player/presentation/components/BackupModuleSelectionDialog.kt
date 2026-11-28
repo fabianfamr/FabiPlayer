@@ -76,7 +76,7 @@ import com.fabian.player.data.backup.model.RestorePlan
 import com.fabian.player.presentation.utils.LocalAppHapticsConfig
 import com.fabian.player.presentation.utils.performAppCompatHapticFeedback
 import com.fabian.player.ui.theme.RoundedSans
-import java.text.SimpleDateFormat
+import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
 import androidx.compose.animation.animateColorAsState
@@ -100,7 +100,7 @@ fun BackupModuleSelectionDialog(
     val selectedCount = plan.selectedModules.size
     val availableCount = plan.availableModules.size
     val dateText = remember(plan.manifest.createdAt) {
-        SimpleDateFormat("MMM d, yyyy 'at' h:mm a", Locale.getDefault())
+        DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault())
             .format(Date(plan.manifest.createdAt))
     }
     val transitionState = remember { MutableTransitionState(false) }

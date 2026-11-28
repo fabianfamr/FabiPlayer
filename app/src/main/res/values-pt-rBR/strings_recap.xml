@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="recap_card_title">Sua Retrospectiva %1$d</string>
+    <string name="recap_card_title_so_far">Seu %1$d até agora</string>
+    <string name="recap_card_subtitle">Reviva seu ano na música</string>
+    <string name="recap_card_subtitle_so_far">Veja como está indo seu ano na música</string>
+    <string name="recap_home_card_title">Sua Retrospectiva %1$d chegou</string>
+    <string name="recap_home_card_subtitle">Reviva as músicas, artistas e momentos que marcaram o seu ano.</string>
+    <string name="recap_home_card_open">Abrir retrospectiva</string>
+    <string name="recap_home_card_dismiss">Dispensar</string>
+    <string name="recap_cd_close">Fechar retrospectiva</string>
+    <string name="recap_cd_pause">Pausar</string>
+    <string name="recap_cd_resume">Retomar</string>
+    <string name="recap_cd_slide_progress">Slide %1$d de %2$d</string>
+    <string name="recap_action_next_slide">Próximo slide</string>
+    <string name="recap_action_previous_slide">Slide anterior</string>
+    <string name="recap_close">Fechar</string>
+    <string name="recap_not_enough_title">Ainda não há audições suficientes</string>
+    <string name="recap_not_enough_subtitle">Continue ouvindo música e sua retrospectiva de %1$d vai ganhando forma.</string>
+    <string name="recap_intro_kicker">Retrospectiva FabiPlayer</string>
+    <string name="recap_intro_title">Seu ano na música</string>
+    <string name="recap_intro_title_so_far">Seu ano até agora</string>
+    <string name="recap_intro_subtitle">Uma viagem pelas músicas, artistas e momentos que embalaram o seu ano.</string>
+    <string name="recap_tap_hint">Toque para continuar</string>
+    <string name="recap_minutes_kicker">Em %1$d você ouviu por</string>
+    <string name="recap_minutes_daily_average">Média diária</string>
+    <string name="recap_minutes_active_days">Dias com música</string>
+    <string name="recap_months_kicker">Seu maior mês</string>
+    <string name="recap_months_detail">%1$s de reprodução</string>
+    <string name="recap_clock_kicker">Seu relógio musical</string>
+    <string name="recap_personality_early_bird">Madrugador</string>
+    <string name="recap_personality_early_bird_desc">Você começou o dia com música. As manhãs foram o seu horário nobre.</string>
+    <string name="recap_personality_daytime">Ouvinte diurno</string>
+    <string name="recap_personality_daytime_desc">Sua música fez companhia ao longo do dia, do fim da manhã até a tarde.</string>
+    <string name="recap_personality_evening">Fim de tarde</string>
+    <string name="recap_personality_evening_desc">Quando o dia desacelerou, o volume da música subiu.</string>
+    <string name="recap_personality_night_owl">Coruja noturna</string>
+    <string name="recap_personality_night_owl_desc">Quanto mais tarde ficava, mais você ouvia.</string>
+    <string name="recap_clock_favorite_day">Dia favorito: %1$s</string>
+    <string name="recap_cd_chart_entry">%1$s: %2$s</string>
+    <string name="recap_cd_months_chart">Audição por mês: %1$s</string>
+    <string name="recap_cd_clock_chart">Audição por hora: %1$s</string>
+    <string name="recap_dedication_kicker">Sua maior sequência</string>
+    <string name="recap_dedication_longest_session">Sessão mais longa</string>
+    <string name="recap_dedication_biggest_day">Maior dia</string>
+    <string name="recap_dedication_first_song">Primeira música do ano</string>
+    <string name="recap_genres_kicker">Seus principais gêneros</string>
+    <string name="recap_genres_share">%1$s das suas audições</string>
+    <string name="recap_decade_kicker">Sua era</string>
+    <string name="recap_decade_value">Anos %1$d</string>
+    <string name="recap_decade_detail">%1$s do que você ouviu veio de músicas lançadas nessa década.</string>
+    <string name="recap_albums_kicker">Seus principais álbuns</string>
+    <string name="recap_artists_kicker">Seu artista principal</string>
+    <string name="recap_songs_kicker">Sua música principal</string>
+    <string name="recap_summary_kicker">Seu ano em resumo</string>
+    <string name="recap_summary_title">Meu %1$d na música</string>
+    <string name="recap_summary_title_so_far">Meu %1$d até agora</string>
+    <string name="recap_summary_minutes">Minutos ouvidos</string>
+    <string name="recap_summary_top_artist">Artista principal</string>
+    <string name="recap_summary_top_song">Música principal</string>
+    <string name="recap_summary_top_genre">Gênero principal</string>
+    <string name="recap_summary_top_album">Álbum principal</string>
+    <string name="recap_summary_listening_style">Estilo de audição</string>
+    <string name="recap_share">Compartilhar</string>
+    <string name="recap_share_chooser_title">Compartilhar sua retrospectiva</string>
+    <string name="recap_share_text">Meu %1$d na música, feito com FabiPlayer</string>
+    <string name="recap_share_failed">Não foi possível criar a imagem da retrospectiva</string>
+    <string name="recap_play_top_songs">Tocar mais ouvidas</string>
+    <string name="recap_top_songs_queue_name">Mais ouvidas de %1$d</string>
+    <string name="recap_replay">Assistir novamente</string>
+    <plurals name="recap_minutes_unit">
+        <item quantity="one">minuto</item>
+        <item quantity="other">minutos</item>
+    </plurals>
+    <plurals name="recap_minutes_days_equivalent">
+        <item quantity="one">Isso dá cerca de %d dia de música sem parar.</item>
+        <item quantity="other">Isso dá cerca de %d dias de música sem parar.</item>
+    </plurals>
+    <plurals name="recap_minutes_hours_equivalent">
+        <item quantity="one">Isso dá cerca de %d hora de música sem parar.</item>
+        <item quantity="other">Isso dá cerca de %d horas de música sem parar.</item>
+    </plurals>
+    <plurals name="recap_streak_unit">
+        <item quantity="one">dia seguido</item>
+        <item quantity="other">dias seguidos</item>
+    </plurals>
+    <plurals name="recap_unique_albums">
+        <item quantity="one">%d álbum na sua rotação</item>
+        <item quantity="other">%d álbuns na sua rotação</item>
+    </plurals>
+    <plurals name="recap_unique_artists">
+        <item quantity="one">Você ouviu %d artista</item>
+        <item quantity="other">Você ouviu %d artistas diferentes</item>
+    </plurals>
+    <plurals name="recap_unique_songs">
+        <item quantity="one">Você tocou %d música</item>
+        <item quantity="other">Você tocou %d músicas diferentes</item>
+    </plurals>
+</resources>

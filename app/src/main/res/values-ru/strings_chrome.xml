@@ -25,4 +25,6 @@
     <string name="add_bookmark_saved_point">Сохранённая позиция воспроизведения</string>
     <string name="add_bookmark_use_lyric_line">Использовать строку текста</string>
     <string name="add_bookmark_default_name">Закладка @ %1$s</string>
+    <string name="song_info_open_source">Открыть источник</string>
+    <string name="song_info_open_source_failed">Нет приложения для открытия этой ссылки</string>
 </resources>

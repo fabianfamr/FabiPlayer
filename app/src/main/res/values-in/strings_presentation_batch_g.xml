@@ -499,4 +499,20 @@ Garis miring terbalik (\) dapat digunakan untuk meloloskan pemisah karakter.</st
         <item>Peristiwa cadangan, pemulihan, dan penyiapan tidak lagi bisa hilang saat layar diputar.</item>
         <item>Bersih-bersih besar: kode mati dihapus, API yang usang dimigrasikan, dan dependensi diperbarui.</item>
     </string-array>
+    <string name="selection_select_between">Pilih semua di antara lagu yang dipilih</string>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>Lirik yang diterjemahkan dan preferensi terjemahan AI kini tersimpan dengan andal setelah aplikasi dimulai ulang atau lagu diganti.</item>
+        <item>Panel bawah multi-pilihan kini menggunakan tata bahasa tunggal dan jamak yang tepat di semua 15 bahasa yang didukung.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>Lokalisasi string selesai di seluruh layar, dialog, dan pesan kesalahan.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>Memperbaiki penggantian bahasa aplikasi agar mengubah bahasa secara andal memulai ulang layar dan memutar ulang animasi masuk.</item>
+        <item>Memperbarui catatan perubahan di dalam aplikasi dengan rilis dan perbaikan terbaru.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>Menghapus menu samping yang berlebihan dari Beranda untuk bilah atas yang lebih bersih dan fokus.</item>
+        <item>Memperbarui lencana sambutan pengaturan awal dari Beta ke Stabil.</item>
+    </string-array>
 </resources>

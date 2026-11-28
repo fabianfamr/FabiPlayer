@@ -38,4 +38,22 @@
     <plurals name="mix_matching_songs">
         <item quantity="other">%1$d bài hát phù hợp · %2$d phút</item>
     </plurals>
+    <string name="mix_moment_chill_evening">Buổi tối thư giãn</string>
+    <string name="mix_moment_feel_good">Tâm trạng vui vẻ</string>
+    <string name="mix_moment_late_night">Đêm khuya êm dịu</string>
+    <string name="mix_moment_morning">Buổi sáng sôi động</string>
+    <string name="mix_moment_party">Tiệc tùng</string>
+    <string name="mix_moment_study">Nhạc học tập</string>
+    <string name="mix_moment_workout">Tập luyện</string>
+    <string name="mix_suggest_decade_genre">%1$s %2$s</string>
+    <string-array name="mix_decades">
+        <item>Thập niên 50</item>
+        <item>Thập niên 60</item>
+        <item>Thập niên 70</item>
+        <item>Thập niên 80</item>
+        <item>Thập niên 90</item>
+        <item>Thập niên 2000</item>
+        <item>Thập niên 2010</item>
+        <item>Thập niên 2020</item>
+    </string-array>
 </resources>

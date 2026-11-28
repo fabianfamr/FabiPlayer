@@ -25,4 +25,6 @@
     <string name="add_bookmark_saved_point">Kaydedilen oynatma noktası</string>
     <string name="add_bookmark_use_lyric_line">Şarkı sözü satırını kullan</string>
     <string name="add_bookmark_default_name">Yer imi @ %1$s</string>
+    <string name="song_info_open_source">Kaynağı aç</string>
+    <string name="song_info_open_source_failed">Bu bağlantıyı açabilecek uygulama bulunamadı</string>
 </resources>

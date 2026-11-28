@@ -364,4 +364,27 @@
     <string name="updates_notification_text">FabiPlayer %1$s je pripravený na inštaláciu.</string>
     <string name="updates_notification_confirm_title">Dokončite aktualizáciu aplikácie FabiPlayer</string>
     <string name="updates_notification_confirm_text">Ťuknutím potvrďte inštaláciu.</string>
+    <string name="ai_settings_gemini_section">Konfigurácia Gemini</string>
+    <string name="ai_settings_overview">Nastavte si svoj kľúč API Google AI Studio a vyberte model Gemini pre funkcie AI, ako je preklad textov a fonetická výslovnosť.</string>
+    <string name="cd_hide_api_key">Skryť kľúč API</string>
+    <string name="cd_show_api_key">Zobraziť kľúč API</string>
+    <string name="playback_speed_multiplier_suffix">×</string>
+    <string name="playback_speed_value">%1$s×</string>
+    <string name="setcat_gain_mode_album">Album</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_after_delay">Počkať pred zmenou</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_after_delay_desc">Pred použitím nových farieb počká nastavený čas – ideálne pri rýchlom preskakovaní skladieb.</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_desc">Vyberte, či sa farby aplikácie menia postupne počas zvoleného času, alebo počkajú na jeho uplynutie.</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_gradual">Postupný</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_gradual_desc">Začne jemne a plnú intenzitu farieb dosiahne počas nastaveného času.</string>
+    <string name="setcat_global_now_playing_theme_transition_mode_label">Štýl farebného prechodu</string>
+    <string name="setcat_global_now_playing_theme_transition_title">Dĺžka farebného prechodu</string>
+    <string name="setcat_lyrics_font_size_value">%1$.0f sp</string>
+    <string name="setcat_theme_preset_amoled">AMOLED</string>
+    <string name="settings_category_ai_subtitle">Konfigurácia kľúča API a modelu Gemini</string>
+    <string name="settings_category_ai_title">AI</string>
+    <string name="updates_channel_stable_description">Otestované vydania publikované na GitHube.</string>
+    <string name="updates_channel_stable_source">Stabilná · GitHub</string>
+    <string name="updates_switch_action_open_fdroid">Otvoriť stránku na GitHube</string>
+    <string name="updates_switch_dialog_body">Stabilné aj alfa verzie pochádzajú z GitHub Releases. Ak sú podpísané odlišnými kľúčmi, Android ich nemôže navzájom aktualizovať. Odinštalovanie vymaže údaje aplikácie, preto si najskôr vytvorte zálohu.</string>
+    <string name="updates_switch_step_download_stable">2. Stiahnite si stabilný súbor APK z GitHub Releases.</string>
 </resources>

@@ -38,4 +38,22 @@
     <plurals name="mix_matching_songs">
         <item quantity="other">일치하는 곡 %1$d개 · %2$d분</item>
     </plurals>
+    <string name="mix_moment_chill_evening">편안한 저녁</string>
+    <string name="mix_moment_feel_good">기분 좋은 날</string>
+    <string name="mix_moment_late_night">잔잔한 심야</string>
+    <string name="mix_moment_morning">상쾌한 아침</string>
+    <string name="mix_moment_party">파티</string>
+    <string name="mix_moment_study">공부할 때 듣는 음악</string>
+    <string name="mix_moment_workout">운동</string>
+    <string name="mix_suggest_decade_genre">%1$s %2$s</string>
+    <string-array name="mix_decades">
+        <item>50년대</item>
+        <item>60년대</item>
+        <item>70년대</item>
+        <item>80년대</item>
+        <item>90년대</item>
+        <item>2000년대</item>
+        <item>2010년대</item>
+        <item>2020년대</item>
+    </string-array>
 </resources>

@@ -499,4 +499,20 @@
         <item>화면을 회전해도 백업, 복구, 설정 이벤트가 유실되지 않습니다.</item>
         <item>대청소: 사용하지 않는 코드를 제거하고, 지원 중단된 API를 마이그레이션하고, 의존성을 업데이트했습니다.</item>
     </string-array>
+    <string name="selection_select_between">선택한 트랙 사이 모두 선택</string>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>번역된 가사와 AI 번역 설정이 이제 앱 재시작 및 트랙 전환 후에도 안정적으로 유지됩니다.</item>
+        <item>다중 선택 하단 시트가 이제 지원되는 15개 언어 모두에서 올바른 단수/복수 문법을 사용합니다.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>모든 화면, 대화상자 및 오류 메시지의 문자열 현지화를 완료했습니다.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>언어 변경 시 화면이 안정적으로 다시 시작되고 진입 애니메이션이 재생되도록 앱 언어 전환을 수정했습니다.</item>
+        <item>최신 릴리스와 수정 사항을 포함하도록 앱 내 변경 로그를 업데이트했습니다.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>더 깔끔하고 집중된 상단 바를 위해 홈에서 불필요한 측면 메뉴를 제거했습니다.</item>
+        <item>초기 설정 환영 배지를 베타에서 안정판으로 업데이트했습니다.</item>
+    </string-array>
 </resources>

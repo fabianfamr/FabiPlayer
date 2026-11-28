@@ -811,30 +811,22 @@ private fun BookmarkFolderSectionHeader(
 private enum class BookmarkFolderSortMode(
     @StringRes val labelRes: Int,
     @StringRes val contentDescriptionRes: Int,
-    val icon: ImageVector,
-    val label: String,
-    val contentDescription: String
+    val icon: ImageVector
 ) {
     MostMoments(
         labelRes = R.string.audio_bookmarks_sort_most_moments,
         contentDescriptionRes = R.string.audio_bookmarks_cd_sort_most_moments,
-        icon = Icons.Rounded.Bookmark,
-        label = "Most moments",
-        contentDescription = "Sort bookmarks by most moments"
+        icon = Icons.Rounded.Bookmark
     ),
     Recent(
         labelRes = R.string.audio_bookmarks_sort_recent,
         contentDescriptionRes = R.string.audio_bookmarks_cd_sort_recent,
-        icon = Icons.Rounded.AccessTime,
-        label = "Recent",
-        contentDescription = "Sort bookmarks by recent moments"
+        icon = Icons.Rounded.AccessTime
     ),
     Title(
         labelRes = R.string.audio_bookmarks_sort_az,
         contentDescriptionRes = R.string.audio_bookmarks_cd_sort_az,
-        icon = Icons.Rounded.SortByAlpha,
-        label = "A-Z",
-        contentDescription = "Sort bookmarks alphabetically"
+        icon = Icons.Rounded.SortByAlpha
     );
 
     fun next(): BookmarkFolderSortMode =
@@ -1168,7 +1160,7 @@ private fun BookmarkKeepSearchTopBar(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                    contentDescription = "Back"
+                    contentDescription = stringResource(R.string.auth_cd_back)
                 )
             }
 

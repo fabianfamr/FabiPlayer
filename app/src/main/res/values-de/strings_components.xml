@@ -189,4 +189,12 @@
     <string name="edit_song_remove_custom_field">Feld entfernen</string>
     <string name="edit_song_custom_metadata_formats">Bewertung und eigene Felder können in Dateien der Formate MP3, WAV, AIFF, FLAC, OGG, Opus, M4A, M4B und MP4 gespeichert werden.</string>
     <string name="edit_song_custom_metadata_invalid">Prüfe die optionalen Metadatenfelder.</string>
+    <plurals name="multi_selection_selected_feminine">
+        <item quantity="one">ausgewählt</item>
+        <item quantity="other">ausgewählt</item>
+    </plurals>
+    <plurals name="multi_selection_selected_masculine">
+        <item quantity="one">ausgewählt</item>
+        <item quantity="other">ausgewählt</item>
+    </plurals>
 </resources>

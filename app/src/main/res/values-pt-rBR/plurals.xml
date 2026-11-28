@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="sharing_playlists_message">
+        <item quantity="one">Compartilhando %d playlist</item>
+        <item quantity="other">Compartilhando %d playlists</item>
+    </plurals>
+    <plurals name="exported_playlists_message">
+        <item quantity="one">%1$d playlist exportada para %2$s</item>
+        <item quantity="other">%1$d playlists exportadas para %2$s</item>
+    </plurals>
+    <plurals name="n_songs_added_to_queue">
+        <item quantity="one">%d música adicionada à fila</item>
+        <item quantity="other">%d músicas adicionadas à fila</item>
+    </plurals>
+    <plurals name="n_songs_will_play_next">
+        <item quantity="one">%d música tocará em seguida</item>
+        <item quantity="other">%d músicas tocarão em seguida</item>
+    </plurals>
+    <plurals name="n_songs_added_to_favorites">
+        <item quantity="one">%d música adicionada aos favoritos</item>
+        <item quantity="other">%d músicas adicionadas aos favoritos</item>
+    </plurals>
+    <plurals name="n_songs_removed_from_favorites">
+        <item quantity="one">%d música removida dos favoritos</item>
+        <item quantity="other">%d músicas removidas dos favoritos</item>
+    </plurals>
+    <plurals name="n_files_deleted">
+        <item quantity="one">%d arquivo excluído</item>
+        <item quantity="other">%d arquivos excluídos</item>
+    </plurals>
+    <plurals name="delete_songs_confirmation_title">
+        <item quantity="one">Excluir %d música?</item>
+        <item quantity="other">Excluir %d músicas?</item>
+    </plurals>
+    <plurals name="sleep_timer_play_count_times">
+        <item quantity="one">%d vez</item>
+        <item quantity="other">%d vezes</item>
+    </plurals>
+    <plurals name="stats_active_days_count">
+        <item quantity="one">%d dia ativo</item>
+        <item quantity="other">%d dias ativos</item>
+    </plurals>
+    <plurals name="stats_artists_count">
+        <item quantity="one">%d artista</item>
+        <item quantity="other">%d artistas</item>
+    </plurals>
+    <plurals name="stats_days_count">
+        <item quantity="one">%d dia</item>
+        <item quantity="other">%d dias</item>
+    </plurals>
+    <plurals name="stats_plays_count">
+        <item quantity="one">%d reprodução</item>
+        <item quantity="other">%d reproduções</item>
+    </plurals>
+    <plurals name="stats_sessions_count">
+        <item quantity="one">%d sessão</item>
+        <item quantity="other">%d sessões</item>
+    </plurals>
+    <plurals name="stats_tracks_count">
+        <item quantity="one">%d faixa</item>
+        <item quantity="other">%d faixas</item>
+    </plurals>
+    <plurals name="delete_playlists_confirmation_title">
+        <item quantity="one">Excluir %d playlist?</item>
+        <item quantity="other">Excluir %d playlists?</item>
+    </plurals>
+    <plurals name="delete_playlists_confirmation_body">
+        <item quantity="one">Tem certeza de que deseja excluir %d playlist?</item>
+        <item quantity="other">Tem certeza de que deseja excluir %d playlists?</item>
+    </plurals>
+    <plurals name="song_count">
+        <item quantity="one">%d música</item>
+        <item quantity="other">%d músicas</item>
+    </plurals>
+    <plurals name="time_ago_minutes">
+        <item quantity="one">há %d minuto</item>
+        <item quantity="other">há %d minutos</item>
+    </plurals>
+    <plurals name="time_ago_hours">
+        <item quantity="one">há %d hora</item>
+        <item quantity="other">há %d horas</item>
+    </plurals>
+    <plurals name="time_ago_days">
+        <item quantity="one">há %d dia</item>
+        <item quantity="other">há %d dias</item>
+    </plurals>
+</resources>

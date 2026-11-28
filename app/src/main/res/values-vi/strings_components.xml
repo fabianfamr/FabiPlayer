@@ -196,4 +196,10 @@
     <string name="playlist_saved_toast">Đã lưu</string>
     <string name="folder_state_excluded">Đã loại trừ</string>
     <string name="folder_state_included">Đã bao gồm</string>
+    <plurals name="multi_selection_selected_feminine">
+        <item quantity="other">đã chọn</item>
+    </plurals>
+    <plurals name="multi_selection_selected_masculine">
+        <item quantity="other">đã chọn</item>
+    </plurals>
 </resources>

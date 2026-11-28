@@ -15,4 +15,8 @@
     <string name="sort_method_date_created">Dato opprettet</string>
     <string name="sort_method_date_liked">Dato likt</string>
     <string name="sort_method_subfolder_count">Antall undermapper</string>
+    <string name="sort_advanced_sorting">Avansert sortering</string>
+    <string name="sort_method_filename">Filnavn</string>
+    <string name="sort_primary">Primær</string>
+    <string name="sort_secondary">Sekundær</string>
 </resources>

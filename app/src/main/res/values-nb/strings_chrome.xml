@@ -25,4 +25,6 @@
     <string name="add_bookmark_saved_point">Lagret avspillingspunkt</string>
     <string name="add_bookmark_use_lyric_line">Bruk sangtekstlinje</string>
     <string name="add_bookmark_default_name">Bokmerke @ %1$s</string>
+    <string name="song_info_open_source">Åpne kilde</string>
+    <string name="song_info_open_source_failed">Ingen app kunne åpne denne lenken</string>
 </resources>

@@ -184,4 +184,21 @@
     <string name="playlist_saved_toast">Uloženo</string>
     <string name="folder_state_excluded">Vyloučeno</string>
     <string name="folder_state_included">Zahrnuto</string>
+    <string name="cd_album_icon">Album</string>
+    <string name="placeholder_replaygain_album_example">-8.20</string>
+    <string name="placeholder_replaygain_track_example">-6.50</string>
+    <string name="song_field_album">Album</string>
+    <string name="song_info_tab_info_badge">INFO</string>
+    <plurals name="multi_selection_selected_feminine">
+        <item quantity="one">vybraná</item>
+        <item quantity="few">vybrané</item>
+        <item quantity="many">vybrané</item>
+        <item quantity="other">vybraných</item>
+    </plurals>
+    <plurals name="multi_selection_selected_masculine">
+        <item quantity="one">vybraný</item>
+        <item quantity="few">vybrané</item>
+        <item quantity="many">vybraného</item>
+        <item quantity="other">vybraných</item>
+    </plurals>
 </resources>

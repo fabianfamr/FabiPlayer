@@ -292,4 +292,34 @@
     <string name="dash_jellyfin_sync_favorites_failed">Impossible de synchroniser les favoris avec Jellyfin</string>
     <string name="home_recently_added_title">Ajoutés récemment</string>
     <string name="home_recently_added_play_cd">Lire les titres ajoutés récemment</string>
+    <string name="audio_bookmarks_cd_close_actions">Fermer les actions de signet</string>
+    <string name="audio_bookmarks_cd_open_actions">Ouvrir les actions de signet</string>
+    <string name="audio_bookmarks_cd_sort_az">Trier les signets par ordre alphabétique</string>
+    <string name="audio_bookmarks_cd_sort_most_moments">Trier les signets par nombre de moments</string>
+    <string name="audio_bookmarks_cd_sort_recent">Trier les signets par moments récents</string>
+    <string name="audio_bookmarks_clear_search">Effacer la recherche de signets</string>
+    <string name="audio_bookmarks_copy_cue">Copier le repère</string>
+    <string name="audio_bookmarks_cue_copied">Repère copié</string>
+    <string name="audio_bookmarks_cue_format">Repère %1$s</string>
+    <string name="audio_bookmarks_cue_label">Repère du signet</string>
+    <string name="audio_bookmarks_delete_bookmark">Supprimer le signet</string>
+    <string name="audio_bookmarks_empty_search_subtitle">Essayez de rechercher par titre, artiste, album, repère ou étiquette.</string>
+    <string name="audio_bookmarks_empty_search_title">Aucun dossier de signets trouvé</string>
+    <string name="audio_bookmarks_empty_subtitle">Les moments enregistrés apparaîtront ici regroupés par piste.</string>
+    <string name="audio_bookmarks_empty_title">Aucun signet audio pour le moment</string>
+    <string name="audio_bookmarks_file_not_found">Fichier audio introuvable</string>
+    <string name="audio_bookmarks_folder_empty_subtitle">Les signets de cette piste ont peut-être été supprimés.</string>
+    <string name="audio_bookmarks_folder_empty_title">Aucun moment dans ce dossier</string>
+    <string name="audio_bookmarks_rename_subtitle">Mettre à jour le libellé de ce repère enregistré.</string>
+    <string name="audio_bookmarks_rename_title">Renommer le signet</string>
+    <string name="audio_bookmarks_saved_moments">Moments enregistrés</string>
+    <string name="audio_bookmarks_search_hint">Rechercher dans les signets</string>
+    <string name="audio_bookmarks_sort_az">A–Z</string>
+    <string name="audio_bookmarks_sort_most_moments">Plus de moments</string>
+    <string name="audio_bookmarks_sort_recent">Récents</string>
+    <string name="audio_bookmarks_unknown_audio">Audio inconnu</string>
+    <plurals name="audio_bookmarks_moments_count">
+        <item quantity="one">1 moment</item>
+        <item quantity="other">%1$d moments</item>
+    </plurals>
 </resources>

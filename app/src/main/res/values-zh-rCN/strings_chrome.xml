@@ -25,4 +25,6 @@
     <string name="add_bookmark_saved_point">已保存的播放位置</string>
     <string name="add_bookmark_use_lyric_line">使用歌词行</string>
     <string name="add_bookmark_default_name">书签 @ %1$s</string>
+    <string name="song_info_open_source">打开来源</string>
+    <string name="song_info_open_source_failed">没有应用可以打开此链接</string>
 </resources>

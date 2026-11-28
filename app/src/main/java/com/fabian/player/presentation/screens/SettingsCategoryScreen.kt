@@ -4,7 +4,7 @@ package com.fabian.player.presentation.screens
 
 import com.fabian.player.presentation.navigation.navigateSafely
 import com.fabian.player.presentation.components.BackupModuleSelectionDialog
-import java.text.SimpleDateFormat
+import java.text.DateFormat
 import java.util.Date
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.ui.draw.rotate
@@ -2343,6 +2343,7 @@ private fun BackupTransferProgressDialogHost(progress: BackupTransferProgressUpd
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun BackupTransferProgressDialog(progress: BackupTransferProgressUpdate) {
+    val context = LocalContext.current
     val animatedProgress by animateFloatAsState(
         targetValue = progress.progress.coerceIn(0f, 1f),
         animationSpec = tween(durationMillis = 300),
@@ -2422,7 +2423,7 @@ private fun BackupTransferProgressDialog(progress: BackupTransferProgressUpdate)
                 )
 
                 Text(
-                    text = progress.title,
+                    text = progress.resolveTitle(context),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Medium,
@@ -2437,7 +2438,7 @@ private fun BackupTransferProgressDialog(progress: BackupTransferProgressUpdate)
                 )
 
                 AnimatedContent(
-                    targetState = progress.detail,
+                    targetState = progress.resolveDetail(context),
                     transitionSpec = { fadeIn() togetherWith fadeOut() },
                     label = "BackupStepDetail"
                 ) { animatedDetail ->
@@ -2693,7 +2694,7 @@ private fun BackupHistoryCard(
 ) {
     val unknownShort = stringResource(R.string.presentation_batch_f_unknown_short)
     val dateText = remember(entry.createdAt) {
-        val sdf = java.text.SimpleDateFormat("MMM d, yyyy 'at' h:mm a", java.util.Locale.getDefault())
+        val sdf = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, java.util.Locale.getDefault())
         sdf.format(java.util.Date(entry.createdAt))
     }
     val sizeText = remember(entry.sizeBytes) {

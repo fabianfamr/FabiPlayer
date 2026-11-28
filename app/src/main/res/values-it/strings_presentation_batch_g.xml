@@ -499,4 +499,20 @@ La barra rovesciata (\) può essere usata per l\'escape dei delimitatori di cara
         <item>Gli eventi di backup, ripristino e configurazione non possono più andare persi durante la rotazione dello schermo.</item>
         <item>Pulizie di primavera: rimosso il codice inutilizzato, migrate le API deprecate e aggiornate le dipendenze.</item>
     </string-array>
+    <string name="selection_select_between">Seleziona tutto tra i brani selezionati</string>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>I testi tradotti e le preferenze di traduzione IA ora persistono in modo affidabile tra riavvii dell\'app e cambi di brano.</item>
+        <item>I pannelli di selezione multipla ora usano correttamente singolare e plurale in tutte le 15 lingue supportate.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>Completata la localizzazione delle stringhe su tutte le schermate, finestre di dialogo e messaggi di errore.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>Risolto il cambio lingua in modo che l\'app riavvii in modo affidabile la schermata e riproduca l\'animazione iniziale.</item>
+        <item>Aggiornato il registro delle modifiche nell\'app con le versioni e correzioni recenti.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>Rimosso il menu laterale ridondante dalla Home per una barra superiore più pulita ed essenziale.</item>
+        <item>Aggiornato il badge iniziale della configurazione da Beta a Stabile.</item>
+    </string-array>
 </resources>

@@ -195,4 +195,16 @@
     <string name="edit_song_remove_custom_field">Удалить поле</string>
     <string name="edit_song_custom_metadata_formats">Оценку и пользовательские поля можно записывать в файлы MP3, WAV, AIFF, FLAC, OGG, Opus, M4A, M4B и MP4.</string>
     <string name="edit_song_custom_metadata_invalid">Проверьте дополнительные поля метаданных.</string>
+    <plurals name="multi_selection_selected_feminine">
+        <item quantity="one">выбрана</item>
+        <item quantity="few">выбраны</item>
+        <item quantity="many">выбрано</item>
+        <item quantity="other">выбрано</item>
+    </plurals>
+    <plurals name="multi_selection_selected_masculine">
+        <item quantity="one">выбран</item>
+        <item quantity="few">выбраны</item>
+        <item quantity="many">выбрано</item>
+        <item quantity="other">выбрано</item>
+    </plurals>
 </resources>

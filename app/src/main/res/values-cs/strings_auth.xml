@@ -32,4 +32,10 @@
     <string name="auth_jellyfin_password_hint">Heslo vašeho účtu Jellyfin.</string>
     <string name="auth_jellyfin_footer">Připojte se k serverům Jellyfin a streamujte hudbu ze své knihovny</string>
     <string name="auth_web_retry">Zkusit znovu</string>
+    <string name="auth_jellyfin_title">Jellyfin</string>
+    <string name="auth_navidrome_title">Subsonic / Navidrome</string>
+    <string name="auth_username_placeholder_admin">admin</string>
+    <string name="cd_jellyfin_logo">Jellyfin</string>
+    <string name="cd_navidrome_logo">Navidrome</string>
+    <string name="cd_subsonic_logo">Subsonic</string>
 </resources>

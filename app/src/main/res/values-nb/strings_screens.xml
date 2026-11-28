@@ -292,4 +292,34 @@
     <string name="dash_jellyfin_sync_favorites_failed">Kunne ikke synkronisere favoritter med Jellyfin</string>
     <string name="home_recently_added_title">Nylig lagt til</string>
     <string name="home_recently_added_play_cd">Spill av nylig tillagte sanger</string>
+    <string name="audio_bookmarks_cd_close_actions">Lukk bokmerkehandlinger</string>
+    <string name="audio_bookmarks_cd_open_actions">Åpne bokmerkehandlinger</string>
+    <string name="audio_bookmarks_cd_sort_az">Sorter bokmerker alfabetisk</string>
+    <string name="audio_bookmarks_cd_sort_most_moments">Sorter bokmerker etter flest øyeblikk</string>
+    <string name="audio_bookmarks_cd_sort_recent">Sorter bokmerker etter nylige øyeblikk</string>
+    <string name="audio_bookmarks_clear_search">Tøm bokmerkesøk</string>
+    <string name="audio_bookmarks_copy_cue">Kopier cue</string>
+    <string name="audio_bookmarks_cue_copied">Cue kopiert</string>
+    <string name="audio_bookmarks_cue_format">Cue %1$s</string>
+    <string name="audio_bookmarks_cue_label">Bokmerke-cue</string>
+    <string name="audio_bookmarks_delete_bookmark">Slett bokmerke</string>
+    <string name="audio_bookmarks_empty_search_subtitle">Prøv å søke etter sang, artist, album, cue eller bokmerketagg.</string>
+    <string name="audio_bookmarks_empty_search_title">Ingen bokmerkemapper funnet</string>
+    <string name="audio_bookmarks_empty_subtitle">Lagrede øyeblikk vises her gruppert etter spor.</string>
+    <string name="audio_bookmarks_empty_title">Ingen lydbokmerker ennå</string>
+    <string name="audio_bookmarks_file_not_found">Lydfil ikke funnet</string>
+    <string name="audio_bookmarks_folder_empty_subtitle">Bokmerker for dette sporet kan ha blitt slettet.</string>
+    <string name="audio_bookmarks_folder_empty_title">Ingen øyeblikk i denne mappen</string>
+    <string name="audio_bookmarks_rename_subtitle">Oppdater etiketten for denne lagrede cuen.</string>
+    <string name="audio_bookmarks_rename_title">Gi nytt navn til bokmerke</string>
+    <string name="audio_bookmarks_saved_moments">Lagrede øyeblikk</string>
+    <string name="audio_bookmarks_search_hint">Søk i bokmerker</string>
+    <string name="audio_bookmarks_sort_az">A–Å</string>
+    <string name="audio_bookmarks_sort_most_moments">Flest øyeblikk</string>
+    <string name="audio_bookmarks_sort_recent">Nylige</string>
+    <string name="audio_bookmarks_unknown_audio">Ukjent lyd</string>
+    <plurals name="audio_bookmarks_moments_count">
+        <item quantity="one">1 øyeblikk</item>
+        <item quantity="other">%1$d øyeblikk</item>
+    </plurals>
 </resources>

@@ -15,4 +15,8 @@
     <string name="sort_method_date_created">创建时间</string>
     <string name="sort_method_date_liked">收藏时间</string>
     <string name="sort_method_subfolder_count">子文件夹数量</string>
+    <string name="sort_advanced_sorting">高级排序</string>
+    <string name="sort_method_filename">文件名</string>
+    <string name="sort_primary">主要</string>
+    <string name="sort_secondary">次要</string>
 </resources>

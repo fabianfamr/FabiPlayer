@@ -292,4 +292,34 @@
     <string name="dash_jellyfin_sync_favorites_failed">Favoriten konnten nicht mit Jellyfin synchronisiert werden</string>
     <string name="home_recently_added_title">Kürzlich hinzugefügt</string>
     <string name="home_recently_added_play_cd">Kürzlich hinzugefügte Titel wiedergeben</string>
+    <string name="audio_bookmarks_cd_close_actions">Lesezeichen-Aktionen schließen</string>
+    <string name="audio_bookmarks_cd_open_actions">Lesezeichen-Aktionen öffnen</string>
+    <string name="audio_bookmarks_cd_sort_az">Lesezeichen alphabetisch sortieren</string>
+    <string name="audio_bookmarks_cd_sort_most_moments">Lesezeichen nach meisten Momenten sortieren</string>
+    <string name="audio_bookmarks_cd_sort_recent">Lesezeichen nach letzten Momenten sortieren</string>
+    <string name="audio_bookmarks_clear_search">Lesezeichensuche leeren</string>
+    <string name="audio_bookmarks_copy_cue">Cue kopieren</string>
+    <string name="audio_bookmarks_cue_copied">Cue kopiert</string>
+    <string name="audio_bookmarks_cue_format">Cue %1$s</string>
+    <string name="audio_bookmarks_cue_label">Lesezeichen-Cue</string>
+    <string name="audio_bookmarks_delete_bookmark">Lesezeichen löschen</string>
+    <string name="audio_bookmarks_empty_search_subtitle">Versuche eine Suche nach Titel, Künstler, Album, Cue oder Tag.</string>
+    <string name="audio_bookmarks_empty_search_title">Keine Lesezeichen-Ordner gefunden</string>
+    <string name="audio_bookmarks_empty_subtitle">Gespeicherte Momente erscheinen hier nach Titel gruppiert.</string>
+    <string name="audio_bookmarks_empty_title">Noch keine Audio-Lesezeichen</string>
+    <string name="audio_bookmarks_file_not_found">Audiodatei nicht gefunden</string>
+    <string name="audio_bookmarks_folder_empty_subtitle">Lesezeichen für diesen Titel wurden möglicherweise gelöscht.</string>
+    <string name="audio_bookmarks_folder_empty_title">Keine Momente in diesem Ordner</string>
+    <string name="audio_bookmarks_rename_subtitle">Bezeichnung für diesen gespeicherten Cue aktualisieren.</string>
+    <string name="audio_bookmarks_rename_title">Lesezeichen umbenennen</string>
+    <string name="audio_bookmarks_saved_moments">Gespeicherte Momente</string>
+    <string name="audio_bookmarks_search_hint">Lesezeichen durchsuchen</string>
+    <string name="audio_bookmarks_sort_az">A–Z</string>
+    <string name="audio_bookmarks_sort_most_moments">Meiste Momente</string>
+    <string name="audio_bookmarks_sort_recent">Aktuell</string>
+    <string name="audio_bookmarks_unknown_audio">Unbekanntes Audio</string>
+    <plurals name="audio_bookmarks_moments_count">
+        <item quantity="one">1 Moment</item>
+        <item quantity="other">%1$d Momente</item>
+    </plurals>
 </resources>

@@ -136,6 +136,19 @@
     <string name="backup_progress_starting_task">Starting restore task.</string>
     <string name="backup_progress_preparing_backup">Preparing backup</string>
     <string name="backup_progress_starting_backup_task">Starting backup task.</string>
+    <string name="backup_progress_building_sections">Building your selected backup sections.</string>
+    <string name="backup_progress_collecting_section">Collecting %1$s</string>
+    <string name="backup_progress_packaging_backup">Packaging backup</string>
+    <string name="backup_progress_creating_archive">Creating .pxpl archive.</string>
+    <string name="backup_progress_backup_complete">Backup complete</string>
+    <string name="backup_progress_backup_created">Your FabiPlayer backup was created successfully.</string>
+    <string name="backup_progress_creating_snapshots">Creating safety snapshots</string>
+    <string name="backup_progress_capturing_rollback">Capturing current state for rollback.</string>
+    <string name="backup_progress_processing_one_by_one">Selected modules will be processed one at a time.</string>
+    <string name="backup_progress_validated_section">Validated %1$s</string>
+    <string name="backup_progress_restoring_section">Restoring %1$s</string>
+    <string name="backup_progress_restore_complete">Restore complete</string>
+    <string name="backup_progress_restore_all_restored">All selected modules were restored successfully.</string>
     <string name="restore_completed_success">Backup restored successfully</string>
     <string name="restore_completed_partial_issues">Restore completed with some unresolved issues.</string>
     <string name="restore_could_not_complete">Restore could not be completed: %1$s</string>
@@ -372,6 +385,7 @@
     <string name="metadata_error_timeout">The operation took too long and was cancelled.</string>
     <string name="metadata_error_corrupted">The file appears to be corrupted or in an unsupported format.</string>
     <string name="metadata_error_io">An error occurred while accessing the file. Please try again.</string>
+    <string name="metadata_error_source_not_editable">This song source does not support metadata editing.</string>
     <string name="metadata_error_unknown">An unknown error occurred while editing metadata.</string>
 
     <!-- M3U Sync & Cloud Auth/Dashboard -->

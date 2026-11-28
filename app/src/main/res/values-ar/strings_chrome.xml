@@ -25,4 +25,6 @@
     <string name="add_bookmark_saved_point">نقطة التشغيل المحفوظة</string>
     <string name="add_bookmark_use_lyric_line">استخدام سطر من الكلمات</string>
     <string name="add_bookmark_default_name">إشارة مرجعية @ %1$s</string>
+    <string name="song_info_open_source">فتح المصدر</string>
+    <string name="song_info_open_source_failed">لم يتمكن أي تطبيق من فتح هذا الرابط</string>
 </resources>

@@ -499,4 +499,20 @@ Mit einem Backslash (\) lassen sich Zeichen-Trennzeichen maskieren.</string>
         <item>Backup-, Wiederherstellungs- und Einrichtungsereignisse können bei einer Bildschirmdrehung nicht mehr verloren gehen.</item>
         <item>Frühjahrsputz: Toter Code entfernt, veraltete APIs migriert und Abhängigkeiten aktualisiert.</item>
     </string-array>
+    <string name="selection_select_between">Alle zwischen ausgewählten Titeln wählen</string>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>Übersetzte Liedtexte und KI-Übersetzungseinstellungen bleiben jetzt zuverlässig über App-Neustarts und Titelwechsel hinweg erhalten.</item>
+        <item>Mehrfachauswahl-Menüs verwenden jetzt in allen 15 unterstützten Sprachen korrekte Singular- und Pluralformen.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>Vollständige Sprachlokalisierung für Bildschirme, Dialoge und Fehlermeldungen abgeschlossen.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>App-Sprachwechsel behoben, sodass ein Sprachwechsel den Bildschirm zuverlässig neu startet und die Eingangsanimation abspielt.</item>
+        <item>Das In-App-Änderungsprotokoll wurde mit den neuesten Versionen und Korrekturen aktualisiert.</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>Überflüssiges Seitenmenü auf der Startseite entfernt – für eine übersichtlichere obere Leiste.</item>
+        <item>Willkommens-Badge bei der Ersteinrichtung von Beta auf Stabil aktualisiert.</item>
+    </string-array>
 </resources>

@@ -35,4 +35,22 @@
     <string name="mix_no_matches">Nenašly se žádné odpovídající skladby. Upravte zadání nebo nastavte energii na Automaticky.</string>
     <string name="mix_daily_updated">Denní mix byl aktualizován</string>
     <string name="mix_undo">Zpět</string>
+    <string name="mix_moment_chill_evening">Klidný večer</string>
+    <string name="mix_moment_feel_good">Dobrá nálada</string>
+    <string name="mix_moment_late_night">Jemná noc</string>
+    <string name="mix_moment_morning">Svěží ráno</string>
+    <string name="mix_moment_party">Párty</string>
+    <string name="mix_moment_study">Hudba ke studiu</string>
+    <string name="mix_moment_workout">Trénink</string>
+    <string name="mix_suggest_decade_genre">%1$s %2$s</string>
+    <string-array name="mix_decades">
+        <item>50. léta</item>
+        <item>60. léta</item>
+        <item>70. léta</item>
+        <item>80. léta</item>
+        <item>90. léta</item>
+        <item>2000s</item>
+        <item>2010s</item>
+        <item>2020s</item>
+    </string-array>
 </resources>

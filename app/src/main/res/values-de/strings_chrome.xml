@@ -25,4 +25,6 @@
     <string name="add_bookmark_saved_point">Gespeicherte Wiedergabeposition</string>
     <string name="add_bookmark_use_lyric_line">Liedtextzeile verwenden</string>
     <string name="add_bookmark_default_name">Lesezeichen @ %1$s</string>
+    <string name="song_info_open_source">Quelle öffnen</string>
+    <string name="song_info_open_source_failed">Keine App konnte diesen Link öffnen</string>
 </resources>

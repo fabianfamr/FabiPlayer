@@ -501,4 +501,20 @@
         <item>屏幕旋转不会丢失备份、恢复、初始化流程事件。</item>
         <item>代码清理：删除废弃代码，迁移废弃API，升级第三方依赖。</item>
     </string-array>
+    <string name="selection_select_between">选择已选曲目之间的全部</string>
+    <string-array name="presentation_batch_g_changelog_v072_improvements">
+        <item>翻译后的歌词和 AI 翻译偏好设置现可在应用重启和切歌后可靠保留。</item>
+        <item>多选底部面板现已在全部 15 种受支持语言中使用正确的单复数语法。</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v072_under_the_hood">
+        <item>已完成所有界面、对话框和错误消息的字符串本地化。</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_improvements">
+        <item>修复了应用语言切换问题，更改语言后可稳定重启界面并播放启动动画。</item>
+        <item>更新了应用内更新日志，加入了近期版本与修复内容。</item>
+    </string-array>
+    <string-array name="presentation_batch_g_changelog_v073_whats_new">
+        <item>移除了主页多余的侧边菜单，使顶部栏更加简洁专注。</item>
+        <item>将首次设置的欢迎徽章从“测试版”更新为“稳定版”。</item>
+    </string-array>
 </resources>
