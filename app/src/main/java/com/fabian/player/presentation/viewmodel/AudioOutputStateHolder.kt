@@ -167,7 +167,7 @@ class AudioOutputStateHolder @Inject constructor(
     // Bluetooth devices can show up once per profile (A2DP + LE); address identifies the
     // physical device, type the built-in / wired ones that have no address.
     private fun endpointKey(device: AudioDeviceInfo): String =
-        device.address?.takeIf { it.isNotBlank() }?.let { "${device.kind()}:$it" }
+        device.address.takeIf { it.isNotBlank() }?.let { "${device.kind()}:$it" }
             ?: "${device.type}:${device.productName}"
 
     private fun AudioDeviceInfo.kind(): AudioOutputKind = when (type) {

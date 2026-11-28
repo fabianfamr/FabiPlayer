@@ -57,7 +57,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.ToggleButton
 import androidx.compose.material3.ToggleButtonDefaults
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
@@ -200,7 +201,7 @@ fun EmbeddedLyricsPane(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    val moreSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val moreSheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
     var showMoreSheet by remember { mutableStateOf(false) }
     var showSyncControls by remember { mutableStateOf(false) }
     var showSaveLyricsDialog by remember { mutableStateOf(false) }
@@ -653,7 +654,7 @@ fun EmbeddedLyricsPane(
                             label = "lyricsModeSwitch"
                         ) { isSyncedMode ->
                             if (isSyncedMode) {
-                                lyrics?.synced?.let { synced: List<SyncedLine> ->
+                                lyrics.synced?.let { synced: List<SyncedLine> ->
                                     val syncedLines: ImmutableList<SyncedLine> = remember(synced) { synced.toImmutableList() }
                                     SyncedLyricsList(
                                         modifier = Modifier
@@ -716,7 +717,7 @@ fun EmbeddedLyricsPane(
                                     )
                                 }
                             } else {
-                                lyrics?.plain?.let { plain: List<String> ->
+                                lyrics.plain?.let { plain: List<String> ->
                                     LazyColumn(
                                         modifier = Modifier
                                             .fillMaxSize()
@@ -731,9 +732,9 @@ fun EmbeddedLyricsPane(
                                             PlainLyricsLine(
                                                 line = line,
                                                 style = sizedLyricsTextStyle,
-                                                romanization = lyrics?.plainRomanizations?.getOrNull(index)
+                                                romanization = lyrics.plainRomanizations?.getOrNull(index)
                                                     ?: plainLyricsRomanization?.getOrNull(index),
-                                                translation = lyrics?.plainTranslations?.getOrNull(index),
+                                                translation = lyrics.plainTranslations?.getOrNull(index),
                                                 lyricsAlignment = lyricsAlignment,
                                                 showTranslation = if (hasTranslatedLyrics) showLyricsTranslation else true,
                                                 showRomanization = if (hasRomanizedLyrics) showLyricsRomanization else true,

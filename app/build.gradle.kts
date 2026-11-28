@@ -81,8 +81,8 @@ android {
         applicationId = "com.fabian.player"
         minSdk = 30
         targetSdk = 37
-        versionCode = (project.findProperty("APP_VERSION_CODE") as? String)?.toInt() ?: 17
-        versionName = (project.findProperty("APP_VERSION_NAME") as? String) ?: "0.7.3"
+        versionCode = (project.findProperty("APP_VERSION_CODE") as? String)?.toInt() ?: 20
+        versionName = (project.findProperty("APP_VERSION_NAME") as? String) ?: "0.7.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -179,8 +179,6 @@ ksp {
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
-        freeCompilerArgs.add("-Xannotation-default-target=param-property")
-
         if (enableComposeCompilerReports) {
             val buildDir = project.layout.buildDirectory.get().asFile.absolutePath
             freeCompilerArgs.addAll(

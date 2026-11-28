@@ -1,4 +1,4 @@
-﻿@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
 
 package com.fabian.player.presentation.screens
 
@@ -80,7 +80,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.window.core.layout.WindowSizeClass
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -796,7 +796,7 @@ fun LibraryScreen(
 
     val systemNavBarInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     val navBarCompactMode by playerViewModel.navBarCompactMode.collectAsStateWithLifecycle()
-    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
     val useNavigationRail = windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)
     val bottomBarHeightDp = resolveNavBarOccupiedHeight(systemNavBarInset, navBarCompactMode, useNavigationRail)
     val bottomGradientHeight = resolveMainScreenBottomGradientHeight(navBarCompactMode, useNavigationRail)
@@ -2353,8 +2353,8 @@ private fun LibraryInlineSyncIndicator(
  *
  * By collecting [SyncManager.syncProgress] HERE instead of in the parent [LibraryScreen],
  * only this small subtree recomposes on every progress tick (e.g., file count updates
- * during a library scan). The rest of [LibraryScreen] — including the Scaffold, pager,
- * and all tab content — remains unaffected during sync.
+ * during a library scan). The rest of [LibraryScreen] � including the Scaffold, pager,
+ * and all tab content � remains unaffected during sync.
  */
 @Composable
 private fun LibrarySyncOverlay(syncManager: com.fabian.player.data.worker.SyncManager) {
@@ -3642,7 +3642,7 @@ fun AlbumGridItemRedesigned(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = selectionIndex?.toString() ?: "✓",
+                            text = selectionIndex?.toString() ?: "?",
                             color = MaterialTheme.colorScheme.onPrimary,
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold
@@ -3786,7 +3786,7 @@ fun ArtistListItem(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = selectionIndex?.toString() ?: "✓",
+                        text = selectionIndex?.toString() ?: "?",
                         color = MaterialTheme.colorScheme.onPrimary,
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold
@@ -4001,7 +4001,7 @@ fun AlbumListItem(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = selectionIndex?.toString() ?: "✓",
+                            text = selectionIndex?.toString() ?: "?",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.Bold

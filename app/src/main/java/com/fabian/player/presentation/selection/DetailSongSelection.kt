@@ -20,7 +20,7 @@ internal class DetailSongSelection<K> {
     val isActive by derivedStateOf(structuralEqualityPolicy()) { keys.isNotEmpty() }
 
     fun toggle(key: K) {
-        keys = if (key in keys) keys.remove(key) else keys.add(key)
+        keys = if (key in keys) keys.removing(key) else keys.adding(key)
     }
 
     fun clear() {

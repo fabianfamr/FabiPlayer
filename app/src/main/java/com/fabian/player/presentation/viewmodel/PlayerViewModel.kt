@@ -1034,7 +1034,7 @@ class PlayerViewModel @Inject constructor(
                         }
                     }
 
-                    if (shouldApplyPersistedLyrics && persistedLyrics != null) {
+                    if (shouldApplyPersistedLyrics) {
                         lyricsStateHolder.applyPersistedLyrics(hydratedSong, persistedLyrics)
                     }
 

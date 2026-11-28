@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.screens
+package com.fabian.player.presentation.screens
 
 import com.fabian.player.ui.theme.withInterfaceFont
 
@@ -80,7 +80,7 @@ import com.fabian.player.presentation.components.SmartImage
 import com.fabian.player.presentation.components.SongInfoBottomSheet
 import com.fabian.player.presentation.components.threeShapeSwitch
 import com.fabian.player.presentation.components.resolveNavBarOccupiedHeight
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.window.core.layout.WindowSizeClass
 import com.fabian.player.presentation.navigation.Screen
 import com.fabian.player.presentation.viewmodel.MainViewModel
@@ -119,7 +119,7 @@ fun DailyMixScreen(
     val navBarCompactMode by playerViewModel.navBarCompactMode.collectAsStateWithLifecycle()
     val swipeToQueue = rememberSwipeToQueue(playerViewModel)
     val systemNavBarInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-    val useNavigationRail = currentWindowAdaptiveInfo().windowSizeClass
+    val useNavigationRail = currentWindowAdaptiveInfoV2().windowSizeClass
         .isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)
     val bottomBarHeightDp = resolveNavBarOccupiedHeight(systemNavBarInset, navBarCompactMode, useNavigationRail)
     var showPlaylistBottomSheet by remember { mutableStateOf(false) }

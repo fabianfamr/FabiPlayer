@@ -51,6 +51,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccessTime
 import androidx.compose.material.icons.rounded.Bookmark
@@ -64,8 +65,8 @@ import androidx.compose.material.icons.rounded.FilterAlt
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.SelectAll
-import androidx.compose.material.icons.rounded.Sort
-import androidx.compose.material.icons.rounded.SortByAlpha
+// (Sort icon now comes from AutoMirrored)
+// (Sort icon now comes from AutoMirrored)ByAlpha
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomSheetDefaults
@@ -1307,7 +1308,7 @@ private fun BookmarkActionFabMenu(
                 val closeActionsCd = stringResource(R.string.audio_bookmarks_cd_close_actions)
                 val openActionsCd = stringResource(R.string.audio_bookmarks_cd_open_actions)
                 Icon(
-                    imageVector = if (expanded) Icons.Rounded.Close else Icons.Rounded.Sort,
+                    imageVector = if (expanded) Icons.Rounded.Close else Icons.AutoMirrored.Rounded.Sort,
                     contentDescription = if (expanded) closeActionsCd else openActionsCd,
                     tint = lerpColor(fabClosedContent, fabOpenContent, checkedProgress)
                 )

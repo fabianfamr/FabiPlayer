@@ -79,7 +79,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -312,7 +313,8 @@ private fun PerformanceReportCard(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val clipboardManager = LocalClipboardManager.current
+    val clipboardManager = LocalClipboard.current
+    val scope = rememberCoroutineScope()
     val copiedMessage = stringResource(R.string.device_capabilities_report_copied)
     val shareTitle = stringResource(R.string.device_capabilities_report_share_title)
     val lagMarkedMessage = stringResource(R.string.device_capabilities_advanced_diagnostics_marked)
@@ -375,7 +377,11 @@ private fun PerformanceReportCard(
                 OutlinedButton(
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        clipboardManager.setText(AnnotatedString(report))
+                        scope.launch {
+                            clipboardManager.setClip(
+                                ClipEntry(android.content.ClipData.newPlainText("report", report))
+                            )
+                        }
                         Toast.makeText(context, copiedMessage, Toast.LENGTH_SHORT).show()
                     }
                 ) {

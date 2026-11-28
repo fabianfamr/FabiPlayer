@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.screens
+package com.fabian.player.presentation.screens
 
 import com.fabian.player.presentation.components.SwipeToQueueBox
 import com.fabian.player.presentation.components.rememberSwipeToQueue
@@ -139,7 +139,7 @@ import com.fabian.player.presentation.components.SmartImage
 import com.fabian.player.presentation.components.SongInfoBottomSheet
 import com.fabian.player.presentation.components.subcomps.TightWrapText
 import com.fabian.player.presentation.components.resolveNavBarOccupiedHeight
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.window.core.layout.WindowSizeClass
 import com.fabian.player.presentation.navigation.Screen
 import com.fabian.player.presentation.selection.DetailSongSelection
@@ -268,7 +268,7 @@ fun PlaylistDetailScreen(
     val listBottomPadding = MiniPlayerHeight + systemNavBarInset + 16.dp
     val selectionBottomPadding = if (hasCurrentSong) listBottomPadding else systemNavBarInset + 16.dp
     val navBarCompactMode by playerViewModel.navBarCompactMode.collectAsStateWithLifecycle()
-    val useNavigationRail = currentWindowAdaptiveInfo().windowSizeClass
+    val useNavigationRail = currentWindowAdaptiveInfoV2().windowSizeClass
         .isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)
     val bottomBarHeightDp = resolveNavBarOccupiedHeight(systemNavBarInset, navBarCompactMode, useNavigationRail)
     var showPlaylistBottomSheet by remember { mutableStateOf(false) }

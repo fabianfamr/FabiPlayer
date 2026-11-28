@@ -1,4 +1,4 @@
-﻿@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
 
 package com.fabian.player.presentation.screens
 
@@ -100,7 +100,7 @@ import com.fabian.player.presentation.components.SmartImageCompactListTargetSize
 import com.fabian.player.presentation.components.SmartImage
 import com.fabian.player.presentation.components.SongInfoBottomSheet
 import com.fabian.player.presentation.components.resolveNavBarOccupiedHeight
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.window.core.layout.WindowSizeClass
 import com.fabian.player.presentation.navigation.Screen
 import com.fabian.player.presentation.selection.DetailSongSelection
@@ -180,7 +180,7 @@ fun ArtistDetailScreen(
     } else {
         systemNavBarInset + 8.dp
     }
-    val useNavigationRail = currentWindowAdaptiveInfo().windowSizeClass
+    val useNavigationRail = currentWindowAdaptiveInfoV2().windowSizeClass
         .isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)
     val bottomBarHeightDp = resolveNavBarOccupiedHeight(systemNavBarInset, navBarCompactMode, useNavigationRail)
     var showPlaylistBottomSheet by remember { mutableStateOf(false) }
@@ -870,7 +870,7 @@ private fun CollapsibleAlbumSectionHeader(
             section.year?.takeIf { it > 0 }?.toString(),
             songCountText,
             section.genre
-        ).joinToString(" • ")
+        ).joinToString(" � ")
     }
 
     val containerColor = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.5f)

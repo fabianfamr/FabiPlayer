@@ -145,6 +145,7 @@ fun ReorderTabsSheet(
             performAppCompatHapticFeedback(
                 view,
                 appHapticsConfig,
+                @Suppress("DEPRECATION")
                 HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
             )
         },

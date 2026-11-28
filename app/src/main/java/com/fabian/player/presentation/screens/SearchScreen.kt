@@ -50,7 +50,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.window.core.layout.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -185,7 +185,7 @@ fun SearchScreen(
     val statusBarTopInset = WindowInsets.systemBars.asPaddingValues().calculateTopPadding()
     val systemNavBarInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     val navBarCompactMode by playerViewModel.navBarCompactMode.collectAsStateWithLifecycle()
-    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
     val useNavigationRail = windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)
     val bottomBarHeightDp = resolveNavBarOccupiedHeight(systemNavBarInset, navBarCompactMode, useNavigationRail)
     val bottomGradientHeight = resolveMainScreenBottomGradientHeight(navBarCompactMode, useNavigationRail)
@@ -376,8 +376,10 @@ fun SearchScreen(
                         .weight(1f)
                         .background(color = Color.Transparent)
                 ) {
+                    @Suppress("DEPRECATION")
                     DockedSearchBar(
                         inputField = {
+                            @Suppress("DEPRECATION")
                             SearchBarDefaults.InputField(
                                 modifier = Modifier
                                     .fillMaxWidth()

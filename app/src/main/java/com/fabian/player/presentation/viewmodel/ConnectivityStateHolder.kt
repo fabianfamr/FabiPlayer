@@ -493,6 +493,7 @@ class ConnectivityStateHolder @Inject constructor(
     private fun readConnectedWifiSsid(): String? {
         if (!hasFineLocationPermission()) return null
 
+        @Suppress("DEPRECATION")
         val info = wifiManager?.connectionInfo ?: return null
         if (info.supplicantState != android.net.wifi.SupplicantState.COMPLETED) return null
 

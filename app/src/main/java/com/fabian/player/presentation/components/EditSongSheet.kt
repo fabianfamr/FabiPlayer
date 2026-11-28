@@ -1031,7 +1031,7 @@ fun CoverArtCropperDialog(
         }
     }
 
-    val transformableState = rememberTransformableState { zoomChange, panChange, _ ->
+    val transformableState = rememberTransformableState { zoomChange, panChange, _, _ ->
         val newScale = (scale * zoomChange).coerceIn(1f, 4f)
         scale = newScale
         loadedBitmap?.let { bitmap ->

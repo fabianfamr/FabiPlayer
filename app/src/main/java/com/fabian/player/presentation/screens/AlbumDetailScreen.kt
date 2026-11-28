@@ -1,4 +1,4 @@
-ï»¿@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
 
 package com.fabian.player.presentation.screens
 
@@ -110,7 +110,7 @@ import com.fabian.player.presentation.components.PlaylistBottomSheet
 import com.fabian.player.presentation.components.SmartImage
 import com.fabian.player.presentation.components.SongInfoBottomSheet
 import com.fabian.player.presentation.components.resolveNavBarOccupiedHeight
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.window.core.layout.WindowSizeClass
 import com.fabian.player.presentation.components.subcomps.EnhancedSongListItem
 import com.fabian.player.presentation.navigation.Screen
@@ -153,7 +153,7 @@ fun AlbumDetailScreen(
     var showSongInfoBottomSheet by remember { mutableStateOf(false) }
     val selectedSongForInfo by playerViewModel.selectedSongForInfo.collectAsStateWithLifecycle()
     val systemNavBarInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-    val useNavigationRail = currentWindowAdaptiveInfo().windowSizeClass
+    val useNavigationRail = currentWindowAdaptiveInfoV2().windowSizeClass
         .isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)
     val bottomBarHeightDp = resolveNavBarOccupiedHeight(systemNavBarInset, navBarCompactMode, useNavigationRail)
     var showPlaylistBottomSheet by remember { mutableStateOf(false) }
@@ -328,7 +328,7 @@ fun AlbumDetailScreen(
                 val heroMetaLine = listOfNotNull(
                     albumGenre,
                     album.year.takeIf { it > 0 }?.toString()
-                ).joinToString(" Â· ").ifBlank { null }
+                ).joinToString(" · ").ifBlank { null }
                 // Drawn by the floating layer, with a same-sized placeholder in the list.
                 val heroChip: @Composable () -> Unit = {
                     val artistName = album.albumArtist?.takeIf { it.isNotBlank() } ?: album.artist
@@ -816,7 +816,7 @@ private fun SharedAlbumTopBarProbe(
         val titleEndPadding = if (showDownloadAction) 88.dp else 24.dp
         CollapsibleCommonTopBar(
             title = album.title,
-            subtitle = "${album.artist} â€¢ ${formatSongCount(songsCount)}",
+            subtitle = "${album.artist} • ${formatSongCount(songsCount)}",
             collapseFraction = collapseFraction,
             headerHeight = headerHeight,
             onBackClick = onBackPressed,

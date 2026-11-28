@@ -61,7 +61,7 @@ import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -723,7 +723,7 @@ class MainActivity : ComponentActivity() {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         var isSearchBarActive by rememberSaveable { mutableStateOf(false) }
-        val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+        val windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
         val useNavigationRail =
             windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)
 

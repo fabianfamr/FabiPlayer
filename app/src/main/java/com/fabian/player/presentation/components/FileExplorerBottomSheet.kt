@@ -439,7 +439,7 @@ fun FileExplorerContent(
             ) {
                 if (isShowingAllFolders) {
                     AllFoldersList(
-                        folders = allFolders ?: persistentListOf(),
+                        folders = allFolders!!,
                         isLoading = isLoadingAllFolders,
                         listState = allFoldersListState,
                         extraBottomPadding = extraBottomPadding,
