@@ -2,6 +2,7 @@ package com.fabian.player.data.network.lyrics
 
 import android.content.Context
 import com.fabian.player.data.model.Lyrics
+import com.fabian.player.data.model.SyncedLine
 import com.fabian.player.utils.MultiLangRomanizer
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
