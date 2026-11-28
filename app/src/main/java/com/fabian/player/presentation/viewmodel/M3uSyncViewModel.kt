@@ -1,11 +1,14 @@
-﻿package com.fabian.player.presentation.viewmodel
+package com.fabian.player.presentation.viewmodel
 
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fabian.player.R
 import com.fabian.player.data.playlist.M3uSyncRepository
 import com.fabian.player.data.playlist.M3uSyncState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -14,6 +17,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class M3uSyncViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val repository: M3uSyncRepository,
 ) : ViewModel() {
     val state: StateFlow<M3uSyncState> = repository.state
@@ -25,7 +29,7 @@ class M3uSyncViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching { repository.configure(uri) }
                 .onFailure { error ->
-                    _messages.emit(error.message ?: "Unable to use the selected folder")
+                    _messages.emit(error.message ?: context.getString(R.string.m3u_sync_folder_error))
                 }
         }
     }
@@ -34,7 +38,7 @@ class M3uSyncViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching { repository.syncNow() }
                 .onFailure { error ->
-                    _messages.emit(error.message ?: "Playlist synchronization failed")
+                    _messages.emit(error.message ?: context.getString(R.string.m3u_sync_failed))
                 }
         }
     }
@@ -43,7 +47,7 @@ class M3uSyncViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching { repository.disable() }
                 .onFailure { error ->
-                    _messages.emit(error.message ?: "Unable to disable playlist synchronization")
+                    _messages.emit(error.message ?: context.getString(R.string.m3u_sync_disable_error))
                 }
         }
     }

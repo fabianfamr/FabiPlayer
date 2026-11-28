@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.viewmodel
+package com.fabian.player.presentation.viewmodel
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -21,6 +21,7 @@ import android.net.NetworkRequest
 import android.net.wifi.WifiManager
 import android.os.Build
 import androidx.core.content.ContextCompat
+import com.fabian.player.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -245,7 +246,7 @@ class ConnectivityStateHolder @Inject constructor(
         _wifiName.value = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R && hasFineLocationPermission()) {
             readConnectedWifiSsid()
         } else {
-            "WiFi Connected"
+            context.getString(R.string.connectivity_wifi_connected)
         }
     }
 

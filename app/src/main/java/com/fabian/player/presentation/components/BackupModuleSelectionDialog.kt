@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.components
+package com.fabian.player.presentation.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -532,7 +532,7 @@ private fun BackupSectionSelectableCardShared(
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
-                        text = section.label,
+                        text = stringResource(section.labelRes),
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontFamily = RoundedSans
                         ),
@@ -540,7 +540,7 @@ private fun BackupSectionSelectableCardShared(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = section.description,
+                        text = stringResource(section.descriptionRes),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

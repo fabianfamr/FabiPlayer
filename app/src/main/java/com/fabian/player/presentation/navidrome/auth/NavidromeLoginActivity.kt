@@ -163,7 +163,7 @@ fun NavidromeLoginScreen(
                 onClose()
             }
             is NavidromeLoginState.Error -> {
-                snackbarHostState.showSnackbar(state.message)
+                snackbarHostState.showSnackbar(state.message ?: context.getString(R.string.auth_login_failed))
                 viewModel.clearError()
             }
             else -> Unit

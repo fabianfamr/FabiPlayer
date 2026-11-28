@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.jellyfin.auth
+package com.fabian.player.presentation.jellyfin.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,7 +30,7 @@ sealed interface JellyfinLoginState {
     ) : JellyfinLoginState
 
     data class Success(val username: String) : JellyfinLoginState
-    data class Error(val message: String) : JellyfinLoginState
+    data class Error(val message: String? = null) : JellyfinLoginState
 }
 
 @HiltViewModel
@@ -52,7 +52,7 @@ class JellyfinLoginViewModel @Inject constructor(
 
             _state.value = result.fold(
                 onSuccess = { loggedInUser -> stateAfterLogin(loggedInUser) },
-                onFailure = { JellyfinLoginState.Error(it.message ?: "Login failed") }
+                onFailure = { JellyfinLoginState.Error(it.message) }
             )
         }
     }

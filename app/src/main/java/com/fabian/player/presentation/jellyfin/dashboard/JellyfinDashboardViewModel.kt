@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.jellyfin.dashboard
+package com.fabian.player.presentation.jellyfin.dashboard
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -106,18 +106,32 @@ class JellyfinDashboardViewModel @Inject constructor(
     fun syncAllPlaylistsAndSongs() {
         viewModelScope.launch {
             _isSyncing.value = true
-            _syncMessage.value = "Syncing all playlists and songs..."
+            _syncMessage.value = context.getString(R.string.dash_jellyfin_syncing_all)
             val result = repository.syncAllPlaylistsAndSongs()
             result.fold(
                 onSuccess = { summary ->
                     _librarySelectionNeedsSync.value = false
                     _syncMessage.value = if (summary.failedPlaylistCount == 0) {
-                        "Synced ${summary.playlistCount} playlists, ${summary.syncedSongCount} songs"
+                        context.getString(
+                            R.string.dash_jellyfin_synced_all_format,
+                            summary.playlistCount,
+                            summary.syncedSongCount
+                        )
                     } else {
-                        "Synced ${summary.playlistCount} playlists, ${summary.syncedSongCount} songs (${summary.failedPlaylistCount} failed)"
+                        context.getString(
+                            R.string.dash_jellyfin_synced_all_with_failures_format,
+                            summary.playlistCount,
+                            summary.syncedSongCount,
+                            summary.failedPlaylistCount
+                        )
                     }
                 },
-                onFailure = { _syncMessage.value = "Sync failed: ${it.message}" }
+                onFailure = {
+                    _syncMessage.value = context.getString(
+                        R.string.dash_jellyfin_sync_failed_format,
+                        it.message.orEmpty()
+                    )
+                }
             )
             _isSyncing.value = false
         }
@@ -126,11 +140,21 @@ class JellyfinDashboardViewModel @Inject constructor(
     fun syncPlaylists() {
         viewModelScope.launch {
             _isSyncing.value = true
-            _syncMessage.value = "Syncing playlists..."
+            _syncMessage.value = context.getString(R.string.dash_jellyfin_syncing_playlists)
             val result = repository.syncPlaylists()
             result.fold(
-                onSuccess = { _syncMessage.value = "Synced ${it.size} playlists" },
-                onFailure = { _syncMessage.value = "Sync failed: ${it.message}" }
+                onSuccess = {
+                    _syncMessage.value = context.getString(
+                        R.string.dash_jellyfin_synced_playlists_count,
+                        it.size
+                    )
+                },
+                onFailure = {
+                    _syncMessage.value = context.getString(
+                        R.string.dash_jellyfin_sync_failed_format,
+                        it.message.orEmpty()
+                    )
+                }
             )
             _isSyncing.value = false
         }
@@ -139,7 +163,7 @@ class JellyfinDashboardViewModel @Inject constructor(
     fun syncPlaylistSongs(playlistId: String) {
         viewModelScope.launch {
             _isSyncing.value = true
-            _syncMessage.value = "Syncing songs..."
+            _syncMessage.value = context.getString(R.string.dash_jellyfin_syncing_songs)
             val result = repository.syncPlaylistSongs(playlistId)
             result.fold(
                 onSuccess = { count ->
@@ -148,9 +172,17 @@ class JellyfinDashboardViewModel @Inject constructor(
                     } catch (e: Exception) {
                         Timber.e(e, "Failed to sync unified library after playlist sync")
                     }
-                    _syncMessage.value = "Synced $count songs"
+                    _syncMessage.value = context.getString(
+                        R.string.dash_jellyfin_synced_songs_count,
+                        count
+                    )
                 },
-                onFailure = { _syncMessage.value = "Sync failed: ${it.message}" }
+                onFailure = {
+                    _syncMessage.value = context.getString(
+                        R.string.dash_jellyfin_sync_failed_format,
+                        it.message.orEmpty()
+                    )
+                }
             )
             _isSyncing.value = false
         }

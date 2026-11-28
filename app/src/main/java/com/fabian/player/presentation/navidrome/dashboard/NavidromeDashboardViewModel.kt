@@ -1,16 +1,19 @@
-﻿package com.fabian.player.presentation.navidrome.dashboard
+package com.fabian.player.presentation.navidrome.dashboard
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.fabian.player.R
 import com.fabian.player.data.database.NavidromePlaylistEntity
 import com.fabian.player.data.model.Song
 import com.fabian.player.data.navidrome.NavidromeRepository
 import com.fabian.player.data.navidrome.model.NavidromeMusicFolder
 import com.fabian.player.data.worker.NavidromeSyncWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,6 +29,7 @@ import kotlinx.coroutines.flow.map
 
 @HiltViewModel
 class NavidromeDashboardViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val repository: NavidromeRepository,
     private val workManager: WorkManager
 ) : ViewModel() {
@@ -98,7 +102,8 @@ class NavidromeDashboardViewModel @Inject constructor(
                     WorkInfo.State.FAILED -> {
                         _isSyncing.value = false
                         _syncProgress.value = null
-                        _syncMessage.value = workInfo.outputData.getString(NavidromeSyncWorker.ERROR_MESSAGE) ?: "Sync failed"
+                        _syncMessage.value = workInfo.outputData.getString(NavidromeSyncWorker.ERROR_MESSAGE)
+                            ?: context.getString(R.string.dash_sync_failed)
                     }
                     else -> {
                         _isSyncing.value = false

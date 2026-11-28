@@ -1,4 +1,4 @@
-﻿package com.fabian.player.presentation.navidrome.auth
+package com.fabian.player.presentation.navidrome.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,7 +30,7 @@ sealed interface NavidromeLoginState {
     ) : NavidromeLoginState
 
     data class Success(val username: String) : NavidromeLoginState
-    data class Error(val message: String) : NavidromeLoginState
+    data class Error(val message: String? = null) : NavidromeLoginState
 }
 
 @HiltViewModel
@@ -52,7 +52,7 @@ class NavidromeLoginViewModel @Inject constructor(
 
             _state.value = result.fold(
                 onSuccess = { loggedInUser -> stateAfterLogin(loggedInUser) },
-                onFailure = { NavidromeLoginState.Error(it.message ?: "Login failed") }
+                onFailure = { NavidromeLoginState.Error(it.message) }
             )
         }
     }

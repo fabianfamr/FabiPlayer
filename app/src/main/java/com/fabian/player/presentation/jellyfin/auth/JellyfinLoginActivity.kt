@@ -163,7 +163,7 @@ fun JellyfinLoginScreen(
                 onClose()
             }
             is JellyfinLoginState.Error -> {
-                snackbarHostState.showSnackbar(state.message)
+                snackbarHostState.showSnackbar(state.message ?: context.getString(R.string.auth_login_failed))
                 viewModel.clearError()
             }
             else -> Unit

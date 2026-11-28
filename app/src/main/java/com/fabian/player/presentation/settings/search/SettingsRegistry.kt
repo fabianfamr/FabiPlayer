@@ -423,7 +423,7 @@ object SettingsRegistry {
                 id = "accounts_listenbrainz",
                 itemKey = "item_accounts_listenbrainz",
                 titleRes = R.string.accounts_listenbrainz_title,
-                subtitleStatic = "Scrobble your listens to ListenBrainz",
+                subtitleRes = R.string.accounts_listenbrainz_search_subtitle,
                 category = SettingsCategory.LIBRARY,
                 subscreenRoute = Screen.Accounts.createRoute(),
                 type = SettingType.NAVIGABLE_CARD,
