@@ -1,7 +1,7 @@
 name: Performance Agent
 on:
   schedule:
-    - cron: '5 17 * * *'  # Daily at 1:05 PM Caracas (UTC-4)
+    - cron: '30 17 * * *'  # Daily at 1:05 PM Caracas (UTC-4)
   pull_request:
     branches: [main, master]
   workflow_dispatch:

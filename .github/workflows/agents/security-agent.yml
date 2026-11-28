@@ -1,7 +1,7 @@
 name: Security Agent
 on:
   schedule:
-    - cron: '5 17 * * *'  # Daily at 1:05 PM Caracas (UTC-4)
+    - cron: '30 17 * * *'  # Daily at 1:05 PM Caracas (UTC-4)
   push:
     branches: [main, master]
     paths:
