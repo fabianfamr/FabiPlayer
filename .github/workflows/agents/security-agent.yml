@@ -1,0 +1,209 @@
+name: Security Agent
+on:
+  schedule:
+    - cron: '0 3 * * 0'  # Weekly on Sunday at 3 AM UTC
+  push:
+    branches: [main, master]
+    paths:
+      - '**/*.kt'
+      - '**/*.java'
+      - '**/build.gradle*'
+      - '**/proguard-rules.pro'
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  security-events: write
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Run security analysis
+        id: security
+        run: |
+          echo "## 🔐 Security Agent Report" > security_report.md
+          echo "" >> security_report.md
+          echo "**Date:** $(date '+%Y-%m-%d %H:%M:%S UTC')" >> security_report.md
+          echo "" >> security_report.md
+          
+          # Check for hardcoded secrets
+          echo "### 🔑 Secrets Detection" >> security_report.md
+          echo "" >> security_report.md
+          
+          SECRETS_FOUND=false
+          
+          # Check for API keys
+          API_KEYS=$(grep -rn "api[_-]*key\|apikey\|api_key" app/src --include="*.kt" --include="*.java" --include="*.xml" -i | grep -v "BuildConfig\|getSystemService\|R.string\|@string" | head -20 || true)
+          if [ -n "$API_KEYS" ]; then
+            echo "⚠️ **Potential hardcoded API keys found:**" >> security_report.md
+            echo '```' >> security_report.md
+            echo "$API_KEYS" >> security_report.md
+            echo '```' >> security_report.md
+            SECRETS_FOUND=true
+          fi
+          
+          # Check for passwords
+          PASSWORDS=$(grep -rn "password\s*=\s*\"" app/src --include="*.kt" --include="*.java" | grep -v "test\|mock\|example" | head -10 || true)
+          if [ -n "$PASSWORDS" ]; then
+            echo "⚠️ **Potential hardcoded passwords found:**" >> security_report.md
+            echo '```' >> security_report.md
+            echo "$PASSWORDS" >> security_report.md
+            echo '```' >> security_report.md
+            SECRETS_FOUND=true
+          fi
+          
+          # Check for tokens
+          TOKENS=$(grep -rn "token\s*=\s*\"" app/src --include="*.kt" --include="*.java" | grep -v "test\|mock\|BuildConfig" | head -10 || true)
+          if [ -n "$TOKENS" ]; then
+            echo "⚠️ **Potential hardcoded tokens found:**" >> security_report.md
+            echo '```' >> security_report.md
+            echo "$TOKENS" >> security_report.md
+            echo '```' >> security_report.md
+            SECRETS_FOUND=true
+          fi
+          
+          if [ "$SECRETS_FOUND" = false ]; then
+            echo "✅ No hardcoded secrets detected." >> security_report.md
+          fi
+          
+          # Check network security
+          echo "" >> security_report.md
+          echo "### 🌐 Network Security" >> security_report.md
+          echo "" >> security_report.md
+          
+          # Check for HTTP URLs
+          HTTP_URLS=$(grep -rn "http://" app/src --include="*.kt" --include="*.java" --include="*.xml" | grep -v "localhost\|127.0.0.1\|test\|example" | head -10 || true)
+          if [ -n "$HTTP_URLS" ]; then
+            echo "⚠️ **HTTP (non-HTTPS) URLs found:**" >> security_report.md
+            echo '```' >> security_report.md
+            echo "$HTTP_URLS" >> security_report.md
+            echo '```' >> security_report.md
+          else
+            echo "✅ All URLs appear to use HTTPS." >> security_report.md
+          fi
+          
+          # Check certificate pinning
+          CERT_PINNING=$(grep -rn "CertificatePinner\|SSLPinning\|trustAllCerts" app/src --include="*.kt" --include="*.java" | head -10 || true)
+          echo "" >> security_report.md
+          echo "**Certificate Pinning:**" >> security_report.md
+          if [ -n "$CERT_PINNING" ]; then
+            echo '```' >> security_report.md
+            echo "$CERT_PINNING" >> security_report.md
+            echo '```' >> security_report.md
+          else
+            echo "No certificate pinning detected. Consider adding for sensitive endpoints." >> security_report.md
+          fi
+          
+          # Check ProGuard rules
+          echo "" >> security_report.md
+          echo "### 🛡️ ProGuard Analysis" >> security_report.md
+          echo "" >> security_report.md
+          if [ -f "app/proguard-rules.pro" ]; then
+            KEEP_CLASSES=$(grep -c "^-keep" app/proguard-rules.pro 2>/dev/null || echo "0")
+            echo "- **Keep rules:** $KEEP_CLASSES" >> security_report.md
+            
+            # Check for overly permissive rules
+            PERMISSIVE=$(grep -n "keep class \*\|keep class \*\.\*" app/proguard-rules.pro 2>/dev/null || true)
+            if [ -n "$PERMISSIVE" ]; then
+              echo "⚠️ **Overly permissive ProGuard rules:**" >> security_report.md
+              echo '```' >> security_report.md
+              echo "$PERMISSIVE" >> security_report.md
+              echo '```' >> security_report.md
+            fi
+          fi
+          
+          # Dependency vulnerability check
+          echo "" >> security_report.md
+          echo "### 📦 Dependency Vulnerabilities" >> security_report.md
+          echo "" >> security_report.md
+          
+          ./gradlew dependencyCheckAnalyze 2>&1 | tee dep-check.log || true
+          if grep -q "No vulnerabilities found" dep-check.log; then
+            echo "✅ No known vulnerabilities in dependencies." >> security_report.md
+          else
+            VULNS=$(grep -A 5 "vulnerabilities found" dep-check.log 2>/dev/null || true)
+            if [ -n "$VULNS" ]; then
+              echo "⚠️ **Vulnerabilities detected:**" >> security_report.md
+              echo '```' >> security_report.md
+              echo "$VULNS" >> security_report.md
+              echo '```' >> security_report.md
+            fi
+          fi
+          
+          # Check WebView security
+          echo "" >> security_report.md
+          echo "### 🌍 WebView Security" >> security_report.md
+          echo "" >> security_report.md
+          
+          WEBVIEW_JS=$(grep -rn "setJavaScriptEnabled(true)" app/src --include="*.kt" --include="*.java" | head -10 || true)
+          if [ -n "$WEBVIEW_JS" ]; then
+            echo "WebView with JavaScript enabled found:" >> security_report.md
+            echo '```' >> security_report.md
+            echo "$WEBVIEW_JS" >> security_report.md
+            echo '```' >> security_report.md
+          fi
+          
+          WEBVIEW_FILE=$(grep -rn "setAllowFileAccess(true)" app/src --include="*.kt" --include="*.java" | head -10 || true)
+          if [ -n "$WEBVIEW_FILE" ]; then
+            echo "⚠️ **WebView file access enabled - potential security risk:**" >> security_report.md
+            echo '```' >> security_report.md
+            echo "$WEBVIEW_FILE" >> security_report.md
+            echo '```' >> security_report.md
+          fi
+          
+          # SQL Injection checks
+          echo "" >> security_report.md
+          echo "### 💉 SQL Injection Analysis" >> security_report.md
+          echo "" >> security_report.md
+          
+          RAW_QUERIES=$(grep -rn "rawQuery\|execSQL" app/src --include="*.kt" --include="*.java" | grep -v "projectionIn\|selection\|selectionArgs" | head -10 || true)
+          if [ -n "$RAW_QUERIES" ]; then
+            echo "⚠️ **Potential SQL injection risks (raw SQL without parameters):**" >> security_report.md
+            echo '```' >> security_report.md
+            echo "$RAW_QUERIES" >> security_report.md
+            echo '```' >> security_report.md
+          else
+            echo "✅ No obvious SQL injection risks detected." >> security_report.md
+          fi
+          
+          echo "" >> security_report.md
+          echo "---" >> security_report.md
+          echo "*Report generated by Security Agent 🤖*" >> security_report.md
+
+      - name: Create security issue if critical findings
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          CRITICAL=$(grep -c "⚠️" security_report.md 2>/dev/null || echo "0")
+          if [ "$CRITICAL" -gt 3 ]; then
+            gh issue create \
+              --title "🔐 Security Report - $(date '+%Y-%m-%d') - Action Required" \
+              --body-file security_report.md \
+              --label "security,automated,high-priority" || echo "Issue might already exist"
+          fi
+
+      - name: Upload security report
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-report
+          path: security_report.md
+          retention-days: 30

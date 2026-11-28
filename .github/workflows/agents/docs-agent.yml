@@ -1,0 +1,265 @@
+name: Documentation Agent
+on:
+  schedule:
+    - cron: '0 2 * * 4'  # Weekly on Thursday at 2 AM UTC
+  pull_request:
+    branches: [main, master]
+    paths:
+      - '**/*.kt'
+      - '**/*.java'
+  workflow_dispatch:
+    inputs:
+      generate_readme:
+        description: 'Generate README improvements'
+        required: false
+        default: 'true'
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  documentation-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Git
+        run: |
+          git config user.name "Docs Agent Bot"
+          git config user.email "docs-agent@bot.local"
+
+      - name: Analyze documentation
+        id: docs
+        run: |
+          echo "## 📚 Documentation Agent Report" > docs_report.md
+          echo "" >> docs_report.md
+          echo "**Date:** $(date '+%Y-%m-%d %H:%M:%S UTC')" >> docs_report.md
+          echo "" >> docs_report.md
+          
+          # Check README
+          echo "### 📄 README Analysis" >> docs_report.md
+          echo "" >> docs_report.md
+          
+          if [ -f "README.md" ]; then
+            README_LINES=$(wc -l < README.md)
+            README_SECTIONS=$(grep -c "^#" README.md 2>/dev/null || echo "0")
+            
+            echo "- **README length:** $README_LINES lines" >> docs_report.md
+            echo "- **Sections:** $README_SECTIONS" >> docs_report.md
+            
+            # Check for important sections
+            MISSING_SECTIONS=""
+            
+            if ! grep -qi "installation\|install" README.md; then
+              MISSING_SECTIONS="$MISSING_SECTIONS, Installation"
+            fi
+            if ! grep -qi "usage\|how to use" README.md; then
+              MISSING_SECTIONS="$MISSING_SECTIONS, Usage"
+            fi
+            if ! grep -qi "contributing\|contribute" README.md; then
+              MISSING_SECTIONS="$MISSING_SECTIONS, Contributing"
+            fi
+            if ! grep -qi "license" README.md; then
+              MISSING_SECTIONS="$MISSING_SECTIONS, License"
+            fi
+            if ! grep -qi "api\|documentation" README.md; then
+              MISSING_SECTIONS="$MISSING_SECTIONS, API Documentation"
+            fi
+            
+            if [ -n "$MISSING_SECTIONS" ]; then
+              echo "- ⚠️ **Missing sections:** $MISSING_SECTIONS" >> docs_report.md
+            else
+              echo "- ✅ README contains all essential sections" >> docs_report.md
+            fi
+          else
+            echo "- ⚠️ No README.md found!" >> docs_report.md
+          fi
+          
+          # Check code documentation
+          echo "" >> docs_report.md
+          echo "### 💻 Code Documentation" >> docs_report.md
+          echo "" >> docs_report.md
+          
+          # Count documented vs undocumented functions
+          TOTAL_FUNCS=$(grep -rn "fun " app/src/main/java --include="*.kt" | wc -l || echo "0")
+          DOCUMENTED_FUNCS=$(grep -rn "/\*\*" app/src/main/java --include="*.kt" -A 1 | grep "fun " | wc -l || echo "0")
+          
+          echo "- **Total functions:** $TOTAL_FUNCS" >> docs_report.md
+          echo "- **Documented functions:** $DOCUMENTED_FUNCS" >> docs_report.md
+          
+          if [ "$TOTAL_FUNCS" -gt 0 ]; then
+            DOC_PERCENT=$((DOCUMENTED_FUNCS * 100 / TOTAL_FUNCS))
+            echo "- **Documentation coverage:** ${DOC_PERCENT}%" >> docs_report.md
+            
+            if [ "$DOC_PERCENT" -lt 30 ]; then
+              echo "⚠️ Documentation coverage is below 30%" >> docs_report.md
+            fi
+          fi
+          
+          # Find undocumented public APIs
+          echo "" >> docs_report.md
+          echo "### 🔍 Undocumented Public APIs" >> docs_report.md
+          echo "" >> docs_report.md
+          
+          UNDOCUMENTED=$(grep -rn "^class\|^interface\|^object" app/src/main/java --include="*.kt" | grep -v "internal\|private" | head -20 || true)
+          
+          while IFS= read -r line; do
+            if [ -z "$line" ]; then continue; fi
+            FILE=$(echo "$line" | cut -d: -f1)
+            LINE_NUM=$(echo "$line" | cut -d: -f2)
+            
+            # Check if there's a KDoc comment before
+            HAS_DOC=$(sed -n "$((LINE_NUM-3)),$((LINE_NUM-1))p" "$FILE" | grep -c "/\*\*" || echo "0")
+            
+            if [ "$HAS_DOC" -eq 0 ]; then
+              CLASS_NAME=$(echo "$line" | sed 's/.*class \|.*interface \|.*object //' | cut -d' ' -f1 | cut -d'(' -f1)
+              echo "- **$FILE:** Undocumented: \`$CLASS_NAME\`" >> docs_report.md
+            fi
+          done <<< "$UNDOCUMENTED"
+          
+          # Generate documentation improvements
+          echo "" >> docs_report.md
+          echo "### 📝 Suggested Documentation Improvements" >> docs_report.md
+          echo "" >> docs_report.md
+          
+          # Check for missing package documentation
+          PACKAGES=$(find app/src/main/java -type d | grep -v "java$" | sort || true)
+          for pkg in $PACKAGES; do
+            PKG_NAME=$(echo "$pkg" | sed 's|.*/java/||' | tr '/' '.')
+            if [ ! -f "$pkg/package-info.java" ] && [ ! -f "$pkg/README.md" ]; then
+              # Check if package has multiple files
+              FILE_COUNT=$(find "$pkg" -maxdepth 1 -name "*.kt" | wc -l || echo "0")
+              if [ "$FILE_COUNT" -gt 3 ]; then
+                echo "- Consider adding documentation for package: \`$PKG_NAME\`" >> docs_report.md
+              fi
+            fi
+          done
+          
+          # Generate KDoc for key classes
+          echo "" >> docs_report.md
+          echo "### 🤖 Auto-Generated Documentation Suggestions" >> docs_report.md
+          echo "" >> docs_report.md
+          
+          # Find classes without documentation
+          CLASSES_WITHOUT_DOC=$(grep -rn "^class " app/src/main/java --include="*.kt" | grep -v "/\*\*" | head -10 || true)
+          
+          while IFS= read -r line; do
+            if [ -z "$line" ]; then continue; fi
+            FILE=$(echo "$line" | cut -d: -f1)
+            LINE_NUM=$(echo "$line" | cut -d: -f2)
+            CLASS_DECL=$(echo "$line" | sed 's/.*class //')
+            CLASS_NAME=$(echo "$CLASS_DECL" | cut -d' ' -f1 | cut -d'(' -f1 | cut -d':' -f1)
+            
+            echo "\`\`\`kotlin" >> docs_report.md
+            echo "/**" >> docs_report.md
+            echo " * $CLASS_NAME - TODO: Add class description" >> docs_report.md
+            echo " *" >> docs_report.md
+            echo " * @property TODO: Document properties" >> docs_report.md
+            echo " */" >> docs_report.md
+            echo "class $CLASS_DECL" >> docs_report.md
+            echo "\`\`\`" >> docs_report.md
+            echo "" >> docs_report.md
+          done <<< "$CLASSES_WITHOUT_DOC"
+          
+          echo "---" >> docs_report.md
+          echo "*Report generated by Documentation Agent 🤖*" >> docs_report.md
+
+      - name: Create documentation improvement branch
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          # Create branch for documentation improvements
+          BRANCH_NAME="docs/automated-improvements-$(date '+%Y%m%d')"
+          git checkout -b "$BRANCH_NAME" 2>/dev/null || git checkout "$BRANCH_NAME"
+          
+          # Generate README improvements
+          if [ "${{ github.event.inputs.generate_readme }}" = "true" ] || [ "${{ github.event_name }}" = "schedule" ]; then
+            if [ -f "README.md" ]; then
+              # Add missing sections if needed
+              if ! grep -qi "## Screenshots" README.md; then
+                echo "" >> README.md
+                echo "## 📸 Screenshots" >> README.md
+                echo "" >> README.md
+                echo "<!-- Add screenshots here -->" >> README.md
+              fi
+              
+              if ! grep -qi "## Features" README.md; then
+                # Prepend features section
+                cat > README_new.md << 'EOF'
+          # FabiPlayer
+
+          ![Platform](https://img.shields.io/badge/platform-Android-green.svg)
+          ![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)
+
+          A modern music player for Android with synced lyrics support.
+
+          ## ✨ Features
+
+          - 🎵 **Music Playback** - Play local music files
+          - 📜 **Synced Lyrics** - Real-time lyrics display
+          - 🌙 **Dark Theme** - Beautiful dark mode support
+          - 🎨 **Material Design** - Modern UI with Material You
+          - 📱 **Android Auto** - Support for Android Auto
+          - 🔊 **Background Playback** - Keep playing in background
+
+          EOF
+                cat README.md >> README_new.md
+                mv README_new.md README.md
+              fi
+            fi
+            
+            git add README.md 2>/dev/null || true
+          fi
+          
+          # Commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No documentation changes to commit"
+          else
+            git commit -m "📚 Automated documentation improvements by Docs Agent
+            
+          - Added missing README sections
+          - Improved documentation structure
+          
+          Generated by Documentation Agent"
+            
+            git push origin "$BRANCH_NAME" --force || true
+            
+            # Create PR
+            gh pr create \
+              --title "📚 Automated Documentation Improvements" \
+              --body "$(cat docs_report.md)" \
+              --base main \
+              --head "$BRANCH_NAME" \
+              --label "documentation,automated" || echo "PR might already exist"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload documentation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation-report
+          path: docs_report.md
+          retention-days: 30
+
+      - name: Create documentation issue
+        if: github.event_name == 'schedule'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create issue for documentation review
+          gh issue create \
+            --title "📚 Documentation Review - $(date '+%Y-%m-%d')" \
+            --body-file docs_report.md \
+            --label "documentation,automated" || echo "Issue might already exist"
