@@ -378,7 +378,7 @@ private fun PerformanceReportCard(
                     modifier = Modifier.weight(1f),
                     onClick = {
                         scope.launch {
-                            clipboardManager.setClip(
+                            clipboardManager.setClipEntry(
                                 ClipEntry(android.content.ClipData.newPlainText("report", report))
                             )
                         }
