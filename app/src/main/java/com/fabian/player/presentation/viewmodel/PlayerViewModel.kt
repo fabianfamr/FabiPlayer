@@ -5,6 +5,8 @@ import android.app.Activity
 import android.net.Uri
 import android.os.Trace
 import android.media.MediaMetadataRetriever
+import android.media.MediaScannerConnection
+import com.fabian.player.data.offline.CloudOfflineRepository
 import kotlinx.coroutines.withContext
 import androidx.compose.animation.core.Animatable
 import androidx.core.content.ContextCompat
@@ -4771,12 +4773,6 @@ class PlayerViewModel @Inject constructor(
         val pendingLyrics = pendingLyricsSave
         if (pendingLyrics != null) {
             pendingLyricsSave = null
-            if (!granted) {
-                viewModelScope.launch {
-                    _toastEvents.emit(context.getString(R.string.player_permission_denied_save_lyrics))
-                }
-                return
-            }
             performLyricsSave(pendingLyrics.song, pendingLyrics.lyrics, pendingLyrics.preferSynced)
             return
         }
@@ -4855,10 +4851,17 @@ class PlayerViewModel @Inject constructor(
             return
         }
 
-        val songFile = java.io.File(song.path)
-        val lrcFile = java.io.File(songFile.parentFile, "${songFile.nameWithoutExtension}.lrc")
+        val songPath = song.path
+        if (songPath.isBlank() || CloudOfflineRepository.isCloudSong(song)) {
+            performLyricsSave(song, lyrics, preferSynced)
+            return
+        }
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R && lrcFile.exists() && !lrcFile.canWrite()) {
+        val songFile = java.io.File(songPath)
+        val parentDir = songFile.parentFile
+        val lrcFile = if (parentDir != null) java.io.File(parentDir, "${songFile.nameWithoutExtension}.lrc") else null
+
+        if (lrcFile != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R && lrcFile.exists() && !lrcFile.canWrite()) {
             val uri = com.fabian.player.utils.MediaStorePermissionHelper.getMediaStoreUri(context, lrcFile.absolutePath)
             if (uri != null) {
                 val intentSender = com.fabian.player.utils.MediaStorePermissionHelper.createWriteRequestIntentSender(context, listOf(uri))
@@ -4875,19 +4878,78 @@ class PlayerViewModel @Inject constructor(
 
     private fun performLyricsSave(song: Song, lyrics: Lyrics, preferSynced: Boolean) {
         viewModelScope.launch(dispatchers.io) {
-            try {
-                val songFile = java.io.File(song.path)
-                val lrcFile = java.io.File(songFile.parentFile, "${songFile.nameWithoutExtension}.lrc")
-                val lrcContent = LyricsUtils.toLrcString(lyrics, preferSynced)
+            val lrcContent = LyricsUtils.toLrcString(lyrics, preferSynced)
+            val songIdLong = song.id.toLongOrNull()
+            var dbSaved = false
+            if (songIdLong != null) {
+                try {
+                    musicRepository.updateLyrics(songIdLong, lrcContent)
+                    dbSaved = true
+                } catch (e: Exception) {
+                    Timber.w(e, "Could not update lyrics in repository")
+                }
+            }
 
-                lrcFile.writeText(lrcContent, Charsets.UTF_8)
+            var fileSaved = false
+            if (song.path.isNotBlank() && !CloudOfflineRepository.isCloudSong(song)) {
+                try {
+                    val songFile = java.io.File(song.path)
+                    val parentDir = songFile.parentFile
+                    if (parentDir != null) {
+                        if (!parentDir.exists()) {
+                            parentDir.mkdirs()
+                        }
+                        val lrcFile = java.io.File(parentDir, "${songFile.nameWithoutExtension}.lrc")
+
+                        // 1. Direct write attempt
+                        try {
+                            lrcFile.writeText(lrcContent, Charsets.UTF_8)
+                            fileSaved = true
+                            MediaScannerConnection.scanFile(context, arrayOf(lrcFile.absolutePath), null, null)
+                        } catch (e: Exception) {
+                            Timber.w(e, "Direct writeText to ${lrcFile.absolutePath} failed")
+                        }
+
+                        // 2. If direct write failed and file already exists, try delete and recreate
+                        if (!fileSaved && lrcFile.exists()) {
+                            try {
+                                if (lrcFile.delete()) {
+                                    lrcFile.writeText(lrcContent, Charsets.UTF_8)
+                                    fileSaved = true
+                                    MediaScannerConnection.scanFile(context, arrayOf(lrcFile.absolutePath), null, null)
+                                }
+                            } catch (e: Exception) {
+                                Timber.w(e, "Delete and recreate failed for ${lrcFile.absolutePath}")
+                            }
+                        }
+
+                        // 3. Try ContentResolver via MediaStore URI if available
+                        if (!fileSaved) {
+                            try {
+                                val uri = com.fabian.player.utils.MediaStorePermissionHelper.getMediaStoreUri(context, lrcFile.absolutePath)
+                                if (uri != null) {
+                                    context.contentResolver.openOutputStream(uri, "wt")?.use { out ->
+                                        out.write(lrcContent.toByteArray(Charsets.UTF_8))
+                                        fileSaved = true
+                                        MediaScannerConnection.scanFile(context, arrayOf(lrcFile.absolutePath), null, null)
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                Timber.w(e, "ContentResolver output stream write failed")
+                            }
+                        }
+                    }
+                } catch (e: Exception) {
+                    Timber.e(e, "Error saving lyrics to file")
+                }
+            }
+
+            if (fileSaved || dbSaved) {
                 _toastEvents.emit(context.getString(R.string.lyrics_saved_successfully))
-                
                 if (playbackStateHolder.stablePlayerState.value.currentSong?.id == song.id) {
                     loadLyricsForCurrentSong()
                 }
-            } catch (e: Exception) {
-                Timber.e(e, "Failed to save lyrics to file")
+            } else {
                 _toastEvents.emit(context.getString(R.string.lyrics_save_failed))
             }
         }
@@ -5066,7 +5128,23 @@ class PlayerViewModel @Inject constructor(
     }
 
     fun resetLyricsForCurrentSong() {
-        val songId = stablePlayerState.value.currentSong?.id?.toLongOrNull() ?: return
+        val currentSong = stablePlayerState.value.currentSong
+        val songId = currentSong?.id?.toLongOrNull() ?: return
+        if (currentSong.path.isNotBlank() && !CloudOfflineRepository.isCloudSong(currentSong)) {
+            try {
+                val songFile = java.io.File(currentSong.path)
+                val parentDir = songFile.parentFile
+                if (parentDir != null) {
+                    val lrcFile = java.io.File(parentDir, "${songFile.nameWithoutExtension}.lrc")
+                    if (lrcFile.exists()) {
+                        lrcFile.delete()
+                        MediaScannerConnection.scanFile(context, arrayOf(lrcFile.absolutePath), null, null)
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.w(e, "Could not delete external .lrc on reset")
+            }
+        }
         lyricsStateHolder.resetLyrics(songId)
         playbackStateHolder.updateStablePlayerState { state -> state.copy(lyrics = null) }
     }

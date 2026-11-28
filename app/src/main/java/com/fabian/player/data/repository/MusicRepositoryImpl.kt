@@ -1,4 +1,4 @@
-﻿package com.fabian.player.data.repository
+package com.fabian.player.data.repository
 
 
 
@@ -1053,14 +1053,29 @@ class MusicRepositoryImpl @Inject constructor(
 
     override suspend fun updateLyrics(songId: Long, lyrics: String) {
         lyricsRepository.updateLyrics(songId, lyrics)
+        try {
+            musicDao.updateLyrics(songId, lyrics)
+        } catch (e: Exception) {
+            Timber.w(e, "Error updating lyrics in songs table for ID: $songId")
+        }
     }
 
     override suspend fun resetLyrics(songId: Long) {
         lyricsRepository.resetLyrics(songId)
+        try {
+            musicDao.resetLyrics(songId)
+        } catch (e: Exception) {
+            Timber.w(e, "Error resetting lyrics in songs table for ID: $songId")
+        }
     }
 
     override suspend fun resetAllLyrics() {
         lyricsRepository.resetAllLyrics()
+        try {
+            musicDao.resetAllLyrics()
+        } catch (e: Exception) {
+            Timber.w(e, "Error resetting all lyrics in songs table")
+        }
     }
 
     override fun getMusicFolders(storageFilter: StorageFilter): Flow<List<MusicFolder>> {
